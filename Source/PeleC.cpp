@@ -15,6 +15,10 @@
 #endif
 #endif
 
+#ifdef PELE_USE_CLEM
+#include "particle_container.H"
+#endif
+
 #ifdef PELE_USE_SOOT
 #include "SootModel.H"
 #endif
@@ -62,6 +66,10 @@ int PeleC::FirstSootVar = -1;
 #include "pelec_defaults.H"
 
 bool PeleC::do_diffuse = false;
+
+#ifdef PELE_USE_CLEM
+std::unique_ptr<clem::ClemContainer> PeleC::ClemPC = nullptr;
+#endif
 
 #ifdef PELE_USE_SPRAY
 bool PeleC::do_spray_particles = true;
@@ -608,6 +616,16 @@ PeleC::buildMetrics()
     geom.GetFaceArea(area[dir], dir);
   }
 
+#ifdef PELE_USE_CLEM
+  for (int dir = 0; dir < AMREX_SPACEDIM; dir++) {
+    clem_mass_flux[dir].clear();
+    clem_mass_flux[dir].define(
+      getEdgeBoxArray(dir), dmap, 1, 0, amrex::MFInfo(),
+      amrex::FArrayBoxFactory());
+    clem_mass_flux[dir].setVal(0.0);
+  }
+#endif
+
   vfrac.clear();
   vfrac.define(grids, dmap, 1, numGrow(), amrex::MFInfo(), Factory());
   const auto& ebfactory =
@@ -1064,6 +1082,10 @@ PeleC::post_timestep(int iteration)
     // fillpatcher on level+1 needs to be reset because data on this
     // level have changed.
     getLevel(level + 1).resetFillPatcher();
+
+#ifdef PELE_USE_CLEM
+    PostTimestepClem();
+#endif
   }
 
   // Re-compute temperature after all the other updates.
@@ -1194,7 +1216,11 @@ PeleC::post_init(amrex::Real /*stop_time*/)
       set_typical_values_chem();
     }
 
+#ifdef PELE_USE_CLEM
+    AdvanceClem(cumtime, dtlev, react_init);
+#else
     react_state(cumtime, dtlev, react_init);
+#endif
   }
 
   if (level > 0) {
@@ -1215,6 +1241,10 @@ PeleC::post_init(amrex::Real /*stop_time*/)
 
 #ifdef PELE_USE_SPRAY
   postInitParticles();
+#endif
+
+#ifdef PELE_USE_CLEM
+  InitializeClem();
 #endif
 
   int nstep = parent->levelSteps(0);

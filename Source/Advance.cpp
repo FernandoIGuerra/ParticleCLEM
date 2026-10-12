@@ -6,6 +6,9 @@
 #ifdef PELE_USE_SPRAY
 #include "SprayParticles.H"
 #endif
+#ifdef PELE_USE_CLEM
+#include "setup.H"
+#endif
 
 amrex::Real
 PeleC::advance(
@@ -66,6 +69,13 @@ PeleC::do_mol_advance(
   amrex::MultiFab& S_old = get_old_data(State_Type);
   amrex::MultiFab& S_new = get_new_data(State_Type);
 
+#ifdef PELE_USE_CLEM
+  // The MOL stages of this step accumulate their mass flux here
+  for (int dir = 0; dir < AMREX_SPACEDIM; dir++) {
+    clem_mass_flux[dir].setVal(0.0);
+  }
+#endif
+
   amrex::MultiFab molSrc(grids, dmap, NVAR, 0, amrex::MFInfo(), Factory());
 
   amrex::MultiFab molSrc_old;
@@ -109,6 +119,13 @@ PeleC::do_mol_advance(
     }
   }
 
+#ifdef PELE_USE_CLEM
+  // The species are transported by the CLEM lines, not by the LES
+  if (clem::setup::freeze_les_species) {
+    molSrc.setVal(0.0, FirstSpec, NUM_SPECIES, 0);
+  }
+#endif
+
   if (mol_iters > 1) {
     amrex::MultiFab::Copy(molSrc_old, molSrc, 0, 0, NVAR, 0);
   }
@@ -143,6 +160,12 @@ PeleC::do_mol_advance(
     }
   }
 
+#ifdef PELE_USE_CLEM
+  if (clem::setup::freeze_les_species) {
+    molSrc.setVal(0.0, FirstSpec, NUM_SPECIES, 0);
+  }
+#endif
+
   // U^{n+1.**} = 0.5*(U^n + U^{n+1,*}) + 0.5*dt*S^{n+1} = U^n + 0.5*dt*S^n +
   // 0.5*dt*S^{n+1} + 0.5*dt*I_R
   amrex::MultiFab::LinComb(S_new, 0.5, Sborder, 0, 0.5, S_old, 0, 0, NVAR, 0);
@@ -162,7 +185,11 @@ PeleC::do_mol_advance(
     amrex::MultiFab::Subtract(molSrc, I_R, NUM_SPECIES, Eden, 1, 0);
 
     // Compute I_R and U^{n+1} = U^n + dt*(F_{AD} + I_R)
+#ifdef PELE_USE_CLEM
+    AdvanceClem(time, dt, false, &molSrc);
+#else
     react_state(time, dt, false, &molSrc);
+#endif
   }
 
   computeTemp(S_new, 0);
@@ -191,6 +218,12 @@ PeleC::do_mol_advance(
   }
 
   set_body_state(S_new);
+
+#ifdef PELE_USE_CLEM
+  if (clem::setup::check_mass_flux) {
+    CheckClemMassFlux(dt);
+  }
+#endif
 
   return dt;
 }

@@ -19,6 +19,10 @@ using namespace MASA;
 #include "SprayParticles.H"
 #endif
 
+#ifdef PELE_USE_CLEM
+#include "particle_container.H"
+#endif
+
 #ifdef PELE_USE_SOOT
 #include "SootModel.H"
 #endif
@@ -715,6 +719,9 @@ PeleC::variableCleanUp()
   delete h_prob_parm_device;
   amrex::The_Arena()->free(d_prob_parm_device);
   trans_parms.deallocate();
+#ifdef PELE_USE_CLEM
+  ClemPC.reset();
+#endif
 #ifdef PELE_USE_SPRAY
   SprayParticleContainer::SprayCleanUp();
   GhostPC.reset();

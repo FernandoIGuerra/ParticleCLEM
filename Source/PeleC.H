@@ -64,6 +64,9 @@ class SootModel;
 #ifdef PELE_USE_SPRAY
 class SprayParticleContainer;
 #endif
+#ifdef PELE_USE_CLEM
+#include "halo_manager.H"
+#endif
 
 AMREX_FORCE_INLINE static bool
 ebInDomain()
@@ -200,6 +203,38 @@ public:
   static std::unique_ptr<SprayParticleContainer> SprayPC;
   static std::unique_ptr<SprayParticleContainer> VirtPC;
   static std::unique_ptr<SprayParticleContainer> GhostPC;
+#endif
+
+#ifdef PELE_USE_CLEM
+  // Build the CLEM particle container and seed the lines of every level
+  // from the LES state (initialize_clem.cpp)
+  void InitializeClem();
+
+  // The step of the CLEM model: it replaces react_state in the MOL advance
+  // (advance_clem.cpp)
+  void AdvanceClem(
+    amrex::Real time,
+    amrex::Real dt,
+    bool react_init = false,
+    amrex::MultiFab* aux_src = nullptr);
+
+  // The coarse/fine sync of the CLEM lines, from post_timestep
+  // (multiresolution/post_timestep.cpp)
+  void PostTimestepClem();
+
+  // Print the defect of the LES mass balance closed with clem_mass_flux
+  // (mass_flux.cpp)
+  void CheckClemMassFlux(amrex::Real dt);
+
+  static std::unique_ptr<clem::ClemContainer> ClemPC;
+
+  // The mass flux of the step of this level, per direction on the faces:
+  // the RK2 average of the MOL stages (mass_flux.H)
+  amrex::Array<amrex::MultiFab, AMREX_SPACEDIM> clem_mass_flux;
+
+  // The halo lines of this level (level > 0): the copy of the coarse lines
+  // around its grids, filled by the step of the level below (halo_manager.H)
+  clem::HaloManager clem_halo;
 #endif
 
   // Get problem metrics.

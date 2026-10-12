@@ -1,6 +1,10 @@
 #include "Diffusion.H"
 #include "prob.H"
 
+#ifdef PELE_USE_CLEM
+#include "mass_flux.H"
+#endif
+
 void
 PeleC::getMOLSrcTerm(
   const amrex::MultiFab& S,
@@ -406,6 +410,17 @@ PeleC::getMOLSrcTerm(
           }
         }
       }
+
+#ifdef PELE_USE_CLEM
+      // Store the mass flux of this stage for the CLEM splicing
+      if (reflux_factor != 0) {
+        for (int dir = 0; dir < AMREX_SPACEDIM; dir++) {
+          clem::AccumulateMassFlux(
+            mfi.nodaltilebox(dir), flux_ec[dir].const_array(), URHO,
+            reflux_factor, clem_mass_flux[dir].array(mfi));
+        }
+      }
+#endif
 
       // Compute divergence and refluxing
       if (typ == amrex::FabType::singlevalued) {

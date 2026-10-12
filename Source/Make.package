@@ -54,8 +54,11 @@ CEXE_headers += EB.H
 CEXE_headers += Geometry.H
 CEXE_headers += SparseData.H
 
+# Particle.cpp is spray-only; CLEM also enables particles
 ifeq ($(USE_PARTICLES), TRUE)
-  CEXE_sources += Particle.cpp
+  ifeq ($(shell test $(SPRAY_FUEL_NUM) -gt 0 2>/dev/null; echo $$?), 0)
+    CEXE_sources += Particle.cpp
+  endif
 endif
 
 ifeq ($(USE_SOOT), TRUE)

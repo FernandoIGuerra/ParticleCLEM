@@ -18,6 +18,11 @@ USE_EB = TRUE
 USE_SUNDIALS = TRUE
 CXXSTD = c++20
 
+# CLEM needs AMReX particles; set before Make.defs consumes USE_PARTICLES
+ifeq ($(CLEM_MODEL), TRUE)
+  USE_PARTICLES = TRUE
+endif
+
 include $(AMREX_HOME)/Tools/GNUMake/Make.defs
 
 # PeleC uses a coarse grained OMP approach
@@ -137,6 +142,17 @@ ifeq ($(USE_PARTICLES), TRUE)
     Bpack += $(SPRAY_HOME)/Make.package $(SPRAY_HOME)/Distribution/Make.package $(SPRAY_HOME)/BreakupSplash/Make.package
     Blocs += $(SPRAY_HOME) $(SPRAY_HOME)/Distribution $(SPRAY_HOME)/BreakupSplash
   endif
+endif
+
+# CLEM
+ifeq ($(CLEM_MODEL), TRUE)
+  DEFINES += -DPELE_USE_CLEM
+  CLEM_HOME = $(PELE_HOME)/Source/Clem
+  Bpack += $(CLEM_HOME)/Make.package
+  Blocs += $(CLEM_HOME)
+  # the modules of the model, one folder each; their files are listed by
+  # name in Clem/Make.package
+  Blocs += $(foreach dir, coupling regridding reactor reindexing splicing stirring diffusion multiresolution, $(CLEM_HOME)/$(dir))
 endif
 
 # Soot

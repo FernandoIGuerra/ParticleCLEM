@@ -1,0 +1,48 @@
+CEXE_headers += setup.H
+CEXE_headers += particle_index.H
+CEXE_headers += particle_container.H
+CEXE_headers += mass_flux.H
+CEXE_headers += line_scratch.H
+CEXE_headers += les_comps.H
+CEXE_headers += eos_util.H
+
+CEXE_sources += particle_container.cpp
+CEXE_sources += particle_plot.cpp
+CEXE_sources += initialize_clem.cpp
+CEXE_sources += mass_flux.cpp
+CEXE_sources += advance_clem.cpp
+
+# coupling/
+CEXE_headers += coupling.H
+CEXE_headers += write_back_coupling.H
+CEXE_sources += write_back_coupling.cpp
+
+# regridding/
+CEXE_headers += regridder.H
+CEXE_headers += equal_mass_regridder.H
+CEXE_sources += equal_mass_regridder.cpp
+
+# reindexing/
+CEXE_headers += reindexer.H
+CEXE_headers += positive_reindexer.H
+CEXE_headers += negative_reindexer.H
+CEXE_headers += alternating_reindexer.H
+
+# splicing/
+CEXE_headers += splicer.H
+CEXE_sources += splicer.cpp
+
+# multiresolution/
+CEXE_headers += halo_manager.H
+CEXE_headers += averager.H
+CEXE_sources += halo_manager.cpp
+CEXE_sources += averager.cpp
+CEXE_sources += post_timestep.cpp
+
+# diffusion/
+CEXE_headers += diffusion.H
+CEXE_headers += mixture_averaged_diffusion.H
+CEXE_sources += mixture_averaged_diffusion.cpp
+
+# reactor/
+CEXE_sources += react.cpp

@@ -3,6 +3,9 @@
 #ifdef PELE_USE_SPRAY
 #include "SprayParticles.H"
 #endif
+#ifdef PELE_USE_CLEM
+#include "particle_container.H"
+#endif
 
 void
 PeleCAmr::writePlotFile()
@@ -304,6 +307,13 @@ PeleCAmr::writePlotFileDoit(
     } else {
       amrex::Abort("HDF5 particle writing incomplete");
     }
+  }
+#endif
+
+#ifdef PELE_USE_CLEM
+  if (PeleC::ClemPC != nullptr && PeleC::ClemPC->IsDefined() && regular) {
+    PeleC::ClemPC->WritePlotFile(pltfile);
+    PeleC::ClemPC->WriteLeafPlotFile(pltfile);
   }
 #endif
 

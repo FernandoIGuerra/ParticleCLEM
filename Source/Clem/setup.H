@@ -1,0 +1,134 @@
+/**
+ * Compile-time setup of the CLEM model: every choice that defines what a
+ * build evaluates lives here.
+ */
+#ifndef CLEM_SETUP_H
+#define CLEM_SETUP_H
+
+#include <AMReX_REAL.H>
+
+#include "mixture_averaged_diffusion.H"
+#include "write_back_coupling.H"
+#include "equal_mass_regridder.H"
+#include "positive_reindexer.H"
+#include "negative_reindexer.H"
+#include "alternating_reindexer.H"
+
+namespace clem::setup {
+
+// number of LEM elements on the line of one LES cell
+static constexpr int n_lem = 12;
+
+// ---- coupling between the LES and the lines (coupling/) -----------------------
+
+// WriteBack: isentropic pressure forward, conserved-delta write-back
+enum class Coupling { WriteBack };
+
+static constexpr Coupling coupling = Coupling::WriteBack;
+
+template <Coupling C>
+struct CouplingOf;
+template <>
+struct CouplingOf<Coupling::WriteBack>
+{
+  using type = clem::WriteBackCoupling;
+};
+
+using CouplingType = typename CouplingOf<coupling>::type;
+
+// return the lines to the LES at the end of the CLEM step (BackwardCoupling):
+// rho Y_k and rho e of the LES become what the lines transported and
+// processed. With ForwardCoupling this is the two-way coupling of the model
+static constexpr bool couple_back = true;
+
+// the LES does not advance rho Y_k: the species part of the MOL source is
+// zeroed in both RK2 stages, so the species are transported by the lines
+// alone and reach the LES only through BackwardCoupling. Needs couple_back
+static constexpr bool freeze_les_species = true;
+static_assert(!freeze_les_species || couple_back,
+              "CLEM: freeze_les_species needs couple_back, or the LES species never change");
+
+// ---- regridding of the lines (regridding/) ------------------------------------
+
+// EqualMass: n_lem elements of equal mass; e, Y mass-averaged, T, p from the EOS
+enum class Regridder { EqualMass };
+
+static constexpr Regridder regridder = Regridder::EqualMass;
+
+template <Regridder R>
+struct RegridderOf;
+template <>
+struct RegridderOf<Regridder::EqualMass>
+{
+  using type = clem::EqualMassRegridder;
+};
+
+using RegridderType = typename RegridderOf<regridder>::type;
+
+// ---- ordering policy of the splicing (reindexing/) -----------------------------
+
+// Positive:    Sigma^+, the largest transfer first
+// Negative:    Sigma^-, the smallest transfer first
+// Alternating: Sigma^- on the even steps, Sigma^+ on the odd ones
+enum class Reindexer { Positive, Negative, Alternating };
+
+static constexpr Reindexer reindexer = Reindexer::Positive;
+
+template <Reindexer R>
+struct ReindexerOf;
+template <>
+struct ReindexerOf<Reindexer::Positive>
+{
+  using type = clem::PositiveReindexer;
+};
+template <>
+struct ReindexerOf<Reindexer::Negative>
+{
+  using type = clem::NegativeReindexer;
+};
+template <>
+struct ReindexerOf<Reindexer::Alternating>
+{
+  using type = clem::AlternatingReindexer;
+};
+
+using ReindexerType = typename ReindexerOf<reindexer>::type;
+
+// ---- molecular diffusion along the line (diffusion/) ---------------------------
+
+// MixtureAveraged: Y_k and T, mass coordinate, isobaric, periodic line
+enum class Diffusion { MixtureAveraged };
+
+static constexpr Diffusion diffusion = Diffusion::MixtureAveraged;
+
+// the model type the rest of the code uses; a new model adds one enum value
+// and one branch here
+template <Diffusion D>
+struct DiffusionOf;
+template <>
+struct DiffusionOf<Diffusion::MixtureAveraged>
+{
+  using type = clem::MixtureAveragedDiffusion;
+};
+
+using DiffusionType = typename DiffusionOf<diffusion>::type;
+
+// diffusion number of the explicit sub-step, in (0, 0.5]: 0.5 is the
+// stability limit of the scheme
+static constexpr amrex::Real diffusion_cfl = 0.5;
+
+// ---- reactor of the lines (reactor/react.cpp) --------------------------------------
+
+// largest number of sub-steps of one line in one LES step; a line that needs
+// more finishes the step above its stability limit, and is reported
+static constexpr int max_substeps = 1000;
+
+// ---- checks ---------------------------------------------------------------------
+
+// after every LES step, print how well the stored mass flux closes the LES
+// mass balance of each level (PeleC::CheckClemMassFlux), and how well the
+// mass of the lines follows the mass of their cells after the splice
+static constexpr bool check_mass_flux = true;
+
+} // namespace clem::setup
+#endif

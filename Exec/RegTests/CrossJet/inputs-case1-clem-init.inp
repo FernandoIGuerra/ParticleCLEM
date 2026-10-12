@@ -1,0 +1,116 @@
+# ============================================================================
+# H2 jet in supersonic crossflow -- Jin et al., Combust. Flame 268 (2024) 113627
+# Case 1 (inflow Mach 1.5), NON-REACTING, with the CLEM particles.
+#
+# First CLEM test: initialize the LES and the particle lines on every level
+# (base + 2 levels of refinement) and write one plotfile; no time step.
+#
+# Build:  make -j8                 (CLEM_MODEL = TRUE in the GNUmakefile)
+# Run:    mpiexec -n 8 ./PeleC3d.gnu.MPI.ex inputs-case1-clem-init.inp
+#
+# Output, side by side:
+#   plt00000                 the LES fields
+#   plt_particle_00000       every particle of every level
+#   plt_particle_leave_00000 only the particles of the cells not covered by a
+#                            finer level
+# ============================================================================
+
+max_step  = 0
+stop_time = 4.0e-4          # 0.4 ms, ~3 flow-through times
+
+# ---------------------------------------------------------------- geometry --
+# CGS. 125 x 15 x 5 mm combustor, spanwise-periodic.
+geometry.is_periodic = 0 0 1
+geometry.coord_sys   = 0
+geometry.prob_lo     = 0.0   0.0  0.0
+geometry.prob_hi     = 12.5  1.5  0.5
+
+amr.n_cell           = 400 48 16       # dx = 0.3125 mm (paper's coarse grid)
+
+# --------------------------------------------------------------------- BCs --
+# Interior, Hard, FOExtrap, Symmetry, SlipWall, NoSlipWall, UserBC
+# xlo   : supersonic vitiated-air inflow            (bcnormal)
+# ylo   : adiabatic no-slip wall + H2 injector hole (bcnormal)
+# yhi   : adiabatic no-slip wall
+# xhi   : supersonic outflow (first-order extrapolation)
+# z     : periodic
+pelec.lo_bc = "UserBC"  "UserBC"      "Interior"
+pelec.hi_bc = "FOExtrap" "NoSlipWall" "Interior"
+
+# ----------------------------------------------------------------- physics --
+pelec.do_hydro     = 1
+pelec.do_mol       = 1        # paper uses a 2nd-order method-of-lines scheme
+pelec.mol_iorder   = 2
+pelec.diffuse_vel  = 1
+pelec.diffuse_temp = 1
+pelec.diffuse_spec = 1
+pelec.diffuse_enth = 1
+pelec.do_react     = 0
+pelec.do_les       = 0        # no subgrid model, as in the paper
+pelec.chem_integrator = "ReactorNull"
+
+# ------------------------------------------------------------- time stepping -
+pelec.cfl         = 0.1       # paper's CFL
+pelec.init_shrink = 0.1
+pelec.change_max  = 1.05
+pelec.dt_cutoff   = 1.e-14
+
+# ----------------------------------------------------------------- verbosity -
+pelec.v            = 1
+amr.v              = 1
+pelec.sum_interval = 100
+amr.data_log       = datlog
+
+# -------------------------------------------------------------------- AMR ---
+# 2 levels of refinement by 2 -> finest 0.0781 mm (the paper's L3 uses 3).
+amr.max_level       = 2
+amr.ref_ratio       = 2 2 2 2
+amr.regrid_int      = 2 2 2 2
+amr.blocking_factor = 8
+amr.max_grid_size   = 32
+amr.n_error_buf     = 2 2 2 2
+
+# Density-gradient criterion of the paper. NOTE: PeleC's `dengrad` is the
+# max adjacent-cell density *difference* [g/cm^3], not d(rho)/dx [g/cm^4].
+# 2e-5 is the value quoted in the paper; see README for the caveat.
+tagging.dengrad         = 2.0e-5
+tagging.max_dengrad_lev = 2
+
+# Static refinement around the injector so the 1 mm hole is always resolved,
+# including at t = 0 before any density gradients have developed.
+tagging.refinement_indicators = injector
+tagging.injector.in_box_lo    = 3.90 -0.01 0.0
+tagging.injector.in_box_hi    = 5.20  0.35 0.5
+tagging.injector.max_level    = 2
+
+# ------------------------------------------------------------------ output --
+amr.checkpoint_files_output = 1
+amr.check_file = chk
+amr.check_per  = 5.0e-5
+
+amr.plot_files_output = 1
+amr.plot_file = plt
+amr.plot_per  = 1.0e-5
+amr.plot_vars        = density Temp
+amr.derive_plot_vars = x_velocity y_velocity z_velocity magvel magvort pressure MachNumber soundspeed
+pelec.plot_massfrac = 1
+pelec.plot_rhoy     = 0
+
+# ------------------------------------------------------- problem parameters --
+# Table 1 of the paper, Case 1. CGS: 1 atm = 1.01325e6 dyn/cm^2.
+prob.p_in   = 1.01325e6      # 1 atm
+prob.T_in   = 1000.0         # K
+prob.u_in   = 9.30e4         # 930 m/s -> M = 1.5
+prob.YO2_in = 0.23
+prob.YN2_in = 0.77
+
+prob.p_jet  = 1.30709e6      # 1.29 atm
+prob.T_jet  = 300.0          # K
+prob.v_jet  = 1.321e5        # 1321 m/s -> M ~ 1.0, mdot = 0.109 g/s
+prob.jet_x  = 4.2            # 42 mm from the inlet
+prob.jet_z  = 0.25           # spanwise centre
+prob.jet_d  = 0.1            # 1 mm diameter
+prob.jet_start = 0.0
+prob.jet_ramp  = 0.0         # > 0 softens the injector start-up transient
+
+eb2.geom_type = "all_regular"
