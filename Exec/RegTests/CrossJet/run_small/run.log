@@ -1,0 +1,118 @@
+Initializing AMReX (26.07-12-g1546c1ccbf41)...
+MPI initialized with 4 MPI processes
+MPI initialized with thread support level 0
+Initializing SUNDIALS with 1 threads...
+SUNDIALS initialized.
+AMReX (26.07-12-g1546c1ccbf41) initialized
+
+Starting run at 21:10:41 UTC on 2026-10-10.
+Successfully read inputs file ... 
+
+PeleC git hash: v1.0.0-15-g949e2bb-dirty
+AMReX git hash: 26.07-12-g1546c1cc
+PelePhysics git hash: v1.0.0-28-g6e8026f
+SUNDIALS git hash: v7.1.1-58-g0eff3966
+
+0 Advected Variables: 
+
+13 Species: 
+H  H2  O  OH  H2O  O2  HO2  H2O2  N2  AR  HE  CO  CO2  
+0 Auxiliary Variables: 
+
+Initializing EB2
+Successfully read inputs file ... 
+Starting to call amrex_probinit ... 
+
+=== CrossJet: H2 jet in supersonic crossflow ===
+  crossflow  p       = 1 atm
+  crossflow  T       = 1000 K
+  crossflow  u       = 930 m/s
+  crossflow  rho     = 0.0003514599969 g/cm^3
+  crossflow  Mach    = 1.499666346
+  crossflow  mdot    = 24.51433478 g/s
+  jet        p       = 1.289997533 atm
+  jet        T       = 300 K
+  jet        v       = 1321 m/s
+  jet        rho     = 0.0001056429646 g/cm^3
+  jet        Mach    = 1.002150239
+  jet        mdot    = 0.1096057351 g/s
+  global equiv ratio = 0.1542721886
+  momentum ratio J   = 0.60646315
+  injector centre    = (4.2, 0, 0.25) cm, d = 0.1 cm
+================================================
+
+Successfully run amrex_probinit
+Initializing the data at level 0
+Done initializing level 0 data 
+...estimated hydro-limited timestep at level 0: 4.031899249e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 4.031899249e-08
+grid_places() time: 0.007847525 new finest: 1
+Initializing the data at level 1
+Done initializing level 1 data 
+grid_places() time: 0.004206959 new finest: 2
+Initializing the data at level 2
+Done initializing level 2 data 
+Now regridding at level lbase = 0
+grid_places() time: 0.013989347 new finest: 2
+Initializing the data at level 1
+Done initializing level 1 data 
+Initializing the data at level 2
+Done initializing level 2 data 
+STEP = 0 TIME = 0 : REGRID  with lbase = 0
+  Level 1   4 grids  24576 cells  8 % of domain
+            smallest grid: 32 x 8 x 16  biggest grid: 32 x 16 x 16
+  Level 2   6 grids  98304 cells  4 % of domain
+            smallest grid: 32 x 32 x 16  biggest grid: 32 x 32 x 16
+
+Now regridding at level lbase = 0
+grid_places() time: 0.017490263 new finest: 2
+Initializing the data at level 1
+Done initializing level 1 data 
+Initializing the data at level 2
+Done initializing level 2 data 
+STEP = 0 TIME = 0 : REGRID  with lbase = 0
+  Level 1   4 grids  24576 cells  8 % of domain
+            smallest grid: 32 x 8 x 16  biggest grid: 32 x 16 x 16
+  Level 2   6 grids  98304 cells  4 % of domain
+            smallest grid: 32 x 32 x 16  biggest grid: 32 x 32 x 16
+
+CLEM: level 0 seeded with 460800 particles in 38400 cells
+CLEM: level 1 seeded with 294912 particles in 24576 cells
+CLEM: level 2 seeded with 1179648 particles in 98304 cells
+
+TIME = 0 MASS        = 0.003294937471
+TIME = 0 XMOM        = 306.4291848
+TIME = 0 YMOM        = 0
+TIME = 0 ZMOM        = 0
+TIME = 0 RHO*e       = 15326173.33
+TIME = 0 RHO*K       = 14248957.09
+TIME = 0 RHO*E       = 29575130.43
+TIME = 0 FUEL PROD   = 0
+
+TIME = 0 density     MIN = 0.00035146       MAX = 0.00035146     
+TIME = 0 x_velocity  MIN = 93000            MAX = 93000          
+TIME = 0 y_velocity  MIN = 0                MAX = 0              
+TIME = 0 z_velocity  MIN = 0                MAX = 0              
+TIME = 0 eint_e      MIN = 4.6514307e+09    MAX = 4.6514307e+09  
+TIME = 0 Temp        MIN = 1000             MAX = 1000           
+TIME = 0 pressure    MIN = 1013250          MAX = 1013250        
+TIME = 0 massfrac    MIN = 0                MAX = 0.77           
+TIME = 0 sumYminus1  MIN = 0                MAX = 0              
+INITIAL GRIDS 
+  Level 0   7 grids  38400 cells  100 % of domain
+            smallest grid: 24 x 24 x 8  biggest grid: 32 x 24 x 8
+  Level 1   4 grids  24576 cells  8 % of domain
+            smallest grid: 32 x 8 x 16  biggest grid: 32 x 16 x 16
+  Level 2   6 grids  98304 cells  4 % of domain
+            smallest grid: 32 x 32 x 16  biggest grid: 32 x 32 x 16
+
+CHECKPOINT: file = chk00000
+checkPoint() time = 0.03345309 secs.
+PLOTFILE: file = plt00000
+Write plotfile time = 0.783746974  seconds
+
+
+Ending run at 21:10:42 UTC on 2026-10-10.
+Run time = 1.040523873
+Run time w/o init = 0.293198685
+AMReX (26.07-12-g1546c1ccbf41) finalized

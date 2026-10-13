@@ -623,6 +623,12 @@ PeleC::buildMetrics()
       getEdgeBoxArray(dir), dmap, 1, 0, amrex::MFInfo(),
       amrex::FArrayBoxFactory());
     clem_mass_flux[dir].setVal(0.0);
+
+    clem_mass_transfer[dir].clear();
+    clem_mass_transfer[dir].define(
+      getEdgeBoxArray(dir), dmap, 1, 0, amrex::MFInfo(),
+      amrex::FArrayBoxFactory());
+    clem_mass_transfer[dir].setVal(0.0);
   }
 #endif
 
@@ -747,6 +753,14 @@ PeleC::init(AmrLevel& old)
   amrex::MultiFab& S_new = get_new_data(State_Type);
   FillPatch(old, S_new, 0, cur_time, State_Type, 0, NVAR);
 
+#ifdef PELE_USE_CLEM
+  // The cells that are new on this level take the state of their parent
+  // unchanged, as their CLEM lines do
+  if (level > 0) {
+    SetNewCellsFromCoarse(&old.boxArray(), &old.DistributionMap());
+  }
+#endif
+
   amrex::MultiFab& React_new = get_new_data(Reactions_Type);
 
   if (do_react) {
@@ -781,6 +795,10 @@ PeleC::init()
   setTimeLevel(cur_time, dt_old, dt);
   amrex::MultiFab& S_new = get_new_data(State_Type);
   FillCoarsePatch(S_new, 0, cur_time, State_Type, 0, NVAR);
+
+#ifdef PELE_USE_CLEM
+  SetNewCellsFromCoarse(nullptr, nullptr);
+#endif
 
   if (do_mol_load_balance || do_react_load_balance) {
     amrex::MultiFab& work_estimate_new = get_new_data(Work_Estimate_Type);
@@ -1198,6 +1216,12 @@ PeleC::post_regrid(int lbase, int /*new_finest*/)
   if ((do_react) && (use_typical_vals_chem)) {
     set_typical_values_chem();
   }
+
+#ifdef PELE_USE_CLEM
+  if (lbase == level) {
+    PostRegridClem(lbase);
+  }
+#endif
 }
 
 void

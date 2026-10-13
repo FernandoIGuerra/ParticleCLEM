@@ -136,6 +136,15 @@ public:
   void Redistribute(int lev);
   void Redistribute();
 
+  // ---- the grids the lines are filed under ------------------------------------------
+
+  // RememberGrids: record the grids of every level as those the lines are now
+  // filed under. GridsChanged: do the grids of level lev differ from the ones
+  // recorded (true for a level that was not there). After an AMR regrid the
+  // lines of a changed level must be moved (multiresolution/grid_adapter.H)
+  void RememberGrids();
+  bool GridsChanged(int lev) const;
+
   // ---- reactor of the lines (reactor/react.cpp) ------------------------------------
 
   // DiffusionStirringReactor: advance every line of level lev by the LES step
@@ -178,6 +187,9 @@ private:
   // one map per AMR level, keyed by grid index
   amrex::Vector<CellVectors> m_cell_vectors;
   amrex::Vector<int> m_cell_map_valid; // per level; int, since Vector<bool> has no references
+  // the grids of each level at the last RememberGrids
+  amrex::Vector<amrex::BoxArray> m_grids;
+  amrex::Vector<amrex::DistributionMapping> m_dmaps;
 };
 
 // slot k of the n of the line of cell iv: at fraction (k + 1) / (n + 1) of the

@@ -38,4 +38,7 @@ PeleC::InitializeClem()
   // every covered cell starts as the average of its children, as it will be
   // after every sync
   clem::AverageDownAll(*ClemPC);
+
+  // the grids the lines are filed under, to tell when an AMR regrid moves them
+  ClemPC->RememberGrids();
 }

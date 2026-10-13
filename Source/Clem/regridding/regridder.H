@@ -14,6 +14,8 @@
 #ifndef CLEM_REGRIDDER_H
 #define CLEM_REGRIDDER_H
 
+#include <AMReX_iMultiFab.H>
+
 #include "particle_container.H"
 
 namespace clem {
@@ -43,10 +45,12 @@ public:
   Regridder& operator=(Regridder&&)      = delete;
 
   // on return every cell of level lev holds exactly setup::n_lem elements and
-  // the cell map of lev is valid
-  RegridDiagnostics Regrid(ClemContainer& container, const int lev) const
+  // the cell map of lev is valid. If only_cells is given, only the cells
+  // where it is 1 are regridded and the others are left as they are
+  RegridDiagnostics Regrid(ClemContainer& container, const int lev,
+                           const amrex::iMultiFab* only_cells = nullptr) const
   {
-    return derived().RegridImplementation(container, lev);
+    return derived().RegridImplementation(container, lev, only_cells);
   }
 
   static constexpr const char* Name() { return DerivedRegridder::name; }

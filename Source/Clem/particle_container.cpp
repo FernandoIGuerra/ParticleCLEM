@@ -153,6 +153,25 @@ ClemContainer::GetFilteredScalars(const int lev, amrex::MultiFab& filtered) cons
 }
 
 void
+ClemContainer::RememberGrids()
+{
+  const int n_levels = m_pc->finestLevel() + 1;
+  m_grids.resize(n_levels);
+  m_dmaps.resize(n_levels);
+  for (int lev = 0; lev < n_levels; ++lev) {
+    m_grids[lev] = m_pc->ParticleBoxArray(lev);
+    m_dmaps[lev] = m_pc->ParticleDistributionMap(lev);
+  }
+}
+
+bool
+ClemContainer::GridsChanged(const int lev) const
+{
+  return lev >= static_cast<int>(m_grids.size()) || m_grids[lev] != m_pc->ParticleBoxArray(lev) ||
+         m_dmaps[lev] != m_pc->ParticleDistributionMap(lev);
+}
+
+void
 ClemContainer::InvalidateCellMaps()
 {
   for (auto&& valid : m_cell_map_valid) {

@@ -66,10 +66,21 @@ PeleC::AdvanceClem(amrex::Real /*time*/, const amrex::Real dt, const bool react_
     clem::HaloManager& halo = getLevel(level + 1).clem_halo;
     halo.FillFromCoarse(*ClemPC, level + 1);
 
+    // and the level above starts the sum of its transfers over its substeps
+    for (int dir = 0; dir < AMREX_SPACEDIM; dir++) {
+      getLevel(level + 1).clem_mass_transfer[dir].setVal(0.0);
+    }
+
     if (verbose != 0) {
       amrex::Print() << "CLEM: level " << level + 1 << " halo filled from level " << level << ": "
                      << halo.NumHaloCells() << " cells, mass " << halo.TotalMass() << std::endl;
     }
+  }
+
+  // The mass through the faces of this level in this step, for the reflux of
+  // the lines of the level below
+  for (int dir = 0; dir < AMREX_SPACEDIM; dir++) {
+    amrex::MultiFab::Saxpy(clem_mass_transfer[dir], dt, clem_mass_flux[dir], 0, 0, 1, 0);
   }
 
   // 1. isentropic pressure change: the elements adopt the LES pressure

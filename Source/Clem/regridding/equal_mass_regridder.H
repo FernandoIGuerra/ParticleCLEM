@@ -40,14 +40,17 @@ class EqualMassRegridder : public Regridder<EqualMassRegridder>
   friend Regridder;
 
 protected:
-  RegridDiagnostics RegridImplementation(ClemContainer& container, int lev) const;
+  RegridDiagnostics RegridImplementation(ClemContainer& container, int lev,
+                                         const amrex::iMultiFab* only_cells) const;
 
 private:
   // step 1; returns the number of elements created on this rank
-  amrex::Long TopUpLines(ClemContainer& container, int lev) const;
+  amrex::Long TopUpLines(ClemContainer& container, int lev,
+                         const amrex::iMultiFab* only_cells) const;
 
   // step 2; returns the number of elements invalidated on this rank
-  amrex::Long MergeLines(ClemContainer& container, int lev) const;
+  amrex::Long MergeLines(ClemContainer& container, int lev,
+                         const amrex::iMultiFab* only_cells) const;
 
 public:
   static constexpr const char* name = "equal mass, e and Y mass-averaged, T and p from the EOS";

@@ -1,0 +1,2425 @@
+Initializing AMReX (26.07-12-g1546c1ccbf41)...
+MPI initialized with 4 MPI processes
+MPI initialized with thread support level 0
+Initializing SUNDIALS with 1 threads...
+SUNDIALS initialized.
+AMReX (26.07-12-g1546c1ccbf41) initialized
+
+Starting run at 13:00:39 UTC on 2026-10-13.
+Successfully read inputs file ... 
+
+PeleC git hash: v1.0.0-16-g9f8b341-dirty
+AMReX git hash: 26.07-12-g1546c1cc
+PelePhysics git hash: v1.0.0-28-g6e8026f
+SUNDIALS git hash: v7.1.1-58-g0eff3966
+
+0 Advected Variables: 
+
+13 Species: 
+H  H2  O  OH  H2O  O2  HO2  H2O2  N2  AR  HE  CO  CO2  
+0 Auxiliary Variables: 
+
+Initializing EB2
+Successfully read inputs file ... 
+Starting to call amrex_probinit ... 
+
+=== CrossJet: H2 jet in supersonic crossflow ===
+  crossflow  p       = 1 atm
+  crossflow  T       = 1000 K
+  crossflow  u       = 930 m/s
+  crossflow  rho     = 0.0003514599969 g/cm^3
+  crossflow  Mach    = 1.499666346
+  crossflow  mdot    = 24.51433478 g/s
+  jet        p       = 1.289997533 atm
+  jet        T       = 300 K
+  jet        v       = 1321 m/s
+  jet        rho     = 0.0001056429646 g/cm^3
+  jet        Mach    = 1.002150239
+  jet        mdot    = 0.1096057351 g/s
+  global equiv ratio = 0.1542721886
+  momentum ratio J   = 0.60646315
+  injector centre    = (4.2, 0, 0.25) cm, d = 0.1 cm
+================================================
+
+Successfully run amrex_probinit
+Creating ReactorBase instance: ReactorCvode
+Initializing CVODE:
+Initializing the data at level 0
+Done initializing level 0 data 
+...estimated hydro-limited timestep at level 0: 4.031899249e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 4.031899249e-08
+grid_places() time: 0.008131713 new finest: 1
+Creating ReactorBase instance: ReactorCvode
+Initializing CVODE:
+Initializing the data at level 1
+Done initializing level 1 data 
+Now regridding at level lbase = 0
+grid_places() time: 0.006406048 new finest: 1
+Creating ReactorBase instance: ReactorCvode
+Initializing CVODE:
+Initializing the data at level 1
+Done initializing level 1 data 
+STEP = 0 TIME = 0 : REGRID  with lbase = 0
+  Level 1   4 grids  2048 cells  0.6666666667 % of domain
+            smallest grid: 8 x 8 x 8  biggest grid: 8 x 8 x 8
+
+CLEM: level 0 seeded with 460800 particles in 38400 cells
+CLEM: level 1 seeded with 24576 particles in 2048 cells
+
+TIME = 0 MASS        = 0.003294937471
+TIME = 0 XMOM        = 306.4291848
+TIME = 0 YMOM        = 0
+TIME = 0 ZMOM        = 0
+TIME = 0 RHO*e       = 15326173.33
+TIME = 0 RHO*K       = 14248957.09
+TIME = 0 RHO*E       = 29575130.43
+TIME = 0 FUEL PROD   = 0
+
+TIME = 0 density     MIN = 0.00035146       MAX = 0.00035146     
+TIME = 0 x_velocity  MIN = 93000            MAX = 93000          
+TIME = 0 y_velocity  MIN = 0                MAX = 0              
+TIME = 0 z_velocity  MIN = 0                MAX = 0              
+TIME = 0 eint_e      MIN = 4.6514307e+09    MAX = 4.6514307e+09  
+TIME = 0 Temp        MIN = 1000             MAX = 1000           
+TIME = 0 pressure    MIN = 1013250          MAX = 1013250        
+TIME = 0 massfrac    MIN = 0                MAX = 0.77           
+TIME = 0 sumYminus1  MIN = 0                MAX = 0              
+INITIAL GRIDS 
+  Level 0   7 grids  38400 cells  100 % of domain
+            smallest grid: 24 x 24 x 8  biggest grid: 32 x 24 x 8
+  Level 1   4 grids  2048 cells  0.6666666667 % of domain
+            smallest grid: 8 x 8 x 8  biggest grid: 8 x 8 x 8
+
+PLOTFILE: file = plt00000
+Write plotfile time = 0.147637692  seconds
+
+...estimated hydro-limited timestep at level 0: 4.031899249e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 4.031899249e-08
+...estimated hydro-limited timestep at level 1: 2.015949625e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 2.015949625e-08
+[Level 0 step 1] ADVANCE at time 0 with dt = 4.031899249e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 720 cells, mass 7.722509697e-06
+CLEM: level 0 lines advanced for dt = 4.031899249e-09: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 3.476236979e-10
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294937471 -> 0.003294937779, in 9.91475288e-08, out 9.883931754e-08, balance -3.248500881e-14, max export 0.005999466083, elements 502410
+CLEM: level 0 regrid: 0 elements added, 41610 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 4.440892099e-16
+CLEM: level 0 write-back: max volume defect 0.004023131003, max projection 3.330669074e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 7.644291874e-17
+[Level 0 step 1] Advanced 38400 cells
+[Level 1 step 1] ADVANCE at time 0 with dt = 2.015949625e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 2.015949625e-09: 2048 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 0
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 2.196624981e-05 -> 2.196640391e-05, in 8.390709549e-09, out 8.236608049e-09, balance 1.968702114e-16, max export 0.005999466083, elements 26900
+CLEM: level 1 regrid: 0 elements added, 2324 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 4.440892099e-16
+CLEM: level 1 write-back: max volume defect 0.004016749349, max projection 2.220446049e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 7.440265617e-17
+[Level 1 step 1] Advanced 2048 cells
+[Level 1 step 2] ADVANCE at time 2.015949625e-09 with dt = 2.015949625e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 2.015949625e-09: 2048 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 6.689032528e-11
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 2.196640391e-05 -> 2.196655669e-05, in 8.389384224e-09, out 8.236602814e-09, balance 6.607984379e-16, max export 0.006003779124, elements 27674
+CLEM: level 1 regrid: 0 elements added, 3098 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 4.440892099e-16
+CLEM: level 1 write-back: max volume defect 0.003512264609, max projection 4.440892099e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.696601326e-16
+[Level 1 step 2] Advanced 2048 cells
+PeleC::reflux() at level 0 : time = 0.005845514
+CLEM: level 0 mass reflux: 40 cells, removed 5.239630451e-15, added 3.927103651e-18, max |dm| / m 7.627266183e-09, max projection 1.110223025e-16
+CLEM: level 0 average down from level 1: 256 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 6.661338148e-16
+
+[STEP 1] Coarse TimeStep time: 1.151638603
+[STEP 1] FAB kilobyte spread across MPI nodes: [20472 ... 32227]
+
+STEP = 1 TIME = 4.031899249e-09 DT = 4.031899249e-09
+
+...estimated hydro-limited timestep at level 0: 4.027911149e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 4.027911149e-08
+...estimated hydro-limited timestep at level 1: 2.010736971e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 2.010736971e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 4.027911149e-08
+ ... but limiting to: 4.233494212e-09 = 1.05 * 4.031899249e-09
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 2.010736971e-08
+ ... but limiting to: 2.116747106e-09 = 1.05 * 2.015949625e-09
+[Level 0 step 2] ADVANCE at time 4.031899249e-09 with dt = 4.233494212e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 720 cells, mass 7.722509694e-06
+CLEM: level 0 lines advanced for dt = 4.233494212e-09: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 4.920395115e-11
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294937778 -> 0.003294938099, in 1.041028438e-07, out 1.037812609e-07, balance 1.508264474e-14, max export 0.006307511031, elements 509632
+CLEM: level 0 regrid: 0 elements added, 48832 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 7.771561172e-16
+CLEM: level 0 write-back: max volume defect 0.003949499031, max projection 6.661338148e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.851417892e-16
+[Level 0 step 2] Advanced 38400 cells
+[Level 1 step 3] ADVANCE at time 4.031899249e-09 with dt = 2.116747106e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 2.116747106e-09: 2048 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.096264876e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 2.196655669e-05 -> 2.196671598e-05, in 8.80771379e-09, out 8.648427329e-09, balance 3.227752733e-15, max export 0.006311504583, elements 29040
+CLEM: level 1 regrid: 0 elements added, 4464 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 4.440892099e-16
+CLEM: level 1 write-back: max volume defect 0.002747444246, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.722211224e-16
+[Level 1 step 3] Advanced 2048 cells
+[Level 1 step 4] ADVANCE at time 6.148646355e-09 with dt = 2.116747106e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 2.116747106e-09: 2048 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 3.311917708e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 2.196671598e-05 -> 2.196687412e-05, in 8.806569663e-09, out 8.648421548e-09, balance -2.881443933e-16, max export 0.006319329529, elements 30409
+CLEM: level 1 regrid: 0 elements added, 5833 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 6.661338148e-16
+CLEM: level 1 write-back: max volume defect 0.001648492297, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.889141083e-16
+[Level 1 step 4] Advanced 2048 cells
+PeleC::reflux() at level 0 : time = 0.002638484
+CLEM: level 0 mass reflux: 120 cells, removed 6.145049194e-15, added 1.269498902e-19, max |dm| / m 8.408614345e-09, max projection 4.440892099e-16
+CLEM: level 0 average down from level 1: 256 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 6.661338148e-16
+
+[STEP 2] Coarse TimeStep time: 1.88607688
+[STEP 2] FAB kilobyte spread across MPI nodes: [20618 ... 32374]
+
+STEP = 2 TIME = 8.265393461e-09 DT = 4.233494212e-09
+
+...estimated hydro-limited timestep at level 0: 4.023843245e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 4.023843245e-08
+...estimated hydro-limited timestep at level 1: 2.00564842e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 2.00564842e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 4.023843245e-08
+ ... but limiting to: 4.445168922e-09 = 1.05 * 4.233494212e-09
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 2.00564842e-08
+ ... but limiting to: 2.222584461e-09 = 1.05 * 2.116747106e-09
+Now regridding at level lbase = 0
+grid_places() time: 0.00441811 new finest: 1
+Creating ReactorBase instance: ReactorCvode
+Initializing CVODE:
+CLEM: regrid from level 0: 0 elements dropped, 0 new fine cells cloned
+CLEM: level 0 line mass defect after the regrid, max |m_line / (rho V) - 1| = 6.661338148e-16
+CLEM: level 1 line mass defect after the regrid, max |m_line / (rho V) - 1| = 6.661338148e-16
+STEP = 2 TIME = 8.265393461e-09 : REGRID  with lbase = 0
+  Level 1   4 grids  2048 cells  0.6666666667 % of domain
+            smallest grid: 8 x 8 x 8  biggest grid: 8 x 8 x 8
+
+[Level 0 step 3] ADVANCE at time 8.265393461e-09 with dt = 4.445168922e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 720 cells, mass 7.722509684e-06
+CLEM: level 0 lines advanced for dt = 4.445168922e-09: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 7.391192484e-10
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294938095 -> 0.003294938431, in 1.093059692e-07, out 1.089702991e-07, balance -8.96597725e-14, max export 0.0066336592, elements 526267
+CLEM: level 0 regrid: 0 elements added, 65467 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 6.661338148e-16
+CLEM: level 0 write-back: max volume defect 0.003603699647, max projection 6.661338148e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.809489023e-16
+[Level 0 step 3] Advanced 38400 cells
+[Level 1 step 5] ADVANCE at time 8.265393461e-09 with dt = 2.222584461e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 2.222584461e-09: 2048 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.577930666e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 2.196687412e-05 -> 2.196703904e-05, in 9.245749806e-09, out 9.080836421e-09, balance 1.45848514e-15, max export 0.006643016768, elements 30486
+CLEM: level 1 regrid: 0 elements added, 5910 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 6.661338148e-16
+CLEM: level 1 write-back: max volume defect 0.0008263405772, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.829137824e-16
+[Level 1 step 5] Advanced 2048 cells
+[Level 1 step 6] ADVANCE at time 1.048797792e-08 with dt = 2.222584461e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 2.222584461e-09: 2048 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.505840938e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 2.196703904e-05 -> 2.196720281e-05, in 9.244598683e-09, out 9.080830089e-09, balance -7.222331659e-17, max export 0.006651021618, elements 30519
+CLEM: level 1 regrid: 0 elements added, 5943 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 7.771561172e-16
+CLEM: level 1 write-back: max volume defect 0.0004345494049, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.888684097e-16
+[Level 1 step 6] Advanced 2048 cells
+PeleC::reflux() at level 0 : time = 0.004431755
+CLEM: level 0 mass reflux: 128 cells, removed 6.463372969e-15, added 8.292225363e-17, max |dm| / m 9.364457716e-09, max projection 4.440892099e-16
+CLEM: level 0 average down from level 1: 256 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 4.440892099e-16
+
+[STEP 3] Coarse TimeStep time: 2.672189283
+[STEP 3] FAB kilobyte spread across MPI nodes: [20618 ... 32374]
+
+STEP = 3 TIME = 1.271056238e-08 DT = 4.445168922e-09
+
+...estimated hydro-limited timestep at level 0: 4.019691476e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 4.019691476e-08
+...estimated hydro-limited timestep at level 1: 2.000689826e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 2.000689826e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 4.019691476e-08
+ ... but limiting to: 4.667427368e-09 = 1.05 * 4.445168922e-09
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 2.000689826e-08
+ ... but limiting to: 2.333713684e-09 = 1.05 * 2.222584461e-09
+[Level 0 step 4] ADVANCE at time 1.271056238e-08 with dt = 4.667427368e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 720 cells, mass 7.722509665e-06
+CLEM: level 0 lines advanced for dt = 4.667427368e-09: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 8.583877484e-10
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294938424 -> 0.003294938774, in 1.147692721e-07, out 1.144187866e-07, balance -3.757756688e-14, max export 0.006976756123, elements 549084
+CLEM: level 0 regrid: 0 elements added, 88284 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 6.661338148e-16
+CLEM: level 0 write-back: max volume defect 0.003195390185, max projection 6.661338148e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.882412027e-16
+[Level 0 step 4] Advanced 38400 cells
+[Level 1 step 7] ADVANCE at time 1.271056238e-08 with dt = 2.333713684e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 2.333713684e-09: 2048 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 2.198477984e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 2.196720281e-05 -> 2.196737362e-05, in 9.705676636e-09, out 9.534864761e-09, balance -2.691597593e-16, max export 0.006991481619, elements 30510
+CLEM: level 1 regrid: 0 elements added, 5934 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 7.771561172e-16
+CLEM: level 1 write-back: max volume defect 0.001177553881, max projection 7.771561172e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.929430911e-16
+[Level 1 step 7] Advanced 2048 cells
+[Level 1 step 8] ADVANCE at time 1.504427607e-08 with dt = 2.333713684e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 2.333713684e-09: 2048 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 2.032271387e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 2.196737362e-05 -> 2.196754328e-05, in 9.704522714e-09, out 9.534857753e-09, balance -1.250144729e-16, max export 0.006999715848, elements 30587
+CLEM: level 1 regrid: 0 elements added, 6011 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 7.771561172e-16
+CLEM: level 1 write-back: max volume defect 0.002103448991, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.878115774e-16
+[Level 1 step 8] Advanced 2048 cells
+PeleC::reflux() at level 0 : time = 0.002494843
+CLEM: level 0 mass reflux: 128 cells, removed 7.082135662e-15, added 3.73108209e-17, max |dm| / m 1.021848678e-08, max projection 6.661338148e-16
+CLEM: level 0 average down from level 1: 256 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 6.661338148e-16
+
+[STEP 4] Coarse TimeStep time: 2.549376607
+[STEP 4] FAB kilobyte spread across MPI nodes: [20618 ... 32374]
+
+STEP = 4 TIME = 1.737798975e-08 DT = 4.667427368e-09
+
+...estimated hydro-limited timestep at level 0: 4.015455143e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 4.015455143e-08
+...estimated hydro-limited timestep at level 1: 1.995867824e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.995867824e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 4.015455143e-08
+ ... but limiting to: 4.900798737e-09 = 1.05 * 4.667427368e-09
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.995867824e-08
+ ... but limiting to: 2.450399368e-09 = 1.05 * 2.333713684e-09
+Now regridding at level lbase = 0
+grid_places() time: 0.003098759 new finest: 1
+Creating ReactorBase instance: ReactorCvode
+Initializing CVODE:
+CLEM: regrid from level 0: 0 elements dropped, 0 new fine cells cloned
+CLEM: level 0 line mass defect after the regrid, max |m_line / (rho V) - 1| = 6.661338148e-16
+CLEM: level 1 line mass defect after the regrid, max |m_line / (rho V) - 1| = 7.771561172e-16
+STEP = 4 TIME = 1.737798975e-08 : REGRID  with lbase = 0
+  Level 1   4 grids  2048 cells  0.6666666667 % of domain
+            smallest grid: 8 x 8 x 8  biggest grid: 8 x 8 x 8
+
+[Level 0 step 5] ADVANCE at time 1.737798975e-08 with dt = 4.900798737e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 720 cells, mass 7.722509637e-06
+CLEM: level 0 lines advanced for dt = 4.900798737e-09: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 4.105242609e-10
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294938764 -> 0.00329493913, in 1.205056264e-07, out 1.201396957e-07, balance 3.034497301e-15, max export 0.007337962314, elements 566140
+CLEM: level 0 regrid: 0 elements added, 105340 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 6.661338148e-16
+CLEM: level 0 write-back: max volume defect 0.002787439573, max projection 6.661338148e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.892992694e-16
+[Level 0 step 5] Advanced 38400 cells
+[Level 1 step 9] ADVANCE at time 1.737798975e-08 with dt = 2.450399368e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 2.450399368e-09: 2048 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 3.237672409e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 2.196754328e-05 -> 2.196772029e-05, in 1.018859626e-08, out 1.001159308e-08, balance 1.590533298e-16, max export 0.007357856087, elements 30590
+CLEM: level 1 regrid: 0 elements added, 6014 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.110223025e-15
+CLEM: level 1 write-back: max volume defect 0.002711490831, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.929757065e-16
+[Level 1 step 9] Advanced 2048 cells
+[Level 1 step 10] ADVANCE at time 1.982838912e-08 with dt = 2.450399368e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 2.450399368e-09: 2048 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 3.371753126e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 2.196772029e-05 -> 2.196789614e-05, in 1.018744184e-08, out 1.001158535e-08, balance 3.923585092e-17, max export 0.007366385237, elements 30597
+CLEM: level 1 regrid: 0 elements added, 6021 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 8.881784197e-16
+CLEM: level 1 write-back: max volume defect 0.003507680281, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.841628678e-16
+[Level 1 step 10] Advanced 2048 cells
+PeleC::reflux() at level 0 : time = 0.002097609
+CLEM: level 0 mass reflux: 128 cells, removed 7.813257539e-15, added 1.199904037e-17, max |dm| / m 1.126455834e-08, max projection 6.661338148e-16
+CLEM: level 0 average down from level 1: 256 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 6.661338148e-16
+
+[STEP 5] Coarse TimeStep time: 2.492687705
+[STEP 5] FAB kilobyte spread across MPI nodes: [20618 ... 32374]
+
+STEP = 5 TIME = 2.227878849e-08 DT = 4.900798737e-09
+
+...estimated hydro-limited timestep at level 0: 4.011131963e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 4.011131963e-08
+...estimated hydro-limited timestep at level 1: 1.991180802e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.991180802e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 4.011131963e-08
+ ... but limiting to: 5.145838674e-09 = 1.05 * 4.900798737e-09
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.991180802e-08
+ ... but limiting to: 2.572919337e-09 = 1.05 * 2.450399368e-09
+[Level 0 step 6] ADVANCE at time 2.227878849e-08 with dt = 5.145838674e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 720 cells, mass 7.722509597e-06
+CLEM: level 0 lines advanced for dt = 5.145838674e-09: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 5.596804146e-10
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294939117 -> 0.003294939499, in 1.265286805e-07, out 1.261466472e-07, balance -4.760041174e-14, max export 0.007718262146, elements 569708
+CLEM: level 0 regrid: 0 elements added, 108908 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 7.771561172e-16
+CLEM: level 0 write-back: max volume defect 0.002399814671, max projection 6.661338148e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.909076625e-16
+[Level 0 step 6] Advanced 38400 cells
+[Level 1 step 11] ADVANCE at time 2.227878849e-08 with dt = 2.572919337e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 2.572919337e-09: 2048 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 3.832073675e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 2.196789614e-05 -> 2.196807965e-05, in 1.069566281e-08, out 1.051215629e-08, balance -2.904634656e-16, max export 0.007743175273, elements 30575
+CLEM: level 1 regrid: 0 elements added, 5999 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 8.881784197e-16
+CLEM: level 1 write-back: max volume defect 0.003975203536, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.872344836e-16
+[Level 1 step 11] Advanced 2048 cells
+[Level 1 step 12] ADVANCE at time 2.485170783e-08 with dt = 2.572919337e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 2.572919337e-09: 2048 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 4.099130804e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 2.196807965e-05 -> 2.196826201e-05, in 1.069450966e-08, out 1.051214777e-08, balance -4.246590097e-16, max export 0.007752087152, elements 30575
+CLEM: level 1 regrid: 0 elements added, 5999 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 8.881784197e-16
+CLEM: level 1 write-back: max volume defect 0.004639476707, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.90311706e-16
+[Level 1 step 12] Advanced 2048 cells
+PeleC::reflux() at level 0 : time = 0.00343047
+CLEM: level 0 mass reflux: 128 cells, removed 8.640047198e-15, added 3.578044498e-17, max |dm| / m 1.241774475e-08, max projection 4.440892099e-16
+CLEM: level 0 average down from level 1: 256 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 7.771561172e-16
+
+[STEP 6] Coarse TimeStep time: 2.45224873
+[STEP 6] FAB kilobyte spread across MPI nodes: [20618 ... 32374]
+
+STEP = 6 TIME = 2.742462716e-08 DT = 5.145838674e-09
+
+...estimated hydro-limited timestep at level 0: 4.006718785e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 4.006718785e-08
+...estimated hydro-limited timestep at level 1: 1.986622725e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.986622725e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 4.006718785e-08
+ ... but limiting to: 5.403130607e-09 = 1.05 * 5.145838674e-09
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.986622725e-08
+ ... but limiting to: 2.701565304e-09 = 1.05 * 2.572919337e-09
+Now regridding at level lbase = 0
+grid_places() time: 0.003287953 new finest: 1
+Creating ReactorBase instance: ReactorCvode
+Initializing CVODE:
+CLEM: regrid from level 0: 0 elements dropped, 0 new fine cells cloned
+CLEM: level 0 line mass defect after the regrid, max |m_line / (rho V) - 1| = 7.771561172e-16
+CLEM: level 1 line mass defect after the regrid, max |m_line / (rho V) - 1| = 8.881784197e-16
+STEP = 6 TIME = 2.742462716e-08 : REGRID  with lbase = 0
+  Level 1   4 grids  2048 cells  0.6666666667 % of domain
+            smallest grid: 8 x 8 x 8  biggest grid: 8 x 8 x 8
+
+[Level 0 step 7] ADVANCE at time 2.742462716e-08 with dt = 5.403130607e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 720 cells, mass 7.722509546e-06
+CLEM: level 0 lines advanced for dt = 5.403130607e-09: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 3.001593754e-11
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294939483 -> 0.003294939882, in 1.328527651e-07, out 1.324539429e-07, balance 7.808326726e-15, max export 0.00811869575, elements 571882
+CLEM: level 0 regrid: 0 elements added, 111082 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 7.771561172e-16
+CLEM: level 0 write-back: max volume defect 0.002042785735, max projection 6.661338148e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.91312584e-16
+[Level 0 step 7] Advanced 38400 cells
+[Level 1 step 13] ADVANCE at time 2.742462716e-08 with dt = 2.701565304e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 2.701565304e-09: 2048 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 4.57855696e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 2.196826201e-05 -> 2.196845235e-05, in 1.122808737e-08, out 1.103774598e-08, balance 1.176142819e-15, max export 0.008148581739, elements 30576
+CLEM: level 1 regrid: 0 elements added, 6000 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.110223025e-15
+CLEM: level 1 write-back: max volume defect 0.004968365431, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.906105621e-16
+[Level 1 step 13] Advanced 2048 cells
+[Level 1 step 14] ADVANCE at time 3.012619247e-08 with dt = 2.701565304e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 2.701565304e-09: 2048 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 4.534178385e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 2.196845235e-05 -> 2.196864155e-05, in 1.122693722e-08, out 1.103773657e-08, balance -4.02888306e-16, max export 0.0081579765, elements 30576
+CLEM: level 1 regrid: 0 elements added, 6000 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.221245327e-15
+CLEM: level 1 write-back: max volume defect 0.005506896703, max projection 7.771561172e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.907445488e-16
+[Level 1 step 14] Advanced 2048 cells
+PeleC::reflux() at level 0 : time = 0.003583332
+CLEM: level 0 mass reflux: 128 cells, removed 9.491815472e-15, added 2.742186608e-17, max |dm| / m 1.368854863e-08, max projection 4.440892099e-16
+CLEM: level 0 average down from level 1: 256 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 7.771561172e-16
+
+[STEP 7] Coarse TimeStep time: 2.540866142
+[STEP 7] FAB kilobyte spread across MPI nodes: [20618 ... 32374]
+
+STEP = 7 TIME = 3.282775777e-08 DT = 5.403130607e-09
+
+...estimated hydro-limited timestep at level 0: 4.002211627e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 4.002211627e-08
+...estimated hydro-limited timestep at level 1: 1.982184551e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.982184551e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 4.002211627e-08
+ ... but limiting to: 5.673287138e-09 = 1.05 * 5.403130607e-09
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.982184551e-08
+ ... but limiting to: 2.836643569e-09 = 1.05 * 2.701565304e-09
+[Level 0 step 8] ADVANCE at time 3.282775777e-08 with dt = 5.673287138e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 720 cells, mass 7.72250948e-06
+CLEM: level 0 lines advanced for dt = 5.673287138e-09: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 5.872812625e-10
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294939863 -> 0.003294940279, in 1.394929268e-07, out 1.390765995e-07, balance 3.723479069e-14, max export 0.008540361718, elements 573152
+CLEM: level 0 regrid: 0 elements added, 112352 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 7.771561172e-16
+CLEM: level 0 write-back: max volume defect 0.001723506291, max projection 6.661338148e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.88890786e-16
+[Level 0 step 8] Advanced 38400 cells
+[Level 1 step 15] ADVANCE at time 3.282775777e-08 with dt = 2.836643569e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 2.836643569e-09: 2048 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 5.545040188e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 2.196864155e-05 -> 2.196883908e-05, in 1.178714173e-08, out 1.158961328e-08, balance 2.170306725e-16, max export 0.008575280273, elements 30576
+CLEM: level 1 regrid: 0 elements added, 6000 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.110223025e-15
+CLEM: level 1 write-back: max volume defect 0.005703768239, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.897473273e-16
+[Level 1 step 15] Advanced 2048 cells
+[Level 1 step 16] ADVANCE at time 3.566440134e-08 with dt = 2.836643569e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 2.836643569e-09: 2048 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 5.172617123e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 2.196883908e-05 -> 2.196903547e-05, in 1.178599667e-08, out 1.158960292e-08, balance -6.085388951e-16, max export 0.008585209336, elements 30579
+CLEM: level 1 regrid: 0 elements added, 6003 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.221245327e-15
+CLEM: level 1 write-back: max volume defect 0.006124174054, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.864364018e-16
+[Level 1 step 16] Advanced 2048 cells
+PeleC::reflux() at level 0 : time = 0.002876502
+CLEM: level 0 mass reflux: 128 cells, removed 1.046589568e-14, added 7.712169655e-17, max |dm| / m 1.508894895e-08, max projection 4.440892099e-16
+CLEM: level 0 average down from level 1: 256 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 7.771561172e-16
+
+[STEP 8] Coarse TimeStep time: 2.515768696
+[STEP 8] FAB kilobyte spread across MPI nodes: [20618 ... 32374]
+
+STEP = 8 TIME = 3.850104491e-08 DT = 5.673287138e-09
+
+...estimated hydro-limited timestep at level 0: 3.997605664e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.997605664e-08
+...estimated hydro-limited timestep at level 1: 1.977836413e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.977836413e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.997605664e-08
+ ... but limiting to: 5.956951495e-09 = 1.05 * 5.673287138e-09
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.977836413e-08
+ ... but limiting to: 2.978475747e-09 = 1.05 * 2.836643569e-09
+Now regridding at level lbase = 0
+grid_places() time: 0.003472852 new finest: 1
+Creating ReactorBase instance: ReactorCvode
+Initializing CVODE:
+CLEM: regrid from level 0: 0 elements dropped, 0 new fine cells cloned
+CLEM: level 0 line mass defect after the regrid, max |m_line / (rho V) - 1| = 7.771561172e-16
+CLEM: level 1 line mass defect after the regrid, max |m_line / (rho V) - 1| = 1.221245327e-15
+STEP = 8 TIME = 3.850104491e-08 : REGRID  with lbase = 0
+  Level 1   4 grids  2048 cells  0.6666666667 % of domain
+            smallest grid: 8 x 8 x 8  biggest grid: 8 x 8 x 8
+
+[Level 0 step 9] ADVANCE at time 3.850104491e-08 with dt = 5.956951495e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 720 cells, mass 7.722509399e-06
+CLEM: level 0 lines advanced for dt = 5.956951495e-09: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 4.197909985e-12
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294940257 -> 0.003294940692, in 1.464649643e-07, out 1.460303849e-07, balance 1.726407198e-15, max export 0.008984420244, elements 573899
+CLEM: level 0 regrid: 0 elements added, 113099 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 8.881784197e-16
+CLEM: level 0 write-back: max volume defect 0.00144703176, max projection 6.661338148e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.894601804e-16
+[Level 0 step 9] Advanced 38400 cells
+[Level 1 step 17] ADVANCE at time 3.850104491e-08 with dt = 2.978475747e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 2.978475747e-09: 2048 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 6.018448493e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 2.196903547e-05 -> 2.196924056e-05, in 1.237416205e-08, out 1.21690719e-08, balance 1.328366557e-16, max export 0.009024292579, elements 30582
+CLEM: level 1 regrid: 0 elements added, 6006 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.110223025e-15
+CLEM: level 1 write-back: max volume defect 0.006195870358, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.865559412e-16
+[Level 1 step 17] Advanced 2048 cells
+[Level 1 step 18] ADVANCE at time 4.147952065e-08 with dt = 2.978475747e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 2.978475747e-09: 2048 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 6.181097312e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 2.196924056e-05 -> 2.196944453e-05, in 1.237302457e-08, out 1.216906047e-08, balance -2.368295817e-16, max export 0.009034657516, elements 30577
+CLEM: level 1 regrid: 0 elements added, 6001 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.221245327e-15
+CLEM: level 1 write-back: max volume defect 0.006505926978, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.859974846e-16
+[Level 1 step 18] Advanced 2048 cells
+PeleC::reflux() at level 0 : time = 0.001854921
+CLEM: level 0 mass reflux: 128 cells, removed 1.155935045e-14, added 8.521806241e-17, max |dm| / m 1.663230333e-08, max projection 6.661338148e-16
+CLEM: level 0 average down from level 1: 256 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 8.881784197e-16
+
+[STEP 9] Coarse TimeStep time: 2.662811332
+[STEP 9] FAB kilobyte spread across MPI nodes: [20618 ... 32374]
+
+STEP = 9 TIME = 4.44579964e-08 DT = 5.956951495e-09
+
+...estimated hydro-limited timestep at level 0: 3.992895179e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.992895179e-08
+...estimated hydro-limited timestep at level 1: 1.973568984e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.973568984e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.992895179e-08
+ ... but limiting to: 6.254799069e-09 = 1.05 * 5.956951495e-09
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.973568984e-08
+ ... but limiting to: 3.127399535e-09 = 1.05 * 2.978475747e-09
+[Level 0 step 10] ADVANCE at time 4.44579964e-08 with dt = 6.254799069e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 720 cells, mass 7.722509299e-06
+CLEM: level 0 lines advanced for dt = 6.254799069e-09: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 4.541124202e-11
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294940666 -> 0.00329494112, in 1.537854661e-07, out 1.533318549e-07, balance -1.131740426e-14, max export 0.009452096747, elements 573964
+CLEM: level 0 regrid: 0 elements added, 113164 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 8.881784197e-16
+CLEM: level 0 write-back: max volume defect 0.001217146965, max projection 6.661338148e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.913498394e-16
+[Level 0 step 10] Advanced 38400 cells
+[Level 1 step 19] ADVANCE at time 4.44579964e-08 with dt = 3.127399535e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 3.127399535e-09: 2048 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 6.600441351e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 2.196944453e-05 -> 2.196965758e-05, in 1.299055224e-08, out 1.27775012e-08, balance 3.875083347e-16, max export 0.009496758973, elements 30583
+CLEM: level 1 regrid: 0 elements added, 6007 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.110223025e-15
+CLEM: level 1 write-back: max volume defect 0.00645907526, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.835585758e-16
+[Level 1 step 19] Advanced 2048 cells
+[Level 1 step 20] ADVANCE at time 4.758539594e-08 with dt = 3.127399535e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 3.127399535e-09: 2048 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 6.96178505e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 2.196965758e-05 -> 2.196986952e-05, in 1.298942541e-08, out 1.27774886e-08, balance -4.519631695e-16, max export 0.009507779823, elements 30590
+CLEM: level 1 regrid: 0 elements added, 6014 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.221245327e-15
+CLEM: level 1 write-back: max volume defect 0.006666313308, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.896871011e-16
+[Level 1 step 20] Advanced 2048 cells
+PeleC::reflux() at level 0 : time = 0.005596811
+CLEM: level 0 mass reflux: 128 cells, removed 1.278421163e-14, added 8.517253783e-17, max |dm| / m 1.833314566e-08, max projection 4.440892099e-16
+CLEM: level 0 average down from level 1: 256 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 8.881784197e-16
+
+TIME = 5.071279547e-08 MASS        = 0.003294941091
+TIME = 5.071279547e-08 XMOM        = 306.428353
+TIME = 5.071279547e-08 YMOM        = 0.0007454166277
+TIME = 5.071279547e-08 ZMOM        = 2.541098842e-19
+TIME = 5.071279547e-08 RHO*e       = 15326168.06
+TIME = 5.071279547e-08 RHO*K       = 14248867.68
+TIME = 5.071279547e-08 RHO*E       = 29575035.74
+TIME = 5.071279547e-08 FUEL PROD   = 0
+
+TIME = 5.071279547e-08 density     MIN = 0.0003512296     MAX = 0.00036625593  
+TIME = 5.071279547e-08 x_velocity  MIN = 88880.328        MAX = 93323.544      
+TIME = 5.071279547e-08 y_velocity  MIN = -2.5924497       MAX = 8366.7196      
+TIME = 5.071279547e-08 z_velocity  MIN = -328.73268       MAX = 328.73268      
+TIME = 5.071279547e-08 eint_e      MIN = 4.3929087e+09    MAX = 4.6692218e+09  
+TIME = 5.071279547e-08 Temp        MIN = 793.5303         MAX = 1001.4927      
+TIME = 5.071279547e-08 pressure    MIN = 1013198.4        MAX = 1292167.2      
+TIME = 5.071279547e-08 massfrac    MIN = 0                MAX = 0.77           
+TIME = 5.071279547e-08 sumYminus1  MIN = -3.3306691e-16   MAX = 2.220446e-16   
+
+[STEP 10] Coarse TimeStep time: 2.855255979
+[STEP 10] FAB kilobyte spread across MPI nodes: [20618 ... 32374]
+
+STEP = 10 TIME = 5.071279547e-08 DT = 6.254799069e-09
+
+...estimated hydro-limited timestep at level 0: 3.988073461e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.988073461e-08
+...estimated hydro-limited timestep at level 1: 1.969367191e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.969367191e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.988073461e-08
+ ... but limiting to: 6.567539023e-09 = 1.05 * 6.254799069e-09
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.969367191e-08
+ ... but limiting to: 3.283769511e-09 = 1.05 * 3.127399535e-09
+Now regridding at level lbase = 0
+grid_places() time: 0.005169937 new finest: 1
+Creating ReactorBase instance: ReactorCvode
+Initializing CVODE:
+CLEM: regrid from level 0: 0 elements dropped, 0 new fine cells cloned
+CLEM: level 0 line mass defect after the regrid, max |m_line / (rho V) - 1| = 8.881784197e-16
+CLEM: level 1 line mass defect after the regrid, max |m_line / (rho V) - 1| = 1.221245327e-15
+STEP = 10 TIME = 5.071279547e-08 : REGRID  with lbase = 0
+  Level 1   4 grids  2048 cells  0.6666666667 % of domain
+            smallest grid: 8 x 8 x 8  biggest grid: 8 x 8 x 8
+
+[Level 0 step 11] ADVANCE at time 5.071279547e-08 with dt = 6.567539023e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 720 cells, mass 7.722509179e-06
+CLEM: level 0 lines advanced for dt = 6.567539023e-09: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 2.030256446e-10
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294941091 -> 0.003294941565, in 1.614718498e-07, out 1.609983934e-07, balance -1.101382635e-14, max export 0.009944684608, elements 574322
+CLEM: level 0 regrid: 0 elements added, 113522 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 8.881784197e-16
+CLEM: level 0 write-back: max volume defect 0.001235401146, max projection 6.661338148e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.908921009e-16
+[Level 0 step 11] Advanced 38400 cells
+[Level 1 step 21] ADVANCE at time 5.071279547e-08 with dt = 3.283769511e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 3.283769511e-09: 2048 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 7.7894554e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 2.196986952e-05 -> 2.197009095e-05, in 1.36377876e-08, out 1.341634948e-08, balance 3.126512791e-16, max export 0.009994219619, elements 30598
+CLEM: level 1 regrid: 0 elements added, 6022 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.443289932e-15
+CLEM: level 1 write-back: max volume defect 0.006507530245, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.867327436e-16
+[Level 1 step 21] Advanced 2048 cells
+[Level 1 step 22] ADVANCE at time 5.399656498e-08 with dt = 3.283769511e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 3.283769511e-09: 2048 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 7.995519826e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 2.197009095e-05 -> 2.197031129e-05, in 1.363667504e-08, out 1.341633558e-08, balance -6.179167961e-16, max export 0.01000600091, elements 30604
+CLEM: level 1 regrid: 0 elements added, 6028 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.221245327e-15
+CLEM: level 1 write-back: max volume defect 0.00661940034, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.893758756e-16
+[Level 1 step 22] Advanced 2048 cells
+PeleC::reflux() at level 0 : time = 0.00666519
+CLEM: level 0 mass reflux: 128 cells, removed 1.409532807e-14, added 9.521737077e-17, max |dm| / m 2.020768368e-08, max projection 6.661338148e-16
+CLEM: level 0 average down from level 1: 256 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.110223025e-15
+
+[STEP 11] Coarse TimeStep time: 3.863604929
+[STEP 11] FAB kilobyte spread across MPI nodes: [20618 ... 32374]
+
+STEP = 11 TIME = 5.728033449e-08 DT = 6.567539023e-09
+
+...estimated hydro-limited timestep at level 0: 3.983132728e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.983132728e-08
+...estimated hydro-limited timestep at level 1: 1.965213041e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.965213041e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.983132728e-08
+ ... but limiting to: 6.895915974e-09 = 1.05 * 6.567539023e-09
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.965213041e-08
+ ... but limiting to: 3.447957987e-09 = 1.05 * 3.283769511e-09
+[Level 0 step 12] ADVANCE at time 5.728033449e-08 with dt = 6.895915974e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 720 cells, mass 7.722509036e-06
+CLEM: level 0 lines advanced for dt = 6.895915974e-09: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 5.011943616e-10
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294941533 -> 0.003294942028, in 1.695424036e-07, out 1.690482533e-07, balance 3.538916481e-14, max export 0.01046354899, elements 574330
+CLEM: level 0 regrid: 0 elements added, 113530 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 8.881784197e-16
+CLEM: level 0 write-back: max volume defect 0.001395164059, max projection 7.771561172e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.917847531e-16
+[Level 0 step 12] Advanced 38400 cells
+[Level 1 step 23] ADVANCE at time 5.728033449e-08 with dt = 3.447957987e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 3.447957987e-09: 2048 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 8.776511195e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 2.197031129e-05 -> 2.197054158e-05, in 1.431741841e-08, out 1.408713742e-08, balance 1.862165381e-16, max export 0.01051814287, elements 30601
+CLEM: level 1 regrid: 0 elements added, 6025 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.221245327e-15
+CLEM: level 1 write-back: max volume defect 0.006354776937, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.893532522e-16
+[Level 1 step 23] Advanced 2048 cells
+[Level 1 step 24] ADVANCE at time 6.072829248e-08 with dt = 3.447957987e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 3.447957987e-09: 2048 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 8.802639152e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 2.197054158e-05 -> 2.197077078e-05, in 1.431632437e-08, out 1.40871221e-08, balance 1.549654745e-16, max export 0.01053080266, elements 30585
+CLEM: level 1 regrid: 0 elements added, 6009 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.443289932e-15
+CLEM: level 1 write-back: max volume defect 0.006378056842, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.933269019e-16
+[Level 1 step 24] Advanced 2048 cells
+PeleC::reflux() at level 0 : time = 0.003414616
+CLEM: level 0 mass reflux: 128 cells, removed 1.554348561e-14, added 1.099898494e-16, max |dm| / m 2.227360029e-08, max projection 6.661338148e-16
+CLEM: level 0 average down from level 1: 256 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 8.881784197e-16
+
+[STEP 12] Coarse TimeStep time: 3.677957411
+[STEP 12] FAB kilobyte spread across MPI nodes: [20618 ... 32374]
+
+STEP = 12 TIME = 6.417625047e-08 DT = 6.895915974e-09
+
+...estimated hydro-limited timestep at level 0: 3.978064055e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.978064055e-08
+...estimated hydro-limited timestep at level 1: 1.961087729e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.961087729e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.978064055e-08
+ ... but limiting to: 7.240711773e-09 = 1.05 * 6.895915974e-09
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.961087729e-08
+ ... but limiting to: 3.620355886e-09 = 1.05 * 3.447957987e-09
+Now regridding at level lbase = 0
+grid_places() time: 0.006301014 new finest: 1
+Creating ReactorBase instance: ReactorCvode
+Initializing CVODE:
+CLEM: regrid from level 0: 0 elements dropped, 1024 new fine cells cloned
+CLEM: level 0 line mass defect after the regrid, max |m_line / (rho V) - 1| = 8.881784197e-16
+CLEM: level 1 line mass defect after the regrid, max |m_line / (rho V) - 1| = 1.443289932e-15
+STEP = 12 TIME = 6.417625047e-08 : REGRID  with lbase = 0
+  Level 1   4 grids  3072 cells  1 % of domain
+            smallest grid: 8 x 8 x 8  biggest grid: 16 x 8 x 8
+
+[Level 0 step 13] ADVANCE at time 6.417625047e-08 with dt = 7.240711773e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.438622134e-06
+CLEM: level 0 lines advanced for dt = 7.240711773e-09: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 8.515495019e-11
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294941993 -> 0.003294942509, in 1.7801633e-07, out 1.775006e-07, balance -4.020668834e-14, max export 0.0110101301, elements 574142
+CLEM: level 0 regrid: 0 elements added, 113342 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.221245327e-15
+CLEM: level 0 write-back: max volume defect 0.001556145101, max projection 6.661338148e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.915142536e-16
+[Level 0 step 13] Advanced 38400 cells
+[Level 1 step 25] ADVANCE at time 6.417625047e-08 with dt = 3.620355886e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 3.620355886e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 6.539581209e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.295389568e-05 -> 3.295413529e-05, in 1.503107359e-08, out 1.479146175e-08, balance 1.4518504e-15, max export 0.01107009939, elements 45738
+CLEM: level 1 regrid: 0 elements added, 8874 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.443289932e-15
+CLEM: level 1 write-back: max volume defect 0.006012912886, max projection 7.771561172e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.893641653e-16
+[Level 1 step 25] Advanced 3072 cells
+[Level 1 step 26] ADVANCE at time 6.779660635e-08 with dt = 3.620355886e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 3.620355886e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 6.566695294e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.295413529e-05 -> 3.295437385e-05, in 1.503000291e-08, out 1.479144485e-08, balance 2.956893734e-17, max export 0.011083772, elements 45785
+CLEM: level 1 regrid: 0 elements added, 8921 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.554312234e-15
+CLEM: level 1 write-back: max volume defect 0.005953786433, max projection 7.771561172e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.881742023e-16
+[Level 1 step 26] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.003873522
+CLEM: level 0 mass reflux: 160 cells, removed 1.692206576e-14, added 1.163356897e-16, max |dm| / m 2.455045756e-08, max projection 4.440892099e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.221245327e-15
+
+[STEP 13] Coarse TimeStep time: 3.855639045
+[STEP 13] FAB kilobyte spread across MPI nodes: [21046 ... 32374]
+
+STEP = 13 TIME = 7.141696224e-08 DT = 7.240711773e-09
+
+...estimated hydro-limited timestep at level 0: 3.972857261e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.972857261e-08
+...estimated hydro-limited timestep at level 1: 1.956971725e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.956971725e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.972857261e-08
+ ... but limiting to: 7.602747361e-09 = 1.05 * 7.240711773e-09
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.956971725e-08
+ ... but limiting to: 3.801373681e-09 = 1.05 * 3.620355886e-09
+[Level 0 step 14] ADVANCE at time 7.141696224e-08 with dt = 7.602747361e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.438621935e-06
+CLEM: level 0 lines advanced for dt = 7.602747361e-09: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.265260474e-10
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294942472 -> 0.00329494301, in 1.869137914e-07, out 1.863755574e-07, balance 1.96937715e-14, max export 0.01158594675, elements 574358
+CLEM: level 0 regrid: 0 elements added, 113558 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.110223025e-15
+CLEM: level 0 write-back: max volume defect 0.001717541315, max projection 7.771561172e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.916576444e-16
+[Level 0 step 14] Advanced 38400 cells
+[Level 1 step 27] ADVANCE at time 7.141696224e-08 with dt = 3.801373681e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 3.801373681e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 7.409536902e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.295437385e-05 -> 3.295462332e-05, in 1.578046523e-08, out 1.553099893e-08, balance -4.076367286e-17, max export 0.01165177306, elements 45810
+CLEM: level 1 regrid: 0 elements added, 8946 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.443289932e-15
+CLEM: level 1 write-back: max volume defect 0.005492959144, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.921504604e-16
+[Level 1 step 27] Advanced 3072 cells
+[Level 1 step 28] ADVANCE at time 7.521833592e-08 with dt = 3.801373681e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 3.801373681e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 7.737538142e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.295462332e-05 -> 3.295487176e-05, in 1.57794233e-08, out 1.553098032e-08, balance -5.631569217e-16, max export 0.01166661209, elements 45820
+CLEM: level 1 regrid: 0 elements added, 8956 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.443289932e-15
+CLEM: level 1 write-back: max volume defect 0.005357183706, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.909727015e-16
+[Level 1 step 28] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.007875178
+CLEM: level 0 mass reflux: 160 cells, removed 1.86955806e-14, added 5.146522537e-17, max |dm| / m 2.706005306e-08, max projection 6.661338148e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.110223025e-15
+
+[STEP 14] Coarse TimeStep time: 3.746133955
+[STEP 14] FAB kilobyte spread across MPI nodes: [21305 ... 32374]
+
+STEP = 14 TIME = 7.90197096e-08 DT = 7.602747361e-09
+
+...estimated hydro-limited timestep at level 0: 3.967500844e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.967500844e-08
+...estimated hydro-limited timestep at level 1: 1.952844848e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.952844848e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.967500844e-08
+ ... but limiting to: 7.982884729e-09 = 1.05 * 7.602747361e-09
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.952844848e-08
+ ... but limiting to: 3.991442365e-09 = 1.05 * 3.801373681e-09
+Now regridding at level lbase = 0
+grid_places() time: 0.00804319 new finest: 1
+Creating ReactorBase instance: ReactorCvode
+Initializing CVODE:
+CLEM: regrid from level 0: 0 elements dropped, 0 new fine cells cloned
+CLEM: level 0 line mass defect after the regrid, max |m_line / (rho V) - 1| = 1.110223025e-15
+CLEM: level 1 line mass defect after the regrid, max |m_line / (rho V) - 1| = 1.443289932e-15
+STEP = 14 TIME = 7.90197096e-08 : REGRID  with lbase = 0
+  Level 1   4 grids  3072 cells  1 % of domain
+            smallest grid: 8 x 8 x 8  biggest grid: 16 x 8 x 8
+
+[Level 0 step 15] ADVANCE at time 7.90197096e-08 with dt = 7.982884729e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.438621705e-06
+CLEM: level 0 lines advanced for dt = 7.982884729e-09: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 8.816866198e-12
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.00329494297 -> 0.003294943532, in 1.962559585e-07, out 1.956942551e-07, balance -1.224772679e-14, max export 0.01219259908, elements 574362
+CLEM: level 0 regrid: 0 elements added, 113562 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.221245327e-15
+CLEM: level 0 write-back: max volume defect 0.001878474315, max projection 6.661338148e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.920254901e-16
+[Level 0 step 15] Advanced 38400 cells
+[Level 1 step 29] ADVANCE at time 7.90197096e-08 with dt = 3.991442365e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 3.991442365e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 8.105375736e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.295487176e-05 -> 3.295513164e-05, in 1.656739166e-08, out 1.63075093e-08, balance 1.554217049e-16, max export 0.01226497316, elements 45809
+CLEM: level 1 regrid: 0 elements added, 8945 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.443289932e-15
+CLEM: level 1 write-back: max volume defect 0.0048048587, max projection 7.771561172e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.798647507e-16
+[Level 1 step 29] Advanced 3072 cells
+[Level 1 step 30] ADVANCE at time 8.301115197e-08 with dt = 3.991442365e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 3.991442365e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 8.205668211e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.295513164e-05 -> 3.295539054e-05, in 1.656638444e-08, out 1.630748878e-08, balance 1.101798669e-15, max export 0.01228115563, elements 45813
+CLEM: level 1 regrid: 0 elements added, 8949 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.554312234e-15
+CLEM: level 1 write-back: max volume defect 0.004597459139, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.933836805e-16
+[Level 1 step 30] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.007058098
+CLEM: level 0 mass reflux: 160 cells, removed 2.067141301e-14, added 6.060129433e-17, max |dm| / m 2.982621073e-08, max projection 6.661338148e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.33226763e-15
+
+[STEP 15] Coarse TimeStep time: 3.895805441
+[STEP 15] FAB kilobyte spread across MPI nodes: [21305 ... 32374]
+
+STEP = 15 TIME = 8.700259433e-08 DT = 7.982884729e-09
+
+...estimated hydro-limited timestep at level 0: 3.961981884e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.961981884e-08
+...estimated hydro-limited timestep at level 1: 1.948686292e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.948686292e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.961981884e-08
+ ... but limiting to: 8.382028966e-09 = 1.05 * 7.982884729e-09
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.948686292e-08
+ ... but limiting to: 4.191014483e-09 = 1.05 * 3.991442365e-09
+[Level 0 step 16] ADVANCE at time 8.700259433e-08 with dt = 8.382028966e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.438621437e-06
+CLEM: level 0 lines advanced for dt = 8.382028966e-09: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 6.824214601e-11
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294943489 -> 0.003294944075, in 2.060650603e-07, out 2.054788795e-07, balance 2.0230834e-14, max export 0.0128317712, elements 574366
+CLEM: level 0 regrid: 0 elements added, 113566 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.110223025e-15
+CLEM: level 0 write-back: max volume defect 0.002037999405, max projection 6.661338148e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.906398909e-16
+[Level 0 step 16] Advanced 38400 cells
+[Level 1 step 31] ADVANCE at time 8.700259433e-08 with dt = 4.191014483e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 4.191014483e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 8.917736951e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.295539054e-05 -> 3.295566144e-05, in 1.739374249e-08, out 1.712284115e-08, balance -5.924606221e-16, max export 0.01291164987, elements 45819
+CLEM: level 1 regrid: 0 elements added, 8955 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.554312234e-15
+CLEM: level 1 write-back: max volume defect 0.00395706013, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.884858926e-16
+[Level 1 step 31] Advanced 3072 cells
+[Level 1 step 32] ADVANCE at time 9.119360881e-08 with dt = 4.191014483e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 4.191014483e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 9.400891455e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.295566144e-05 -> 3.29559314e-05, in 1.739277649e-08, out 1.712281853e-08, balance -3.781034336e-16, max export 0.0129293816, elements 45815
+CLEM: level 1 regrid: 0 elements added, 8951 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.443289932e-15
+CLEM: level 1 write-back: max volume defect 0.003682676472, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.886982793e-16
+[Level 1 step 32] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.005889547
+CLEM: level 0 mass reflux: 160 cells, removed 2.275358875e-14, added 5.673035478e-17, max |dm| / m 3.287501285e-08, max projection 6.661338148e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.110223025e-15
+
+[STEP 16] Coarse TimeStep time: 3.829212178
+[STEP 16] FAB kilobyte spread across MPI nodes: [21305 ... 32374]
+
+STEP = 16 TIME = 9.53846233e-08 DT = 8.382028966e-09
+
+...estimated hydro-limited timestep at level 0: 3.956285961e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.956285961e-08
+...estimated hydro-limited timestep at level 1: 1.94447463e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.94447463e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.956285961e-08
+ ... but limiting to: 8.801130414e-09 = 1.05 * 8.382028966e-09
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.94447463e-08
+ ... but limiting to: 4.400565207e-09 = 1.05 * 4.191014483e-09
+Now regridding at level lbase = 0
+grid_places() time: 0.004935219 new finest: 1
+Creating ReactorBase instance: ReactorCvode
+Initializing CVODE:
+CLEM: regrid from level 0: 0 elements dropped, 0 new fine cells cloned
+CLEM: level 0 line mass defect after the regrid, max |m_line / (rho V) - 1| = 1.110223025e-15
+CLEM: level 1 line mass defect after the regrid, max |m_line / (rho V) - 1| = 1.443289932e-15
+STEP = 16 TIME = 9.53846233e-08 : REGRID  with lbase = 0
+  Level 1   4 grids  3072 cells  1 % of domain
+            smallest grid: 8 x 8 x 8  biggest grid: 16 x 8 x 8
+
+[Level 0 step 17] ADVANCE at time 9.53846233e-08 with dt = 8.801130414e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.438621128e-06
+CLEM: level 0 lines advanced for dt = 8.801130414e-09: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 4.444992149e-10
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294944031 -> 0.003294944642, in 2.163644372e-07, out 2.157527261e-07, balance -1.814789276e-14, max export 0.01350523462, elements 574366
+CLEM: level 0 regrid: 0 elements added, 113566 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.221245327e-15
+CLEM: level 0 write-back: max volume defect 0.002195130157, max projection 6.661338148e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.896990169e-16
+[Level 0 step 17] Advanced 38400 cells
+[Level 1 step 33] ADVANCE at time 9.53846233e-08 with dt = 4.400565207e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 4.400565207e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.012582265e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.29559314e-05 -> 3.295621396e-05, in 1.826150295e-08, out 1.797893513e-08, balance 1.530874649e-15, max export 0.01359391354, elements 45833
+CLEM: level 1 regrid: 0 elements added, 8969 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.554312234e-15
+CLEM: level 1 write-back: max volume defect 0.002957412963, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.897890648e-16
+[Level 1 step 33] Advanced 3072 cells
+[Level 1 step 34] ADVANCE at time 9.97851885e-08 with dt = 4.400565207e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 4.400565207e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.03380896e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.295621396e-05 -> 3.295649564e-05, in 1.826058518e-08, out 1.797891017e-08, balance -1.361892482e-15, max export 0.0136134374, elements 45850
+CLEM: level 1 regrid: 0 elements added, 8986 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.665334537e-15
+CLEM: level 1 write-back: max volume defect 0.002745381327, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.917666486e-16
+[Level 1 step 34] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.006391119
+CLEM: level 0 mass reflux: 160 cells, removed 2.518065738e-14, added 4.774677333e-17, max |dm| / m 3.623640821e-08, max projection 6.661338148e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.221245327e-15
+
+[STEP 17] Coarse TimeStep time: 3.797611124
+[STEP 17] FAB kilobyte spread across MPI nodes: [21305 ... 32374]
+
+STEP = 17 TIME = 1.041857537e-07 DT = 8.801130414e-09
+
+...estimated hydro-limited timestep at level 0: 3.950397067e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.950397067e-08
+...estimated hydro-limited timestep at level 1: 1.940187717e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.940187717e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.950397067e-08
+ ... but limiting to: 9.241186935e-09 = 1.05 * 8.801130414e-09
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.940187717e-08
+ ... but limiting to: 4.620593467e-09 = 1.05 * 4.400565207e-09
+[Level 0 step 18] ADVANCE at time 1.041857537e-07 with dt = 9.241186935e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.438620773e-06
+CLEM: level 0 lines advanced for dt = 9.241186935e-09: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.162883414e-10
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294944595 -> 0.003294945234, in 2.271785973e-07, out 2.26540255e-07, balance -1.223484312e-14, max export 0.01421484927, elements 574370
+CLEM: level 0 regrid: 0 elements added, 113570 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.221245327e-15
+CLEM: level 0 write-back: max volume defect 0.002348884388, max projection 7.771561172e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.914870427e-16
+[Level 0 step 18] Advanced 38400 cells
+[Level 1 step 35] ADVANCE at time 1.041857537e-07 with dt = 4.620593467e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 4.620593467e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.146964088e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.295649564e-05 -> 3.295679057e-05, in 1.917275904e-08, out 1.887782886e-08, balance 9.305767436e-16, max export 0.01431406139, elements 45820
+CLEM: level 1 regrid: 0 elements added, 8956 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.665334537e-15
+CLEM: level 1 write-back: max volume defect 0.002964611307, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.879313507e-16
+[Level 1 step 35] Advanced 3072 cells
+[Level 1 step 36] ADVANCE at time 1.088063472e-07 with dt = 4.620593467e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 4.620593467e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.137073212e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.295679057e-05 -> 3.295708466e-05, in 1.917188989e-08, out 1.887780135e-08, balance -9.897015259e-16, max export 0.01433515129, elements 45826
+CLEM: level 1 regrid: 0 elements added, 8962 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.776356839e-15
+CLEM: level 1 write-back: max volume defect 0.003049735804, max projection 7.771561172e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.908694693e-16
+[Level 1 step 36] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.005666075
+CLEM: level 0 mass reflux: 160 cells, removed 2.773883458e-14, added 8.450881455e-17, max |dm| / m 3.994341617e-08, max projection 4.440892099e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.221245327e-15
+
+[STEP 18] Coarse TimeStep time: 3.86750161
+[STEP 18] FAB kilobyte spread across MPI nodes: [21305 ... 32374]
+
+STEP = 18 TIME = 1.134269406e-07 DT = 9.241186935e-09
+
+...estimated hydro-limited timestep at level 0: 3.944302827e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.944302827e-08
+...estimated hydro-limited timestep at level 1: 1.935814147e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.935814147e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.944302827e-08
+ ... but limiting to: 9.703246281e-09 = 1.05 * 9.241186935e-09
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.935814147e-08
+ ... but limiting to: 4.851623141e-09 = 1.05 * 4.620593467e-09
+Now regridding at level lbase = 0
+grid_places() time: 0.00727725 new finest: 1
+Creating ReactorBase instance: ReactorCvode
+Initializing CVODE:
+CLEM: regrid from level 0: 0 elements dropped, 0 new fine cells cloned
+CLEM: level 0 line mass defect after the regrid, max |m_line / (rho V) - 1| = 1.221245327e-15
+CLEM: level 1 line mass defect after the regrid, max |m_line / (rho V) - 1| = 1.776356839e-15
+STEP = 18 TIME = 1.134269406e-07 : REGRID  with lbase = 0
+  Level 1   4 grids  3072 cells  1 % of domain
+            smallest grid: 8 x 8 x 8  biggest grid: 16 x 8 x 8
+
+[Level 0 step 19] ADVANCE at time 1.134269406e-07 with dt = 9.703246281e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.438620367e-06
+CLEM: level 0 lines advanced for dt = 9.703246281e-09: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 2.206761456e-10
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294945185 -> 0.003294945851, in 2.385332765e-07, out 2.378671493e-07, balance 4.261584911e-16, max export 0.01496256329, elements 574370
+CLEM: level 0 regrid: 0 elements added, 113570 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.33226763e-15
+CLEM: level 0 write-back: max volume defect 0.002498438628, max projection 6.661338148e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.909906377e-16
+[Level 0 step 19] Advanced 38400 cells
+[Level 1 step 37] ADVANCE at time 1.134269406e-07 with dt = 4.851623141e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 4.851623141e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.232000514e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.295708466e-05 -> 3.295739265e-05, in 2.012965798e-08, out 1.982166181e-08, balance 2.543002227e-16, max export 0.01507232136, elements 45826
+CLEM: level 1 regrid: 0 elements added, 8962 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.776356839e-15
+CLEM: level 1 write-back: max volume defect 0.003285101816, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.950186413e-16
+[Level 1 step 37] Advanced 3072 cells
+[Level 1 step 38] ADVANCE at time 1.182785638e-07 with dt = 4.851623141e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 4.851623141e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.23879239e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.295739265e-05 -> 3.295769982e-05, in 2.01287933e-08, out 1.982163149e-08, balance 2.410458463e-16, max export 0.01510813935, elements 45840
+CLEM: level 1 regrid: 0 elements added, 8976 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.665334537e-15
+CLEM: level 1 write-back: max volume defect 0.003370750726, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.915456664e-16
+[Level 1 step 38] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.004474659
+CLEM: level 0 mass reflux: 160 cells, removed 3.065056243e-14, added 9.622581733e-17, max |dm| / m 4.402917418e-08, max projection 4.440892099e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.33226763e-15
+
+[STEP 19] Coarse TimeStep time: 3.894811146
+[STEP 19] FAB kilobyte spread across MPI nodes: [21305 ... 32374]
+
+STEP = 19 TIME = 1.231301869e-07 DT = 9.703246281e-09
+
+...estimated hydro-limited timestep at level 0: 3.938004388e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.938004388e-08
+...estimated hydro-limited timestep at level 1: 1.931376624e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.931376624e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.938004388e-08
+ ... but limiting to: 1.01884086e-08 = 1.05 * 9.703246281e-09
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.931376624e-08
+ ... but limiting to: 5.094204298e-09 = 1.05 * 4.851623141e-09
+[Level 0 step 20] ADVANCE at time 1.231301869e-07 with dt = 1.01884086e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.438619902e-06
+CLEM: level 0 lines advanced for dt = 1.01884086e-08: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.840108452e-10
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294945801 -> 0.003294946496, in 2.504555077e-07, out 2.497603762e-07, balance 2.035104038e-14, max export 0.0157504159, elements 573817
+CLEM: level 0 regrid: 0 elements added, 113017 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.221245327e-15
+CLEM: level 0 write-back: max volume defect 0.002643194182, max projection 6.661338148e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.917498849e-16
+[Level 0 step 20] Advanced 38400 cells
+[Level 1 step 39] ADVANCE at time 1.231301869e-07 with dt = 5.094204298e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 5.094204298e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.350929839e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.295769982e-05 -> 3.29580215e-05, in 2.113436398e-08, out 2.081268041e-08, balance -4.666266771e-16, max export 0.01595859546, elements 45842
+CLEM: level 1 regrid: 0 elements added, 8978 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.887379142e-15
+CLEM: level 1 write-back: max volume defect 0.004186213542, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.914546061e-16
+[Level 1 step 39] Advanced 3072 cells
+[Level 1 step 40] ADVANCE at time 1.282243912e-07 with dt = 5.094204298e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 5.094204298e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.350195461e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.29580215e-05 -> 3.295834221e-05, in 2.113336129e-08, out 2.0812647e-08, balance 6.561622619e-16, max export 0.01605611528, elements 45847
+CLEM: level 1 regrid: 0 elements added, 8983 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.887379142e-15
+CLEM: level 1 write-back: max volume defect 0.004697477447, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.887100672e-16
+[Level 1 step 40] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.003996274
+CLEM: level 0 mass reflux: 160 cells, removed 3.393144937e-14, added 1.11189386e-16, max |dm| / m 4.853525514e-08, max projection 4.440892099e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.33226763e-15
+
+TIME = 1.333185955e-07 MASS        = 0.003294946444
+TIME = 1.333185955e-07 XMOM        = 306.4269882
+TIME = 1.333185955e-07 YMOM        = 0.001951579637
+TIME = 1.333185955e-07 ZMOM        = 3.388131789e-18
+TIME = 1.333185955e-07 RHO*e       = 15326178.38
+TIME = 1.333185955e-07 RHO*K       = 14248735.86
+TIME = 1.333185955e-07 RHO*E       = 29574914.24
+TIME = 1.333185955e-07 FUEL PROD   = 0
+
+TIME = 1.333185955e-07 density     MIN = 0.00034874959    MAX = 0.00038706288  
+TIME = 1.333185955e-07 x_velocity  MIN = 81944.244        MAX = 95083.482      
+TIME = 1.333185955e-07 y_velocity  MIN = -5.4010442       MAX = 20749.269      
+TIME = 1.333185955e-07 z_velocity  MIN = -2126.0857       MAX = 2126.0857      
+TIME = 1.333185955e-07 eint_e      MIN = 4.1454274e+09    MAX = 4.752935e+09   
+TIME = 1.333185955e-07 Temp        MIN = 660.91744        MAX = 1008.3084      
+TIME = 1.333185955e-07 pressure    MIN = 1012378.8        MAX = 1693127.6      
+TIME = 1.333185955e-07 massfrac    MIN = 0                MAX = 0.77           
+TIME = 1.333185955e-07 sumYminus1  MIN = -3.3306691e-16   MAX = 4.4408921e-16  
+
+[STEP 20] Coarse TimeStep time: 3.728021842
+[STEP 20] FAB kilobyte spread across MPI nodes: [21305 ... 32374]
+
+STEP = 20 TIME = 1.333185955e-07 DT = 1.01884086e-08
+
+PLOTFILE: file = plt00020
+Write plotfile time = 0.290803533  seconds
+
+...estimated hydro-limited timestep at level 0: 3.931510434e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.931510434e-08
+...estimated hydro-limited timestep at level 1: 1.926869487e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.926869487e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.931510434e-08
+ ... but limiting to: 1.069782903e-08 = 1.05 * 1.01884086e-08
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.926869487e-08
+ ... but limiting to: 5.348914513e-09 = 1.05 * 5.094204298e-09
+Now regridding at level lbase = 0
+grid_places() time: 0.004622514 new finest: 1
+Creating ReactorBase instance: ReactorCvode
+Initializing CVODE:
+CLEM: regrid from level 0: 0 elements dropped, 0 new fine cells cloned
+CLEM: level 0 line mass defect after the regrid, max |m_line / (rho V) - 1| = 1.33226763e-15
+CLEM: level 1 line mass defect after the regrid, max |m_line / (rho V) - 1| = 1.887379142e-15
+STEP = 20 TIME = 1.333185955e-07 : REGRID  with lbase = 0
+  Level 1   4 grids  3072 cells  1 % of domain
+            smallest grid: 8 x 8 x 8  biggest grid: 16 x 8 x 8
+
+[Level 0 step 21] ADVANCE at time 1.333185955e-07 with dt = 1.069782903e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.438619374e-06
+CLEM: level 0 lines advanced for dt = 1.069782903e-08: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.963440326e-11
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294946444 -> 0.00329494717, in 2.629736844e-07, out 2.622482511e-07, balance -2.012009085e-15, max export 0.01658052526, elements 574314
+CLEM: level 0 regrid: 0 elements added, 113514 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.221245327e-15
+CLEM: level 0 write-back: max volume defect 0.002779927505, max projection 7.771561172e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.927143849e-16
+[Level 0 step 21] Advanced 38400 cells
+[Level 1 step 41] ADVANCE at time 1.333185955e-07 with dt = 5.348914513e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 5.348914513e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.453714602e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.295834221e-05 -> 3.295867805e-05, in 2.218908391e-08, out 2.185324341e-08, balance -2.806933647e-16, max export 0.016980442, elements 45873
+CLEM: level 1 regrid: 0 elements added, 9009 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.665334537e-15
+CLEM: level 1 write-back: max volume defect 0.005894979597, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.875451159e-16
+[Level 1 step 41] Advanced 3072 cells
+[Level 1 step 42] ADVANCE at time 1.3866751e-07 with dt = 5.348914513e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 5.348914513e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.455120383e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.295867805e-05 -> 3.295901292e-05, in 2.218807769e-08, out 2.185320659e-08, balance -1.498823044e-16, max export 0.01711691534, elements 45872
+CLEM: level 1 regrid: 0 elements added, 9008 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.665334537e-15
+CLEM: level 1 write-back: max volume defect 0.006432590121, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.895691581e-16
+[Level 1 step 42] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.004486402
+CLEM: level 0 mass reflux: 160 cells, removed 3.738689145e-14, added 1.912675784e-16, max |dm| / m 5.350634522e-08, max projection 4.440892099e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.221245327e-15
+
+[STEP 21] Coarse TimeStep time: 4.048394981
+[STEP 21] FAB kilobyte spread across MPI nodes: [21305 ... 33423]
+
+STEP = 21 TIME = 1.440164245e-07 DT = 1.069782903e-08
+
+...estimated hydro-limited timestep at level 0: 3.92483497e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.92483497e-08
+...estimated hydro-limited timestep at level 1: 1.922289595e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.922289595e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.92483497e-08
+ ... but limiting to: 1.123272048e-08 = 1.05 * 1.069782903e-08
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.922289595e-08
+ ... but limiting to: 5.616360238e-09 = 1.05 * 5.348914513e-09
+[Level 0 step 22] ADVANCE at time 1.440164245e-07 with dt = 1.123272048e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.438618774e-06
+CLEM: level 0 lines advanced for dt = 1.123272048e-08: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 6.521836116e-10
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294947116 -> 0.003294947873, in 2.76117626e-07, out 2.75360505e-07, balance -7.998757542e-15, max export 0.0174551635, elements 574363
+CLEM: level 0 regrid: 0 elements added, 113563 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.443289932e-15
+CLEM: level 0 write-back: max volume defect 0.002968520659, max projection 7.771561172e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.927478794e-16
+[Level 0 step 22] Advanced 38400 cells
+[Level 1 step 43] ADVANCE at time 1.440164245e-07 with dt = 5.616360238e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 5.616360238e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.540627478e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.295901292e-05 -> 3.295936361e-05, in 2.329651475e-08, out 2.294582727e-08, balance 6.921821763e-16, max export 0.01811621731, elements 45897
+CLEM: level 1 regrid: 0 elements added, 9033 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.665334537e-15
+CLEM: level 1 write-back: max volume defect 0.007685446429, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.884417438e-16
+[Level 1 step 43] Advanced 3072 cells
+[Level 1 step 44] ADVANCE at time 1.496327848e-07 with dt = 5.616360238e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 5.616360238e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.526099688e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.295936361e-05 -> 3.295971331e-05, in 2.329548162e-08, out 2.294578663e-08, balance -1.03640504e-15, max export 0.01826441917, elements 45887
+CLEM: level 1 regrid: 0 elements added, 9023 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.665334537e-15
+CLEM: level 1 write-back: max volume defect 0.008233708282, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.8805354e-16
+[Level 1 step 44] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.004788678
+CLEM: level 0 mass reflux: 160 cells, removed 4.130417439e-14, added 2.134849881e-16, max |dm| / m 5.899303478e-08, max projection 4.440892099e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.443289932e-15
+
+[STEP 22] Coarse TimeStep time: 4.103543378
+[STEP 22] FAB kilobyte spread across MPI nodes: [21344 ... 33423]
+
+STEP = 22 TIME = 1.55249145e-07 DT = 1.123272048e-08
+
+...estimated hydro-limited timestep at level 0: 3.917983135e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.917983135e-08
+...estimated hydro-limited timestep at level 1: 1.91764201e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.91764201e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.917983135e-08
+ ... but limiting to: 1.17943565e-08 = 1.05 * 1.123272048e-08
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.91764201e-08
+ ... but limiting to: 5.89717825e-09 = 1.05 * 5.616360238e-09
+Now regridding at level lbase = 0
+grid_places() time: 0.004706837 new finest: 1
+Creating ReactorBase instance: ReactorCvode
+Initializing CVODE:
+CLEM: regrid from level 0: 0 elements dropped, 0 new fine cells cloned
+CLEM: level 0 line mass defect after the regrid, max |m_line / (rho V) - 1| = 1.443289932e-15
+CLEM: level 1 line mass defect after the regrid, max |m_line / (rho V) - 1| = 1.665334537e-15
+STEP = 22 TIME = 1.55249145e-07 : REGRID  with lbase = 0
+  Level 1   4 grids  3072 cells  1 % of domain
+            smallest grid: 8 x 8 x 8  biggest grid: 16 x 8 x 8
+
+[Level 0 step 23] ADVANCE at time 1.55249145e-07 with dt = 1.17943565e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.438618094e-06
+CLEM: level 0 lines advanced for dt = 1.17943565e-08: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.218349253e-09
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294947817 -> 0.003294948608, in 2.899186417e-07, out 2.891283553e-07, balance 2.075588138e-14, max export 0.01837663059, elements 574366
+CLEM: level 0 regrid: 0 elements added, 113566 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.443289932e-15
+CLEM: level 0 write-back: max volume defect 0.003568276527, max projection 6.661338148e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.903783605e-16
+[Level 0 step 23] Advanced 38400 cells
+[Level 1 step 45] ADVANCE at time 1.55249145e-07 with dt = 5.89717825e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 5.89717825e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.59589987e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.295971331e-05 -> 3.296007956e-05, in 2.445928613e-08, out 2.409303225e-08, balance 7.597278311e-16, max export 0.01933337655, elements 45858
+CLEM: level 1 regrid: 0 elements added, 8994 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.776356839e-15
+CLEM: level 1 write-back: max volume defect 0.009522777801, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.888841195e-16
+[Level 1 step 45] Advanced 3072 cells
+[Level 1 step 46] ADVANCE at time 1.611463233e-07 with dt = 5.89717825e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 5.89717825e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.526319928e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.296007956e-05 -> 3.296044487e-05, in 2.445829523e-08, out 2.409298748e-08, balance -1.14249027e-15, max export 0.01949420713, elements 45850
+CLEM: level 1 regrid: 0 elements added, 8986 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.887379142e-15
+CLEM: level 1 write-back: max volume defect 0.01005820326, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.896100402e-16
+[Level 1 step 46] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.005601829
+CLEM: level 0 mass reflux: 160 cells, removed 4.561350256e-14, added 1.606378967e-16, max |dm| / m 6.504641589e-08, max projection 4.440892099e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.443289932e-15
+
+[STEP 23] Coarse TimeStep time: 3.466726601
+[STEP 23] FAB kilobyte spread across MPI nodes: [21344 ... 33423]
+
+STEP = 23 TIME = 1.670435015e-07 DT = 1.17943565e-08
+
+...estimated hydro-limited timestep at level 0: 3.910960505e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.910960505e-08
+...estimated hydro-limited timestep at level 1: 1.912937723e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.912937723e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.910960505e-08
+ ... but limiting to: 1.238407433e-08 = 1.05 * 1.17943565e-08
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.912937723e-08
+ ... but limiting to: 6.192037163e-09 = 1.05 * 5.89717825e-09
+[Level 0 step 24] ADVANCE at time 1.670435015e-07 with dt = 1.238407433e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.438617325e-06
+CLEM: level 0 lines advanced for dt = 1.238407433e-08: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 4.525754034e-11
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.00329494855 -> 0.003294949375, in 3.044096087e-07, out 3.035845803e-07, balance -4.378306478e-15, max export 0.01934720256, elements 574364
+CLEM: level 0 regrid: 0 elements added, 113564 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.554312234e-15
+CLEM: level 0 write-back: max volume defect 0.004233941788, max projection 6.661338148e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.920645127e-16
+[Level 0 step 24] Advanced 38400 cells
+[Level 1 step 47] ADVANCE at time 1.670435015e-07 with dt = 6.192037163e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 6.192037163e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.575006614e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.296044487e-05 -> 3.296082757e-05, in 2.568028955e-08, out 2.529758869e-08, balance -1.011977574e-15, max export 0.02063769428, elements 45863
+CLEM: level 1 regrid: 0 elements added, 8999 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.887379142e-15
+CLEM: level 1 write-back: max volume defect 0.01135588555, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.903093041e-16
+[Level 1 step 47] Advanced 3072 cells
+[Level 1 step 48] ADVANCE at time 1.732355387e-07 with dt = 6.192037163e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 6.192037163e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.46944462e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.296082757e-05 -> 3.29612093e-05, in 2.567927396e-08, out 2.529753934e-08, balance 2.150314444e-15, max export 0.02081109956, elements 45858
+CLEM: level 1 regrid: 0 elements added, 8994 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.776356839e-15
+CLEM: level 1 write-back: max volume defect 0.01184635819, max projection 7.771561172e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.904084669e-16
+[Level 1 step 48] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.003835417
+CLEM: level 0 mass reflux: 160 cells, removed 5.033037497e-14, added 1.9811227e-16, max |dm| / m 7.173994065e-08, max projection 4.440892099e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.554312234e-15
+
+[STEP 24] Coarse TimeStep time: 3.30840267
+[STEP 24] FAB kilobyte spread across MPI nodes: [21344 ... 33423]
+
+STEP = 24 TIME = 1.794275758e-07 DT = 1.238407433e-08
+
+...estimated hydro-limited timestep at level 0: 3.903776514e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.903776514e-08
+...estimated hydro-limited timestep at level 1: 1.908197858e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.908197858e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.903776514e-08
+ ... but limiting to: 1.300327804e-08 = 1.05 * 1.238407433e-08
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.908197858e-08
+ ... but limiting to: 6.501639021e-09 = 1.05 * 6.192037163e-09
+Now regridding at level lbase = 0
+grid_places() time: 0.00758598 new finest: 1
+Creating ReactorBase instance: ReactorCvode
+Initializing CVODE:
+CLEM: regrid from level 0: 0 elements dropped, 0 new fine cells cloned
+CLEM: level 0 line mass defect after the regrid, max |m_line / (rho V) - 1| = 1.554312234e-15
+CLEM: level 1 line mass defect after the regrid, max |m_line / (rho V) - 1| = 1.776356839e-15
+STEP = 24 TIME = 1.794275758e-07 : REGRID  with lbase = 0
+  Level 1   4 grids  3072 cells  1 % of domain
+            smallest grid: 8 x 8 x 8  biggest grid: 16 x 8 x 8
+
+[Level 0 step 25] ADVANCE at time 1.794275758e-07 with dt = 1.300327804e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.438616457e-06
+CLEM: level 0 lines advanced for dt = 1.300327804e-08: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 3.986165584e-10
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294949316 -> 0.003294950177, in 3.196250469e-07, out 3.187635966e-07, balance -1.705790249e-14, max export 0.02036904967, elements 574164
+CLEM: level 0 regrid: 0 elements added, 113364 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.554312234e-15
+CLEM: level 0 write-back: max volume defect 0.00494791162, max projection 6.661338148e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.910081168e-16
+[Level 0 step 25] Advanced 38400 cells
+[Level 1 step 49] ADVANCE at time 1.794275758e-07 with dt = 6.501639021e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 6.501639021e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.438083322e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.29612093e-05 -> 3.296160924e-05, in 2.696230226e-08, out 2.656236318e-08, balance 3.061660566e-17, max export 0.02203313806, elements 45872
+CLEM: level 1 regrid: 0 elements added, 9008 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.887379142e-15
+CLEM: level 1 write-back: max volume defect 0.01311514199, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.809172902e-16
+[Level 1 step 49] Advanced 3072 cells
+[Level 1 step 50] ADVANCE at time 1.859292149e-07 with dt = 6.501639021e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 6.501639021e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.283801739e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.296160924e-05 -> 3.296200822e-05, in 2.696128763e-08, out 2.656230875e-08, balance 3.603681334e-16, max export 0.02221896812, elements 45866
+CLEM: level 1 regrid: 0 elements added, 9002 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.887379142e-15
+CLEM: level 1 write-back: max volume defect 0.01352233268, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.913233611e-16
+[Level 1 step 50] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.004174947
+CLEM: level 0 mass reflux: 160 cells, removed 5.565389777e-14, added 1.942402481e-16, max |dm| / m 7.91439489e-08, max projection 4.440892099e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.554312234e-15
+
+[STEP 25] Coarse TimeStep time: 3.389215814
+[STEP 25] FAB kilobyte spread across MPI nodes: [21344 ... 33423]
+
+STEP = 25 TIME = 1.924308539e-07 DT = 1.300327804e-08
+
+...estimated hydro-limited timestep at level 0: 3.896453856e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.896453856e-08
+...estimated hydro-limited timestep at level 1: 1.903462946e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.903462946e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.896453856e-08
+ ... but limiting to: 1.365344194e-08 = 1.05 * 1.300327804e-08
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.903462946e-08
+ ... but limiting to: 6.826720972e-09 = 1.05 * 6.501639021e-09
+[Level 0 step 26] ADVANCE at time 1.924308539e-07 with dt = 1.365344194e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.43861548e-06
+CLEM: level 0 lines advanced for dt = 1.365344194e-08: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 6.611135393e-10
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294950116 -> 0.003294951016, in 3.356012247e-07, out 3.347015421e-07, balance 2.112063321e-14, max export 0.02144441847, elements 574121
+CLEM: level 0 regrid: 0 elements added, 113321 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.443289932e-15
+CLEM: level 0 write-back: max volume defect 0.00568600767, max projection 8.881784197e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.950773724e-16
+[Level 0 step 26] Advanced 38400 cells
+[Level 1 step 51] ADVANCE at time 1.924308539e-07 with dt = 6.826720972e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 6.826720972e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.213888561e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.296200822e-05 -> 3.296242636e-05, in 2.83084994e-08, out 2.789036562e-08, balance -1.380223358e-16, max export 0.02352445584, elements 45890
+CLEM: level 1 regrid: 0 elements added, 9026 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.998401444e-15
+CLEM: level 1 write-back: max volume defect 0.01472136606, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.916259633e-16
+[Level 1 step 51] Advanced 3072 cells
+[Level 1 step 52] ADVANCE at time 1.992575749e-07 with dt = 6.826720972e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 6.826720972e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.020393713e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.296242636e-05 -> 3.29628436e-05, in 2.830755083e-08, out 2.789030562e-08, balance -1.408612996e-15, max export 0.02372371398, elements 45927
+CLEM: level 1 regrid: 0 elements added, 9063 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 2.220446049e-15
+CLEM: level 1 write-back: max volume defect 0.01500711857, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.894738618e-16
+[Level 1 step 52] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.008292193
+CLEM: level 0 mass reflux: 160 cells, removed 6.15224183e-14, added 2.178081218e-16, max |dm| / m 8.734294703e-08, max projection 6.661338148e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.443289932e-15
+
+[STEP 26] Coarse TimeStep time: 3.895840954
+[STEP 26] FAB kilobyte spread across MPI nodes: [21344 ... 33423]
+
+STEP = 26 TIME = 2.060842958e-07 DT = 1.365344194e-08
+
+...estimated hydro-limited timestep at level 0: 3.889055021e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.889055021e-08
+...estimated hydro-limited timestep at level 1: 1.898777007e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.898777007e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.889055021e-08
+ ... but limiting to: 1.433611404e-08 = 1.05 * 1.365344194e-08
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.898777007e-08
+ ... but limiting to: 7.16805702e-09 = 1.05 * 6.826720972e-09
+Now regridding at level lbase = 0
+grid_places() time: 0.005130095 new finest: 1
+Creating ReactorBase instance: ReactorCvode
+Initializing CVODE:
+CLEM: regrid from level 0: 0 elements dropped, 0 new fine cells cloned
+CLEM: level 0 line mass defect after the regrid, max |m_line / (rho V) - 1| = 1.443289932e-15
+CLEM: level 1 line mass defect after the regrid, max |m_line / (rho V) - 1| = 2.220446049e-15
+STEP = 26 TIME = 2.060842958e-07 : REGRID  with lbase = 0
+  Level 1   4 grids  3072 cells  1 % of domain
+            smallest grid: 8 x 8 x 8  biggest grid: 16 x 8 x 8
+
+[Level 0 step 27] ADVANCE at time 2.060842958e-07 with dt = 1.433611404e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.43861439e-06
+CLEM: level 0 lines advanced for dt = 1.433611404e-08: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 3.584842345e-10
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294950953 -> 0.003294951893, in 3.523762519e-07, out 3.514363607e-07, balance -1.874212007e-14, max export 0.02257528379, elements 573987
+CLEM: level 0 regrid: 0 elements added, 113187 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.665334537e-15
+CLEM: level 0 write-back: max volume defect 0.006418774327, max projection 7.771561172e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.945737265e-16
+[Level 0 step 27] Advanced 38400 cells
+[Level 1 step 53] ADVANCE at time 2.060842958e-07 with dt = 7.16805702e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 7.16805702e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 9.182439979e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.29628436e-05 -> 3.296328094e-05, in 2.972209468e-08, out 2.928475634e-08, balance 5.831923261e-17, max export 0.02511820166, elements 45886
+CLEM: level 1 regrid: 0 elements added, 9022 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.998401444e-15
+CLEM: level 1 write-back: max volume defect 0.01609595832, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.940050696e-16
+[Level 1 step 53] Advanced 3072 cells
+[Level 1 step 54] ADVANCE at time 2.132523529e-07 with dt = 7.16805702e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 7.16805702e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 7.362845113e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.296328094e-05 -> 3.296371742e-05, in 2.972117401e-08, out 2.928469018e-08, balance 1.058665724e-15, max export 0.02533099723, elements 45884
+CLEM: level 1 regrid: 0 elements added, 9020 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 2.220446049e-15
+CLEM: level 1 write-back: max volume defect 0.0162263861, max projection 7.771561172e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.920962661e-16
+[Level 1 step 54] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.007603395
+CLEM: level 0 mass reflux: 160 cells, removed 6.803617725e-14, added 3.026063176e-16, max |dm| / m 9.643251651e-08, max projection 4.440892099e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.665334537e-15
+
+[STEP 27] Coarse TimeStep time: 3.695297458
+[STEP 27] FAB kilobyte spread across MPI nodes: [21344 ... 33423]
+
+STEP = 27 TIME = 2.204204099e-07 DT = 1.433611404e-08
+
+...estimated hydro-limited timestep at level 0: 3.881640394e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.881640394e-08
+...estimated hydro-limited timestep at level 1: 1.894203119e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.894203119e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.881640394e-08
+ ... but limiting to: 1.505291974e-08 = 1.05 * 1.433611404e-08
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.894203119e-08
+ ... but limiting to: 7.526459871e-09 = 1.05 * 7.16805702e-09
+[Level 0 step 28] ADVANCE at time 2.204204099e-07 with dt = 1.505291974e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.438613183e-06
+CLEM: level 0 lines advanced for dt = 1.505291974e-08: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.673792106e-10
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294951829 -> 0.003294952812, in 3.699901476e-07, out 3.690078938e-07, balance 6.031888205e-15, max export 0.02376366653, elements 574237
+CLEM: level 0 regrid: 0 elements added, 113437 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.554312234e-15
+CLEM: level 0 write-back: max volume defect 0.007115458797, max projection 6.661338148e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.95873213e-16
+[Level 0 step 28] Advanced 38400 cells
+[Level 1 step 55] ADVANCE at time 2.204204099e-07 with dt = 7.526459871e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 7.526459871e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 6.412360225e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.296371742e-05 -> 3.296417503e-05, in 3.120645701e-08, out 3.07488535e-08, balance -1.268735902e-15, max export 0.02681935599, elements 45910
+CLEM: level 1 regrid: 0 elements added, 9046 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 2.220446049e-15
+CLEM: level 1 write-back: max volume defect 0.0171724278, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.912880836e-16
+[Level 1 step 55] Advanced 3072 cells
+[Level 1 step 56] ADVANCE at time 2.279468697e-07 with dt = 7.526459871e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 7.526459871e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 5.031143915e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.296417503e-05 -> 3.296463186e-05, in 3.120561589e-08, out 3.074878055e-08, balance 4.976507343e-16, max export 0.02704329255, elements 45942
+CLEM: level 1 regrid: 0 elements added, 9078 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 2.109423747e-15
+CLEM: level 1 write-back: max volume defect 0.01715583703, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.883079475e-16
+[Level 1 step 56] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.003960421
+CLEM: level 0 mass reflux: 160 cells, removed 7.530037378e-14, added 3.437580839e-16, max |dm| / m 1.065423769e-07, max projection 4.440892099e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.554312234e-15
+
+[STEP 28] Coarse TimeStep time: 3.600740555
+[STEP 28] FAB kilobyte spread across MPI nodes: [21344 ... 33423]
+
+STEP = 28 TIME = 2.354733296e-07 DT = 1.505291974e-08
+
+...estimated hydro-limited timestep at level 0: 3.874281049e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.874281049e-08
+...estimated hydro-limited timestep at level 1: 1.889824893e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.889824893e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.874281049e-08
+ ... but limiting to: 1.580556573e-08 = 1.05 * 1.505291974e-08
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.889824893e-08
+ ... but limiting to: 7.902782865e-09 = 1.05 * 7.526459871e-09
+Now regridding at level lbase = 0
+grid_places() time: 0.009681701 new finest: 1
+Creating ReactorBase instance: ReactorCvode
+Initializing CVODE:
+CLEM: regrid from level 0: 0 elements dropped, 0 new fine cells cloned
+CLEM: level 0 line mass defect after the regrid, max |m_line / (rho V) - 1| = 1.554312234e-15
+CLEM: level 1 line mass defect after the regrid, max |m_line / (rho V) - 1| = 2.109423747e-15
+STEP = 28 TIME = 2.354733296e-07 : REGRID  with lbase = 0
+  Level 1   4 grids  3072 cells  1 % of domain
+            smallest grid: 8 x 8 x 8  biggest grid: 16 x 8 x 8
+
+[Level 0 step 29] ADVANCE at time 2.354733296e-07 with dt = 1.580556573e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.438611857e-06
+CLEM: level 0 lines advanced for dt = 1.580556573e-08: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 4.021910418e-10
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294952746 -> 0.003294953773, in 3.884849672e-07, out 3.874579744e-07, balance 1.526027574e-14, max export 0.02501161265, elements 574377
+CLEM: level 0 regrid: 0 elements added, 113577 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.554312234e-15
+CLEM: level 0 write-back: max volume defect 0.007748048329, max projection 7.771561172e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.940558062e-16
+[Level 0 step 29] Advanced 38400 cells
+[Level 1 step 57] ADVANCE at time 2.354733296e-07 with dt = 7.902782865e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 7.902782865e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 4.544131209e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.296463186e-05 -> 3.296511097e-05, in 3.276524407e-08, out 3.22861411e-08, balance 1.413236231e-15, max export 0.02862561646, elements 45943
+CLEM: level 1 regrid: 0 elements added, 9079 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 2.109423747e-15
+CLEM: level 1 write-back: max volume defect 0.01799550795, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.910333823e-16
+[Level 1 step 57] Advanced 3072 cells
+[Level 1 step 58] ADVANCE at time 2.433761125e-07 with dt = 7.902782865e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 7.902782865e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 3.984694969e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.296511097e-05 -> 3.296558946e-05, in 3.276455191e-08, out 3.228606069e-08, balance -2.311932546e-15, max export 0.02885667635, elements 45952
+CLEM: level 1 regrid: 0 elements added, 9088 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 2.331468352e-15
+CLEM: level 1 write-back: max volume defect 0.01783918465, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.859898619e-16
+[Level 1 step 58] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.006666758
+CLEM: level 0 mass reflux: 160 cells, removed 8.328324607e-14, added 4.17561274e-16, max |dm| / m 1.177618694e-07, max projection 4.440892099e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.554312234e-15
+
+[STEP 29] Coarse TimeStep time: 3.621496029
+[STEP 29] FAB kilobyte spread across MPI nodes: [21344 ... 33423]
+
+STEP = 29 TIME = 2.512788953e-07 DT = 1.580556573e-08
+
+...estimated hydro-limited timestep at level 0: 3.867057169e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.867057169e-08
+...estimated hydro-limited timestep at level 1: 1.885721254e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.885721254e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.867057169e-08
+ ... but limiting to: 1.659584402e-08 = 1.05 * 1.580556573e-08
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.885721254e-08
+ ... but limiting to: 8.297922008e-09 = 1.05 * 7.902782865e-09
+[Level 0 step 30] ADVANCE at time 2.512788953e-07 with dt = 1.659584402e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.438610405e-06
+CLEM: level 0 lines advanced for dt = 1.659584402e-08: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.016186474e-10
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294953706 -> 0.00329495478, in 4.079048995e-07, out 4.068305268e-07, balance -2.903488826e-14, max export 0.02632066203, elements 574389
+CLEM: level 0 regrid: 0 elements added, 113589 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.665334537e-15
+CLEM: level 0 write-back: max volume defect 0.008304932551, max projection 6.661338148e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.922624159e-16
+[Level 0 step 30] Advanced 38400 cells
+[Level 1 step 59] ADVANCE at time 2.512788953e-07 with dt = 8.297922008e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 8.297922008e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 3.907693627e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.296558946e-05 -> 3.29660915e-05, in 3.440232073e-08, out 3.390027721e-08, balance 3.98063358e-16, max export 0.03053796217, elements 45945
+CLEM: level 1 regrid: 0 elements added, 9081 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 2.109423747e-15
+CLEM: level 1 write-back: max volume defect 0.01856466435, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.879416375e-16
+[Level 1 step 59] Advanced 3072 cells
+[Level 1 step 60] ADVANCE at time 2.595768174e-07 with dt = 8.297922008e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 8.297922008e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 3.695649282e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.29660915e-05 -> 3.296659317e-05, in 3.440185408e-08, out 3.390018854e-08, balance 7.754388976e-16, max export 0.03077729664, elements 45961
+CLEM: level 1 regrid: 0 elements added, 9097 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.998401444e-15
+CLEM: level 1 write-back: max volume defect 0.01829395347, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.905719491e-16
+[Level 1 step 60] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.003826658
+CLEM: level 0 mass reflux: 160 cells, removed 9.213676036e-14, added 3.72984904e-16, max |dm| / m 1.302417678e-07, max projection 4.440892099e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.554312234e-15
+
+TIME = 2.678747394e-07 MASS        = 0.003294954712
+TIME = 2.678747394e-07 XMOM        = 306.4247654
+TIME = 2.678747394e-07 YMOM        = 0.003893648324
+TIME = 2.678747394e-07 ZMOM        = 4.445228907e-18
+TIME = 2.678747394e-07 RHO*e       = 15326222.89
+TIME = 2.678747394e-07 RHO*K       = 14248542.97
+TIME = 2.678747394e-07 RHO*E       = 29574765.86
+TIME = 2.678747394e-07 FUEL PROD   = 0
+
+TIME = 2.678747394e-07 density     MIN = 0.00033261953    MAX = 0.00039336642  
+TIME = 2.678747394e-07 x_velocity  MIN = 69819.578        MAX = 100788.87      
+TIME = 2.678747394e-07 y_velocity  MIN = -7.5638899       MAX = 36705.211      
+TIME = 2.678747394e-07 z_velocity  MIN = -7843.9164       MAX = 7843.9164      
+TIME = 2.678747394e-07 eint_e      MIN = 3.728114e+09     MAX = 4.8768142e+09  
+TIME = 2.678747394e-07 Temp        MIN = 562.87484        MAX = 1010.3162      
+TIME = 2.678747394e-07 pressure    MIN = 1008013.1        MAX = 2233020        
+TIME = 2.678747394e-07 massfrac    MIN = 0                MAX = 0.77           
+TIME = 2.678747394e-07 sumYminus1  MIN = -4.4408921e-16   MAX = 4.4408921e-16  
+
+[STEP 30] Coarse TimeStep time: 3.195909339
+[STEP 30] FAB kilobyte spread across MPI nodes: [21344 ... 33423]
+
+STEP = 30 TIME = 2.678747394e-07 DT = 1.659584402e-08
+
+...estimated hydro-limited timestep at level 0: 3.860064587e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.860064587e-08
+...estimated hydro-limited timestep at level 1: 1.881973429e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.881973429e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.860064587e-08
+ ... but limiting to: 1.742563622e-08 = 1.05 * 1.659584402e-08
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.881973429e-08
+ ... but limiting to: 8.712818109e-09 = 1.05 * 8.297922008e-09
+Now regridding at level lbase = 0
+grid_places() time: 0.005823743 new finest: 1
+Creating ReactorBase instance: ReactorCvode
+Initializing CVODE:
+CLEM: regrid from level 0: 0 elements dropped, 0 new fine cells cloned
+CLEM: level 0 line mass defect after the regrid, max |m_line / (rho V) - 1| = 1.554312234e-15
+CLEM: level 1 line mass defect after the regrid, max |m_line / (rho V) - 1| = 1.998401444e-15
+STEP = 30 TIME = 2.678747394e-07 : REGRID  with lbase = 0
+  Level 1   4 grids  3072 cells  1 % of domain
+            smallest grid: 8 x 8 x 8  biggest grid: 16 x 8 x 8
+
+[Level 0 step 31] ADVANCE at time 2.678747394e-07 with dt = 1.742563622e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.438608818e-06
+CLEM: level 0 lines advanced for dt = 1.742563622e-08: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 7.533527731e-11
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294954712 -> 0.003294955837, in 4.282963624e-07, out 4.271716713e-07, balance 2.533404004e-14, max export 0.0276911282, elements 574393
+CLEM: level 0 regrid: 0 elements added, 113593 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.887379142e-15
+CLEM: level 0 write-back: max volume defect 0.00879274538, max projection 7.771561172e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.940622545e-16
+[Level 0 step 31] Advanced 38400 cells
+[Level 1 step 61] ADVANCE at time 2.678747394e-07 with dt = 8.712818109e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 8.712818109e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 4.122958936e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.296659317e-05 -> 3.296711983e-05, in 3.612176318e-08, out 3.559510257e-08, balance 2.906597041e-16, max export 0.03256412292, elements 45959
+CLEM: level 1 regrid: 0 elements added, 9095 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 2.220446049e-15
+CLEM: level 1 write-back: max volume defect 0.01894155256, max projection 7.771561172e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.895519967e-16
+[Level 1 step 61] Advanced 3072 cells
+[Level 1 step 62] ADVANCE at time 2.765875575e-07 with dt = 8.712818109e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 8.712818109e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 4.110423465e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.296711983e-05 -> 3.296764642e-05, in 3.612160366e-08, out 3.559500487e-08, balance 1.987213468e-17, max export 0.03281312333, elements 45950
+CLEM: level 1 regrid: 0 elements added, 9086 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 2.109423747e-15
+CLEM: level 1 write-back: max volume defect 0.01859825189, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.891968237e-16
+[Level 1 step 62] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.004699372
+CLEM: level 0 mass reflux: 160 cells, removed 1.019071689e-13, added 4.242424264e-16, max |dm| / m 1.441624081e-07, max projection 4.440892099e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.665334537e-15
+
+[STEP 31] Coarse TimeStep time: 3.063482258
+[STEP 31] FAB kilobyte spread across MPI nodes: [21344 ... 33423]
+
+STEP = 31 TIME = 2.853003756e-07 DT = 1.742563622e-08
+
+...estimated hydro-limited timestep at level 0: 3.853411982e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.853411982e-08
+...estimated hydro-limited timestep at level 1: 1.871029967e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.871029967e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.853411982e-08
+ ... but limiting to: 1.829691803e-08 = 1.05 * 1.742563622e-08
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.871029967e-08
+ ... but limiting to: 9.148459014e-09 = 1.05 * 8.712818109e-09
+[Level 0 step 32] ADVANCE at time 2.853003756e-07 with dt = 1.829691803e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.438607088e-06
+CLEM: level 0 lines advanced for dt = 1.829691803e-08: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 4.959712133e-10
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294955769 -> 0.003294956947, in 4.497080885e-07, out 4.485298339e-07, balance -1.449753625e-14, max export 0.02909898465, elements 574395
+CLEM: level 0 regrid: 0 elements added, 113595 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.554312234e-15
+CLEM: level 0 write-back: max volume defect 0.009143807031, max projection 7.771561172e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.901849368e-16
+[Level 0 step 32] Advanced 38400 cells
+[Level 1 step 63] ADVANCE at time 2.853003756e-07 with dt = 9.148459014e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 9.148459014e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 4.733212581e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.296764642e-05 -> 3.296819963e-05, in 3.792785342e-08, out 3.737464997e-08, balance -3.671268057e-16, max export 0.0347135626, elements 45951
+CLEM: level 1 regrid: 0 elements added, 9087 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 1.998401444e-15
+CLEM: level 1 write-back: max volume defect 0.01921051353, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.901543749e-16
+[Level 1 step 63] Advanced 3072 cells
+[Level 1 step 64] ADVANCE at time 2.944488346e-07 with dt = 9.148459014e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 9.148459014e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 5.165723417e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.296819963e-05 -> 3.296875316e-05, in 3.792806949e-08, out 3.737454222e-08, balance 1.415090514e-16, max export 0.03497644186, elements 45961
+CLEM: level 1 regrid: 0 elements added, 9097 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 2.331468352e-15
+CLEM: level 1 write-back: max volume defect 0.01884400096, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.906443773e-16
+[Level 1 step 64] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.006186648
+CLEM: level 0 mass reflux: 160 cells, removed 1.126842603e-13, added 4.625847007e-16, max |dm| / m 1.596690438e-07, max projection 4.440892099e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.776356839e-15
+
+[STEP 32] Coarse TimeStep time: 3.316388429
+[STEP 32] FAB kilobyte spread across MPI nodes: [21344 ... 33423]
+
+STEP = 32 TIME = 3.035972936e-07 DT = 1.829691803e-08
+
+...estimated hydro-limited timestep at level 0: 3.847212209e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.847212209e-08
+...estimated hydro-limited timestep at level 1: 1.849803202e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.849803202e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.847212209e-08
+ ... but limiting to: 1.921176393e-08 = 1.05 * 1.829691803e-08
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.849803202e-08
+ ... but limiting to: 9.605881965e-09 = 1.05 * 9.148459014e-09
+Now regridding at level lbase = 0
+grid_places() time: 0.005536716 new finest: 1
+Creating ReactorBase instance: ReactorCvode
+Initializing CVODE:
+CLEM: regrid from level 0: 0 elements dropped, 0 new fine cells cloned
+CLEM: level 0 line mass defect after the regrid, max |m_line / (rho V) - 1| = 1.776356839e-15
+CLEM: level 1 line mass defect after the regrid, max |m_line / (rho V) - 1| = 2.331468352e-15
+STEP = 32 TIME = 3.035972936e-07 : REGRID  with lbase = 0
+  Level 1   4 grids  3072 cells  1 % of domain
+            smallest grid: 8 x 8 x 8  biggest grid: 16 x 8 x 8
+
+[Level 0 step 33] ADVANCE at time 3.035972936e-07 with dt = 1.921176393e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.438605205e-06
+CLEM: level 0 lines advanced for dt = 1.921176393e-08: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 6.452502223e-10
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294956879 -> 0.003294958114, in 4.72190854e-07, out 4.709558615e-07, balance 3.555994318e-15, max export 0.03055326132, elements 574393
+CLEM: level 0 regrid: 0 elements added, 113593 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.665334537e-15
+CLEM: level 0 write-back: max volume defect 0.009427794383, max projection 8.881784197e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.952055002e-16
+[Level 0 step 33] Advanced 38400 cells
+[Level 1 step 65] ADVANCE at time 3.035972936e-07 with dt = 9.605881965e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 9.605881965e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 6.333290046e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.296875316e-05 -> 3.296933506e-05, in 3.982505464e-08, out 3.924315341e-08, balance 2.360451779e-16, max export 0.03700195044, elements 45974
+CLEM: level 1 regrid: 0 elements added, 9110 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 2.109423747e-15
+CLEM: level 1 write-back: max volume defect 0.0194739462, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.899398374e-16
+[Level 1 step 65] Advanced 3072 cells
+[Level 1 step 66] ADVANCE at time 3.132031756e-07 with dt = 9.605881965e-09
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 9.605881965e-09: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 7.267931741e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.296933506e-05 -> 3.296991774e-05, in 3.982571712e-08, out 3.924303463e-08, balance 6.864457994e-17, max export 0.03728537857, elements 45971
+CLEM: level 1 regrid: 0 elements added, 9107 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 2.442490654e-15
+CLEM: level 1 write-back: max volume defect 0.01913158214, max projection 7.771561172e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.896147286e-16
+[Level 1 step 66] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.003091099
+CLEM: level 0 mass reflux: 160 cells, removed 1.246290537e-13, added 5.547461928e-16, max |dm| / m 1.768377038e-07, max projection 6.661338148e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.665334537e-15
+
+[STEP 33] Coarse TimeStep time: 3.225658008
+[STEP 33] FAB kilobyte spread across MPI nodes: [21344 ... 33423]
+
+STEP = 33 TIME = 3.228090575e-07 DT = 1.921176393e-08
+
+...estimated hydro-limited timestep at level 0: 3.841570644e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.841570644e-08
+...estimated hydro-limited timestep at level 1: 1.827361865e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.827361865e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.841570644e-08
+ ... but limiting to: 2.017235213e-08 = 1.05 * 1.921176393e-08
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.827361865e-08
+ ... but limiting to: 1.008617606e-08 = 1.05 * 9.605881965e-09
+[Level 0 step 34] ADVANCE at time 3.228090575e-07 with dt = 2.017235213e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.438603161e-06
+CLEM: level 0 lines advanced for dt = 2.017235213e-08: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 5.630296591e-10
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294958047 -> 0.003294959342, in 4.95797813e-07, out 4.945031429e-07, balance 5.985925663e-15, max export 0.03241631374, elements 574401
+CLEM: level 0 regrid: 0 elements added, 113601 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.998401444e-15
+CLEM: level 0 write-back: max volume defect 0.009732156979, max projection 6.661338148e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.97320201e-16
+[Level 0 step 34] Advanced 38400 cells
+[Level 1 step 67] ADVANCE at time 3.228090575e-07 with dt = 1.008617606e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 1.008617606e-08: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 8.451652169e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.296991774e-05 -> 3.297053076e-05, in 4.181807963e-08, out 4.120505854e-08, balance -1.082236941e-15, max export 0.03948807505, elements 45970
+CLEM: level 1 regrid: 0 elements added, 9106 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 2.442490654e-15
+CLEM: level 1 write-back: max volume defect 0.01982533478, max projection 7.771561172e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.879852536e-16
+[Level 1 step 67] Advanced 3072 cells
+[Level 1 step 68] ADVANCE at time 3.328952336e-07 with dt = 1.008617606e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 1.008617606e-08: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 9.143178594e-09
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.297053076e-05 -> 3.297114508e-05, in 4.181924729e-08, out 4.120492763e-08, balance 5.465275216e-16, max export 0.03984245772, elements 45962
+CLEM: level 1 regrid: 0 elements added, 9098 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 2.331468352e-15
+CLEM: level 1 write-back: max volume defect 0.01954407256, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.855070057e-16
+[Level 1 step 68] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.002993037
+CLEM: level 0 mass reflux: 160 cells, removed 1.375919543e-13, added 5.656542283e-16, max |dm| / m 1.956029343e-07, max projection 4.440892099e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.998401444e-15
+
+[STEP 34] Coarse TimeStep time: 3.065450699
+[STEP 34] FAB kilobyte spread across MPI nodes: [21344 ... 33423]
+
+STEP = 34 TIME = 3.429814097e-07 DT = 2.017235213e-08
+
+...estimated hydro-limited timestep at level 0: 3.836647243e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.836647243e-08
+...estimated hydro-limited timestep at level 1: 1.80394421e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.80394421e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.836647243e-08
+ ... but limiting to: 2.118096973e-08 = 1.05 * 2.017235213e-08
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.80394421e-08
+ ... but limiting to: 1.059048487e-08 = 1.05 * 1.008617606e-08
+Now regridding at level lbase = 0
+grid_places() time: 0.008701022 new finest: 1
+Creating ReactorBase instance: ReactorCvode
+Initializing CVODE:
+CLEM: regrid from level 0: 0 elements dropped, 0 new fine cells cloned
+CLEM: level 0 line mass defect after the regrid, max |m_line / (rho V) - 1| = 1.998401444e-15
+CLEM: level 1 line mass defect after the regrid, max |m_line / (rho V) - 1| = 2.331468352e-15
+STEP = 34 TIME = 3.429814097e-07 : REGRID  with lbase = 0
+  Level 1   4 grids  3072 cells  1 % of domain
+            smallest grid: 8 x 8 x 8  biggest grid: 16 x 8 x 8
+
+[Level 0 step 35] ADVANCE at time 3.429814097e-07 with dt = 2.118096973e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.438600947e-06
+CLEM: level 0 lines advanced for dt = 2.118096973e-08: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 7.556823973e-11
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294959279 -> 0.003294960637, in 5.205855682e-07, out 5.19227736e-07, balance -1.388916625e-14, max export 0.03441256786, elements 574394
+CLEM: level 0 regrid: 0 elements added, 113594 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.998401444e-15
+CLEM: level 0 write-back: max volume defect 0.01011235643, max projection 7.771561172e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.960685736e-16
+[Level 0 step 35] Advanced 38400 cells
+[Level 1 step 69] ADVANCE at time 3.429814097e-07 with dt = 1.059048487e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 1.059048487e-08: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.117387347e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.297114508e-05 -> 3.297179182e-05, in 4.391176977e-08, out 4.32650331e-08, balance 6.422532075e-17, max export 0.04261985344, elements 45971
+CLEM: level 1 regrid: 0 elements added, 9107 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 2.220446049e-15
+CLEM: level 1 write-back: max volume defect 0.02034220718, max projection 7.771561172e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.93478287e-16
+[Level 1 step 69] Advanced 3072 cells
+[Level 1 step 70] ADVANCE at time 3.535718945e-07 with dt = 1.059048487e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 1.059048487e-08: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.19759538e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.297179182e-05 -> 3.297244027e-05, in 4.391334492e-08, out 4.326488873e-08, balance 1.085788031e-16, max export 0.04327575949, elements 45978
+CLEM: level 1 regrid: 0 elements added, 9114 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 2.442490654e-15
+CLEM: level 1 write-back: max volume defect 0.02020324718, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.883519788e-16
+[Level 1 step 70] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.004435778
+CLEM: level 0 mass reflux: 160 cells, removed 1.517843212e-13, added 6.742275361e-16, max |dm| / m 2.154842416e-07, max projection 4.440892099e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.998401444e-15
+
+[STEP 35] Coarse TimeStep time: 3.092836689
+[STEP 35] FAB kilobyte spread across MPI nodes: [21344 ... 33423]
+
+STEP = 35 TIME = 3.641623794e-07 DT = 2.118096973e-08
+
+...estimated hydro-limited timestep at level 0: 3.832514037e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.832514037e-08
+...estimated hydro-limited timestep at level 1: 1.77985406e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.77985406e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.832514037e-08
+ ... but limiting to: 2.224001822e-08 = 1.05 * 2.118096973e-08
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.77985406e-08
+ ... but limiting to: 1.112000911e-08 = 1.05 * 1.059048487e-08
+[Level 0 step 36] ADVANCE at time 3.641623794e-07 with dt = 2.224001822e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.438598555e-06
+CLEM: level 0 lines advanced for dt = 2.224001822e-08: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 2.060961457e-11
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294960579 -> 0.003294962004, in 5.466135898e-07, out 5.451885009e-07, balance 1.857726788e-14, max export 0.03651676541, elements 574378
+CLEM: level 0 regrid: 0 elements added, 113578 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.887379142e-15
+CLEM: level 0 write-back: max volume defect 0.01063320804, max projection 7.771561172e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.95047502e-16
+[Level 0 step 36] Advanced 38400 cells
+[Level 1 step 71] ADVANCE at time 3.641623794e-07 with dt = 1.112000911e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 1.112000911e-08: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.412402534e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.297244027e-05 -> 3.297312323e-05, in 4.611093209e-08, out 4.542797783e-08, balance -2.488633419e-17, max export 0.04662275073, elements 45967
+CLEM: level 1 regrid: 0 elements added, 9103 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 2.220446049e-15
+CLEM: level 1 write-back: max volume defect 0.02126154361, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.916331526e-16
+[Level 1 step 71] Advanced 3072 cells
+[Level 1 step 72] ADVANCE at time 3.752823885e-07 with dt = 1.112000911e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 1.112000911e-08: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.485007036e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.297312323e-05 -> 3.297380821e-05, in 4.611280396e-08, out 4.542781866e-08, balance -2.492595715e-16, max export 0.04790418404, elements 45967
+CLEM: level 1 regrid: 0 elements added, 9103 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 2.220446049e-15
+CLEM: level 1 write-back: max volume defect 0.02113426973, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 2.001312585e-16
+[Level 1 step 72] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.003072621
+CLEM: level 0 mass reflux: 160 cells, removed 1.670837162e-13, added 8.524589785e-16, max |dm| / m 2.3510368e-07, max projection 4.440892099e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.887379142e-15
+
+[STEP 36] Coarse TimeStep time: 3.080510951
+[STEP 36] FAB kilobyte spread across MPI nodes: [21344 ... 33423]
+
+STEP = 36 TIME = 3.864023976e-07 DT = 2.224001822e-08
+
+...estimated hydro-limited timestep at level 0: 3.829187496e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.829187496e-08
+...estimated hydro-limited timestep at level 1: 1.755400414e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.755400414e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.829187496e-08
+ ... but limiting to: 2.335201913e-08 = 1.05 * 2.224001822e-08
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.755400414e-08
+ ... but limiting to: 1.167600957e-08 = 1.05 * 1.112000911e-08
+Now regridding at level lbase = 0
+grid_places() time: 0.005601651 new finest: 1
+Creating ReactorBase instance: ReactorCvode
+Initializing CVODE:
+CLEM: regrid from level 0: 0 elements dropped, 0 new fine cells cloned
+CLEM: level 0 line mass defect after the regrid, max |m_line / (rho V) - 1| = 1.887379142e-15
+CLEM: level 1 line mass defect after the regrid, max |m_line / (rho V) - 1| = 2.220446049e-15
+STEP = 36 TIME = 3.864023976e-07 : REGRID  with lbase = 0
+  Level 1   4 grids  3072 cells  1 % of domain
+            smallest grid: 8 x 8 x 8  biggest grid: 16 x 8 x 8
+
+[Level 0 step 37] ADVANCE at time 3.864023976e-07 with dt = 2.335201913e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.438595977e-06
+CLEM: level 0 lines advanced for dt = 2.335201913e-08: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 6.701904097e-11
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294961952 -> 0.003294963449, in 5.739437522e-07, out 5.724472403e-07, balance -2.661471876e-14, max export 0.03874027861, elements 574388
+CLEM: level 0 regrid: 0 elements added, 113588 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.998401444e-15
+CLEM: level 0 write-back: max volume defect 0.01130874211, max projection 7.771561172e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.985288084e-16
+[Level 0 step 37] Advanced 38400 cells
+[Level 1 step 73] ADVANCE at time 3.864023976e-07 with dt = 1.167600957e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 1.167600957e-08: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.640002017e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.297380821e-05 -> 3.297452978e-05, in 4.842060577e-08, out 4.769903834e-08, balance -4.950970923e-16, max export 0.05138727209, elements 45963
+CLEM: level 1 regrid: 0 elements added, 9099 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 2.442490654e-15
+CLEM: level 1 write-back: max volume defect 0.02217759274, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.894168493e-16
+[Level 1 step 73] Advanced 3072 cells
+[Level 1 step 74] ADVANCE at time 3.980784072e-07 with dt = 1.167600957e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 1.167600957e-08: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.673099498e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.297452978e-05 -> 3.297525361e-05, in 4.842269758e-08, out 4.769886289e-08, balance -4.665891977e-16, max export 0.05216313762, elements 45958
+CLEM: level 1 regrid: 0 elements added, 9094 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 2.220446049e-15
+CLEM: level 1 write-back: max volume defect 0.0221146909, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.922979673e-16
+[Level 1 step 74] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.002807517
+CLEM: level 0 mass reflux: 160 cells, removed 1.837794186e-13, added 8.769722867e-16, max |dm| / m 2.584191209e-07, max projection 6.661338148e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.998401444e-15
+
+[STEP 37] Coarse TimeStep time: 3.178622703
+[STEP 37] FAB kilobyte spread across MPI nodes: [21344 ... 33423]
+
+STEP = 37 TIME = 4.097544167e-07 DT = 2.335201913e-08
+
+...estimated hydro-limited timestep at level 0: 3.82682091e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.82682091e-08
+...estimated hydro-limited timestep at level 1: 1.730638862e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.730638862e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.82682091e-08
+ ... but limiting to: 2.451962009e-08 = 1.05 * 2.335201913e-08
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.730638862e-08
+ ... but limiting to: 1.225981004e-08 = 1.05 * 1.167600957e-08
+[Level 0 step 38] ADVANCE at time 4.097544167e-07 with dt = 2.451962009e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.438593206e-06
+CLEM: level 0 lines advanced for dt = 2.451962009e-08: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 2.395953353e-10
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294963404 -> 0.003294964976, in 6.026411577e-07, out 6.010688464e-07, balance 1.01724774e-14, max export 0.04108607697, elements 574395
+CLEM: level 0 regrid: 0 elements added, 113595 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.887379142e-15
+CLEM: level 0 write-back: max volume defect 0.0121275694, max projection 7.771561172e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.951703719e-16
+[Level 0 step 38] Advanced 38400 cells
+[Level 1 step 75] ADVANCE at time 4.097544167e-07 with dt = 1.225981004e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 1.225981004e-08: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.79594644e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.297525361e-05 -> 3.297601619e-05, in 5.084619443e-08, out 5.008361721e-08, balance 2.157501227e-15, max export 0.05561953326, elements 45965
+CLEM: level 1 regrid: 0 elements added, 9101 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 2.664535259e-15
+CLEM: level 1 write-back: max volume defect 0.0232746468, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.88859909e-16
+[Level 1 step 75] Advanced 3072 cells
+[Level 1 step 76] ADVANCE at time 4.220142268e-07 with dt = 1.225981004e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 1.225981004e-08: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.735057789e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.297601619e-05 -> 3.297678146e-05, in 5.084869467e-08, out 5.00834238e-08, balance -1.393684263e-15, max export 0.05648713903, elements 45973
+CLEM: level 1 regrid: 0 elements added, 9109 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 2.442490654e-15
+CLEM: level 1 write-back: max volume defect 0.02326820864, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.931184658e-16
+[Level 1 step 76] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.003336348
+CLEM: level 0 mass reflux: 160 cells, removed 2.043959729e-13, added 8.798228968e-16, max |dm| / m 2.889004124e-07, max projection 6.661338148e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.887379142e-15
+
+[STEP 38] Coarse TimeStep time: 3.122464404
+[STEP 38] FAB kilobyte spread across MPI nodes: [21344 ... 33423]
+
+STEP = 38 TIME = 4.342740368e-07 DT = 2.451962009e-08
+
+...estimated hydro-limited timestep at level 0: 3.825744198e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.825744198e-08
+...estimated hydro-limited timestep at level 1: 1.706147732e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.706147732e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.825744198e-08
+ ... but limiting to: 2.574560109e-08 = 1.05 * 2.451962009e-08
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.706147732e-08
+ ... but limiting to: 1.287280055e-08 = 1.05 * 1.225981004e-08
+Now regridding at level lbase = 0
+grid_places() time: 0.005276988 new finest: 1
+Creating ReactorBase instance: ReactorCvode
+Initializing CVODE:
+CLEM: regrid from level 0: 0 elements dropped, 0 new fine cells cloned
+CLEM: level 0 line mass defect after the regrid, max |m_line / (rho V) - 1| = 1.887379142e-15
+CLEM: level 1 line mass defect after the regrid, max |m_line / (rho V) - 1| = 2.442490654e-15
+STEP = 38 TIME = 4.342740368e-07 : REGRID  with lbase = 0
+  Level 1   4 grids  3072 cells  1 % of domain
+            smallest grid: 8 x 8 x 8  biggest grid: 16 x 8 x 8
+
+[Level 0 step 39] ADVANCE at time 4.342740368e-07 with dt = 2.574560109e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.438590234e-06
+CLEM: level 0 lines advanced for dt = 2.574560109e-08: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 2.980492283e-11
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294964938 -> 0.003294966592, in 6.327746058e-07, out 6.311214553e-07, balance -3.852851977e-15, max export 0.04354689452, elements 574382
+CLEM: level 0 regrid: 0 elements added, 113582 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.887379142e-15
+CLEM: level 0 write-back: max volume defect 0.01299417714, max projection 7.771561172e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.973328198e-16
+[Level 0 step 39] Advanced 38400 cells
+[Level 1 step 77] ADVANCE at time 4.342740368e-07 with dt = 1.287280055e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 1.287280055e-08: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.749911639e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.297678146e-05 -> 3.297758786e-05, in 5.339378293e-08, out 5.258738686e-08, balance 1.151443445e-15, max export 0.06022427781, elements 45965
+CLEM: level 1 regrid: 0 elements added, 9101 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 2.442490654e-15
+CLEM: level 1 write-back: max volume defect 0.02454322783, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.872946137e-16
+[Level 1 step 77] Advanced 3072 cells
+[Level 1 step 78] ADVANCE at time 4.471468374e-07 with dt = 1.287280055e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 1.287280055e-08: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.610834639e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.297758786e-05 -> 3.297839687e-05, in 5.339618678e-08, out 5.258717361e-08, balance 6.900866464e-16, max export 0.06115112437, elements 45965
+CLEM: level 1 regrid: 0 elements added, 9101 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 2.442490654e-15
+CLEM: level 1 write-back: max volume defect 0.0245417549, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.906142876e-16
+[Level 1 step 78] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.004714372
+CLEM: level 0 mass reflux: 160 cells, removed 2.287968383e-13, added 1.047109651e-15, max |dm| / m 3.358720095e-07, max projection 6.661338148e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.887379142e-15
+
+[STEP 39] Coarse TimeStep time: 3.245899076
+[STEP 39] FAB kilobyte spread across MPI nodes: [21344 ... 33423]
+
+STEP = 39 TIME = 4.600196379e-07 DT = 2.574560109e-08
+
+...estimated hydro-limited timestep at level 0: 3.825592118e-08
+PeleC::estTimeStep (hydro-limited) at level 0:  estdt = 3.825592118e-08
+...estimated hydro-limited timestep at level 1: 1.682057313e-08
+PeleC::estTimeStep (hydro-limited) at level 1:  estdt = 1.682057313e-08
+PeleC::compute_new_dt : limiting dt at level 0
+ ... new dt computed: 3.825592118e-08
+ ... but limiting to: 2.703288115e-08 = 1.05 * 2.574560109e-08
+PeleC::compute_new_dt : limiting dt at level 1
+ ... new dt computed: 1.682057313e-08
+ ... but limiting to: 1.351644057e-08 = 1.05 * 1.287280055e-08
+[Level 0 step 40] ADVANCE at time 4.600196379e-07 with dt = 2.703288115e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 halo filled from level 0: 880 cells, mass 9.438587055e-06
+CLEM: level 0 lines advanced for dt = 2.703288115e-08: 38400 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 4.868503513e-10
+CLEM: level 0 splice (Sigma^+ (largest transfer first)): mass 0.003294966561 -> 0.0032949683, in 6.644157921e-07, out 6.626766093e-07, balance 6.446448869e-15, max export 0.04613326052, elements 574380
+CLEM: level 0 regrid: 0 elements added, 113580 removed
+CLEM: level 0 line mass defect, max |m_line / (rho V) - 1| = 1.998401444e-15
+CLEM: level 0 write-back: max volume defect 0.01391704241, max projection 7.771561172e-16
+CLEM: level 0 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.982817727e-16
+[Level 0 step 40] Advanced 38400 cells
+[Level 1 step 79] ADVANCE at time 4.600196379e-07 with dt = 1.351644057e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 1.351644057e-08: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.600755269e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.297839687e-05 -> 3.297924914e-05, in 5.606856974e-08, out 5.521630281e-08, balance 2.072817732e-16, max export 0.06517646153, elements 45948
+CLEM: level 1 regrid: 0 elements added, 9084 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 2.886579864e-15
+CLEM: level 1 write-back: max volume defect 0.02586015896, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.908407845e-16
+[Level 1 step 79] Advanced 3072 cells
+[Level 1 step 80] ADVANCE at time 4.735360785e-07 with dt = 1.351644057e-08
+... Computing MOL source term at t^{n} 
+... Computing MOL source term at t^{n+1} 
+CLEM: level 1 lines advanced for dt = 1.351644057e-08: 3072 lines, sub-steps max 1 mean 1, skipped 0, capped 0, clipped 0 (max -Y 0), enthalpy drift 1.412206032e-08
+CLEM: level 1 splice (Sigma^+ (largest transfer first)): mass 3.297924914e-05 -> 3.298010398e-05, in 5.607090866e-08, out 5.521606776e-08, balance -8.594045422e-16, max export 0.0661499904, elements 45953
+CLEM: level 1 regrid: 0 elements added, 9089 removed
+CLEM: level 1 line mass defect, max |m_line / (rho V) - 1| = 2.664535259e-15
+CLEM: level 1 write-back: max volume defect 0.02583345579, max projection 6.661338148e-16
+CLEM: level 1 mass flux defect, max |d(rho V) + dt div F| / (rho V) = 1.961806804e-16
+[Level 1 step 80] Advanced 3072 cells
+PeleC::reflux() at level 0 : time = 0.00266391
+CLEM: level 0 mass reflux: 160 cells, removed 2.576839937e-13, added 1.282252533e-15, max |dm| / m 3.987357894e-07, max projection 4.440892099e-16
+CLEM: level 0 average down from level 1: 384 covered cells, 0 rebuilt
+CLEM: level 0 line mass defect after the sync, max |m_line / (rho V) - 1| = 1.998401444e-15
+
+TIME = 4.870525191e-07 MASS        = 0.003294968277
+TIME = 4.870525191e-07 XMOM        = 306.421155
+TIME = 4.870525191e-07 YMOM        = 0.007148263964
+TIME = 4.870525191e-07 ZMOM        = -4.878909776e-17
+TIME = 4.870525191e-07 RHO*e       = 15326287.69
+TIME = 4.870525191e-07 RHO*K       = 14248253.12
+TIME = 4.870525191e-07 RHO*E       = 29574540.81
+TIME = 4.870525191e-07 FUEL PROD   = 0
+
+TIME = 4.870525191e-07 density     MIN = 0.00023889174    MAX = 0.00043166203  
+TIME = 4.870525191e-07 x_velocity  MIN = 54465.041        MAX = 110969.51      
+TIME = 4.870525191e-07 y_velocity  MIN = -7.8777588       MAX = 53785.678      
+TIME = 4.870525191e-07 z_velocity  MIN = -20259.774       MAX = 20259.774      
+TIME = 4.870525191e-07 eint_e      MIN = 2.1578773e+09    MAX = 5.1447774e+09  
+TIME = 4.870525191e-07 Temp        MIN = 469.90984        MAX = 1036.5693      
+TIME = 4.870525191e-07 pressure    MIN = 1013133.5        MAX = 2607296.8      
+TIME = 4.870525191e-07 massfrac    MIN = 0                MAX = 0.77           
+TIME = 4.870525191e-07 sumYminus1  MIN = -3.3306691e-16   MAX = 4.4408921e-16  
+
+[STEP 40] Coarse TimeStep time: 3.012348251
+[STEP 40] FAB kilobyte spread across MPI nodes: [21344 ... 33423]
+
+STEP = 40 TIME = 4.870525191e-07 DT = 2.703288115e-08
+
+PLOTFILE: file = plt00040
+Write plotfile time = 0.184156817  seconds
+
+
+Ending run at 13:02:49 UTC on 2026-10-13.
+Run time = 130.4390436
+Run time w/o init = 130.2036959
+AMReX (26.07-12-g1546c1ccbf41) finalized

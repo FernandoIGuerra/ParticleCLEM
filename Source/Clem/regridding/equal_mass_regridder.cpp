@@ -19,7 +19,8 @@ using ParticleType = ClemContainer::ParticleType;
 } // namespace
 
 RegridDiagnostics
-EqualMassRegridder::RegridImplementation(ClemContainer& container, const int lev) const
+EqualMassRegridder::RegridImplementation(ClemContainer& container, const int lev,
+                                         const amrex::iMultiFab* only_cells) const
 {
   BL_PROFILE("clem::EqualMassRegridder::Regrid()");
   AMREX_ALWAYS_ASSERT(container.IsDefined());
@@ -32,7 +33,7 @@ EqualMassRegridder::RegridImplementation(ClemContainer& container, const int lev
 
   // 1. the empty elements go straight into the tile of their cell, so only
   // the map has to see them
-  diag.n_added = TopUpLines(container, lev);
+  diag.n_added = TopUpLines(container, lev, only_cells);
 
   amrex::ParallelDescriptor::ReduceLongSum(diag.n_added);
   if (diag.n_added > 0) {
@@ -40,7 +41,7 @@ EqualMassRegridder::RegridImplementation(ClemContainer& container, const int lev
   }
 
   // 2.
-  diag.n_removed = MergeLines(container, lev);
+  diag.n_removed = MergeLines(container, lev, only_cells);
   amrex::ParallelDescriptor::ReduceLongSum(diag.n_removed);
 
   // 3. only if some rank invalidated elements; otherwise the storage, and
@@ -53,7 +54,8 @@ EqualMassRegridder::RegridImplementation(ClemContainer& container, const int lev
 }
 
 amrex::Long
-EqualMassRegridder::TopUpLines(ClemContainer& container, const int lev) const
+EqualMassRegridder::TopUpLines(ClemContainer& container, const int lev,
+                               const amrex::iMultiFab* only_cells) const
 {
   auto& pc             = container.Particles();
   const auto prob_lo   = pc.Geom(lev).ProbLoArray();
@@ -66,6 +68,9 @@ EqualMassRegridder::TopUpLines(ClemContainer& container, const int lev) const
     auto& tile           = pc.DefineAndReturnParticleTile(lev, grid_id, mfi.LocalTileIndex());
 
     for (amrex::IntVect iv = bx.smallEnd(); iv <= bx.bigEnd(); bx.next(iv)) {
+      if (only_cells != nullptr && only_cells->const_array(mfi)(iv) != 1) {
+        continue;
+      }
       // only the count is read: push_back may move the storage of the tile
       const int n_in_cell = static_cast<int>(container.ParticlesInCell(lev, grid_id, iv).size());
 
@@ -90,7 +95,8 @@ EqualMassRegridder::TopUpLines(ClemContainer& container, const int lev) const
 }
 
 amrex::Long
-EqualMassRegridder::MergeLines(ClemContainer& container, const int lev) const
+EqualMassRegridder::MergeLines(ClemContainer& container, const int lev,
+                               const amrex::iMultiFab* only_cells) const
 {
   auto& pc             = container.Particles();
   const auto prob_lo   = pc.Geom(lev).ProbLoArray();
@@ -110,6 +116,9 @@ EqualMassRegridder::MergeLines(ClemContainer& container, const int lev) const
     auto* particles      = pti.GetArrayOfStructs().data();
 
     for (amrex::IntVect iv = bx.smallEnd(); iv <= bx.bigEnd(); bx.next(iv)) {
+      if (only_cells != nullptr && only_cells->const_array(grid_id)(iv) != 1) {
+        continue;
+      }
       const auto& in_cell = container.ParticlesInCell(lev, grid_id, iv);
 
       slots.assign(in_cell.begin(), in_cell.end());

@@ -35,8 +35,15 @@ CEXE_sources += splicer.cpp
 # multiresolution/
 CEXE_headers += halo_manager.H
 CEXE_headers += averager.H
+CEXE_headers += refluxer.H
+CEXE_headers += line_packing.H
+CEXE_headers += grid_adapter.H
 CEXE_sources += halo_manager.cpp
 CEXE_sources += averager.cpp
+CEXE_sources += refluxer.cpp
+CEXE_sources += line_packing.cpp
+CEXE_sources += grid_adapter.cpp
+CEXE_sources += post_regrid.cpp
 CEXE_sources += post_timestep.cpp
 
 # diffusion/

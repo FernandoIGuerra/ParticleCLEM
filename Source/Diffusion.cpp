@@ -3,6 +3,7 @@
 
 #ifdef PELE_USE_CLEM
 #include "mass_flux.H"
+#include "setup.H"
 #endif
 
 void
@@ -680,6 +681,16 @@ PeleC::getMOLSrcTerm(
               });
           }
         }
+
+#ifdef PELE_USE_CLEM
+        // The LES does not transport the species: their reflux is the one of
+        // the CLEM lines (PostTimestepClem)
+        if (clem::setup::freeze_les_species) {
+          for (int dir = 0; dir < AMREX_SPACEDIM; dir++) {
+            setC(eboxes[dir], FirstSpec, FirstSpec + NUM_SPECIES, flx[dir], 0.0);
+          }
+        }
+#endif
 
         update_flux_registers(
           reflux_factor * dt, mfi, typ,

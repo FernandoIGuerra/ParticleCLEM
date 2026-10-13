@@ -218,6 +218,14 @@ public:
     bool react_init = false,
     amrex::MultiFab* aux_src = nullptr);
 
+  // The CLEM side of an AMR regrid (multiresolution/post_regrid.cpp): the new
+  // cells of this level take the LES state of their coarse parent, and the
+  // lines follow the new grids
+  void SetNewCellsFromCoarse(
+    const amrex::BoxArray* old_grids,
+    const amrex::DistributionMapping* old_dmap);
+  void PostRegridClem(int lbase);
+
   // The coarse/fine sync of the CLEM lines, from post_timestep
   // (multiresolution/post_timestep.cpp)
   void PostTimestepClem();
@@ -231,6 +239,11 @@ public:
   // The mass flux of the step of this level, per direction on the faces:
   // the RK2 average of the MOL stages (mass_flux.H)
   amrex::Array<amrex::MultiFab, AMREX_SPACEDIM> clem_mass_flux;
+
+  // The mass through the faces of this level since the level below began
+  // its step: the sum over the substeps of dt clem_mass_flux, for the reflux
+  // of the lines of the level below (multiresolution/refluxer.H)
+  amrex::Array<amrex::MultiFab, AMREX_SPACEDIM> clem_mass_transfer;
 
   // The halo lines of this level (level > 0): the copy of the coarse lines
   // around its grids, filled by the step of the level below (halo_manager.H)
