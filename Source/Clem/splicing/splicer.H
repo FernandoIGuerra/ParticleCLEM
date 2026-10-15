@@ -35,6 +35,8 @@
  * Splice          : the splice of the lines of a level
  *
  * LineMassDefect  : max | m_line - rho V_c | / rho V_c against a LES state
+ *
+ * LineTemperatureGap : max | mass-mean T of a line - T of its LES cell |
  */
 #ifndef CLEM_SPLICER_H
 #define CLEM_SPLICER_H
@@ -72,6 +74,11 @@ SpliceDiagnostics Splice(ClemContainer& container, int lev, amrex::Real dt,
 // its LES cell, rho V_c, over level lev
 amrex::Real LineMassDefect(ClemContainer& container, int lev, const amrex::MultiFab& les,
                            int rho_comp);
+
+// the largest difference between the mass-mean temperature of a line and the
+// temperature of its LES cell, over level lev
+amrex::Real LineTemperatureGap(ClemContainer& container, int lev, const amrex::MultiFab& les,
+                               int temp_comp);
 
 } // namespace clem
 #endif

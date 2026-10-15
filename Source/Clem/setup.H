@@ -48,6 +48,30 @@ static constexpr bool freeze_les_species = true;
 static_assert(!freeze_les_species || couple_back,
               "CLEM: freeze_les_species needs couple_back, or the LES species never change");
 
+// the energy channel of BackwardCoupling; rho E is always rebuilt with the
+// kinetic energy of the LES, whose momentum the lines do not touch
+//   LesPlusSubgrid: (rho e)^{n+1} = (rho E** - k**) + Delta[rho e]_subgrid.
+//                   The LES keeps what its energy equation did (transport,
+//                   p dV work, viscous heating, conduction); the lines add only
+//                   what the LES does not have: the delta is taken around the
+//                   line processes alone (diffusion; stirring and reaction to
+//                   come), not around the splice or the pressure coupling
+//   LinesOnly:      (rho e)^{n+1} = (rho E^n - k^n) + Delta[rho e] of the whole
+//                   CLEM step: the energy of the cell is that of the lines
+//                   (CLEMNew, clem.couple_back_energy = 1). Unstable at a
+//                   resolved jet lip, see multiresolution/EnergyCouplingProblem.pdf
+//   Off:            rho E of the LES, no energy from the lines (diagnostic)
+enum class EnergyCoupling { LesPlusSubgrid, LinesOnly, Off };
+
+static constexpr EnergyCoupling energy_coupling = EnergyCoupling::LesPlusSubgrid;
+
+// after the write-back, shift the internal energy of every element of a line
+// by the same amount so that the line's mass-mean e is the e of its LES cell
+// (AnchorLineEnergy). Closes the energy loop LES -> lines: without it the
+// lines keep only isentropic pressure work and drift from the LES wherever
+// the LES heats or cools irreversibly (shocks, walls, conduction)
+static constexpr bool anchor_line_energy = true;
+
 // ---- regridding of the lines (regridding/) ------------------------------------
 
 // EqualMass: n_lem elements of equal mass; e, Y mass-averaged, T, p from the EOS

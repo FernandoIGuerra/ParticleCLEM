@@ -10,12 +10,32 @@
 #include "PeleCUtilities.H"
 #include "GradUtil.H"
 #include "TransCoeff.H"
+#ifdef PELE_USE_CLEM
+#include "setup.H"
+#endif
 
 // This header file contains functions and declarations for diffterm.
 
 namespace {
 AMREX_GPU_CONSTANT const amrex::Real weights[3] = {0.0, 1.0, 0.5};
 } // namespace
+
+// When the CLEM lines own the species (clem::setup::freeze_les_species), the
+// LES has no species diffusion flux J_k, so it must not carry the energy those
+// fluxes would move either: sum_k h_k J_k is dropped from the energy flux
+// together with J_k. Otherwise the LES energy diffuses as if the species did,
+// while the species stay where the lines put them
+AMREX_GPU_HOST_DEVICE
+AMREX_FORCE_INLINE
+constexpr bool
+pc_les_species_diffuse()
+{
+#ifdef PELE_USE_CLEM
+  return !clem::setup::freeze_les_species;
+#else
+  return true;
+#endif
+}
 
 template <typename EOSType>
 struct SpeciesEnergyFlux
@@ -330,8 +350,12 @@ pc_diffusion_flux_eb(
             -tauz * (q(iv, QW) + q(ivm, QW)))) -
     coef[dComp_lambda] * dTdd;
 
-  if (update) {
+  if (update && pc_les_species_diffuse()) {
     FluxTypes::SpeciesEnergyFluxType()(iv, ivm, dxinv[dir], coef, q, flx);
+  } else if (!pc_les_species_diffuse()) {
+    for (int ns = 0; ns < NUM_SPECIES; ++ns) {
+      flx(iv, UFS + ns) = 0.0;
+    }
   }
 
   // Scale by area
@@ -452,7 +476,13 @@ pc_diffusion_flux(
             -tauz * (q(iv, QW) + q(ivm, QW)))) -
     coef[dComp_lambda] * dTdd;
 
-  FluxTypes::SpeciesEnergyFluxType()(iv, ivm, dxinv[dir], coef, q, flx);
+  if (pc_les_species_diffuse()) {
+    FluxTypes::SpeciesEnergyFluxType()(iv, ivm, dxinv[dir], coef, q, flx);
+  } else {
+    for (int ns = 0; ns < NUM_SPECIES; ++ns) {
+      flx(iv, UFS + ns) = 0.0;
+    }
+  }
 
   // Scale by area
   AMREX_D_TERM(flx(iv, UMX) *= area(iv);, flx(iv, UMY) *= area(iv);

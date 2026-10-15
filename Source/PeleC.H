@@ -234,6 +234,10 @@ public:
   // (mass_flux.cpp)
   void CheckClemMassFlux(amrex::Real dt);
 
+  // Print the LES state and the line of the cells named in the input file,
+  // at one stage of the step (probe.cpp)
+  void ProbeClem(const char* tag);
+
   static std::unique_ptr<clem::ClemContainer> ClemPC;
 
   // The mass flux of the step of this level, per direction on the faces:

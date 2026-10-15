@@ -206,9 +206,20 @@ EqualMassRegridder::MergeLines(ClemContainer& container, const int lev,
         auto& p                = particles[slots[j]];
         const amrex::Real mass = p.rdata(RealData::mass);
         
-        AMREX_ALWAYS_ASSERT_WITH_MESSAGE(
-          mass > 0.0 && p.rdata(RealData::vol) > 0.0 &&std::abs(mass - new_mass) <= 1.0e-10 * new_mass,
-          "CLEM regrid: a new element did not get its equal share of the mass");
+        if (!(mass > 0.0 && p.rdata(RealData::vol) > 0.0 &&
+              std::abs(mass - new_mass) <= 1.0e-10 * new_mass)) {
+          amrex::AllPrint() << "CLEM regrid: level " << lev << " cell " << iv << " new element " << j
+                            << " mass " << mass << " (share " << new_mass << ") vol "
+                            << p.rdata(RealData::vol) << "; the " << n_old
+                            << " old elements, mass rho T eint press:\n";
+          for (int o = 0; o < n_old; ++o) {
+            const amrex::Real* q = &old_data[o * ncomps];
+            amrex::AllPrint() << "    " << o << " " << particles[slots[o]].idata(IntData::lem_index)
+                              << " | " << q[RealData::rho] << " " << q[RealData::T] << " "
+                              << q[RealData::eint] << " " << q[RealData::press] << '\n';
+          }
+          amrex::Abort("CLEM regrid: a new element did not get its equal share of the mass");
+        }
 
         const amrex::Real inv_mass  = 1.0 / mass;
         p.rdata(RealData::eint)     *= inv_mass;

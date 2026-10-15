@@ -106,7 +106,11 @@ PeleC::PostTimestepClem()
       for (int n = 0; n < NUM_SPECIES; ++n) {
         state(i, j, k, UFS + n) *= projection;
       }
-      state(i, j, k, UEINT) += post(i, j, k, NUM_SPECIES) - pre(i, j, k, NUM_SPECIES);
+      // with LesPlusSubgrid the energy moved by the reflux is the LES's own,
+      // refluxed by PeleC through rho E
+      if (clem::setup::energy_coupling == clem::setup::EnergyCoupling::LinesOnly) {
+        state(i, j, k, UEINT) += post(i, j, k, NUM_SPECIES) - pre(i, j, k, NUM_SPECIES);
+      }
     });
   }
   amrex::ParallelDescriptor::ReduceRealMax(max_projection);

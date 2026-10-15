@@ -4,7 +4,9 @@
 
 #include "PelePhysics.H"
 
+#include "eos_util.H"
 #include "write_back_coupling.H"
+#include "setup.H"
 
 namespace clem {
 
@@ -189,6 +191,7 @@ WriteBackCoupling::BackwardCouplingImplementation(ClemContainer& container, cons
                                                   amrex::MultiFab& les_new,
                                                   const amrex::MultiFab& les_old,
                                                   const amrex::MultiFab& conserved_pre,
+                                                  const amrex::MultiFab& subgrid_energy,
                                                   const LesComps& comps) const
 {
   BL_PROFILE("clem::WriteBackCoupling::BackwardCoupling()");
@@ -210,6 +213,7 @@ WriteBackCoupling::BackwardCouplingImplementation(ClemContainer& container, cons
     const auto& state_old = les_old.const_array(mfi);
     const auto& pre       = conserved_pre.const_array(mfi);
     const auto& post      = conserved_post.const_array(mfi);
+    const auto& subgrid   = subgrid_energy.const_array(mfi);
 
     for (amrex::IntVect iv = bx.smallEnd(); iv <= bx.bigEnd(); bx.next(iv)) {
       const amrex::Real rho_new = state_new(iv, comps.rho);
@@ -219,7 +223,7 @@ WriteBackCoupling::BackwardCouplingImplementation(ClemContainer& container, cons
       amrex::Real rho_Y[NUM_SPECIES];
       amrex::Real rho_Y_sum = 0.0;
       for (int k = 0; k < NUM_SPECIES; ++k) {
-        rho_Y[k] = amrex::max<amrex::Real>( 0.0, state_old(iv, comps.spec + k) + (post(iv, k) - pre(iv, k)));
+        rho_Y[k] = amrex::max<amrex::Real>( 0.0, state_new(iv, comps.spec + k) + (post(iv, k) - pre(iv, k)));
         rho_Y_sum += rho_Y[k];
       }
       AMREX_ALWAYS_ASSERT_WITH_MESSAGE(rho_new > 0.0 && rho_Y_sum > 0.0, "BackwardCoupling: a cell holds no mass");
@@ -231,21 +235,31 @@ WriteBackCoupling::BackwardCouplingImplementation(ClemContainer& container, cons
         state_new(iv, comps.spec + k) = rho_Y[k] * projection;
       }
 
-      // 4. ( rho e )^n + Delta[rho e]; rho E rebuilt with the kinetic energy
-      // of the LES, whose momentum is not touched
-      amrex::Real kinetic_old = 0.0;
+      // 4. the internal energy; rho E rebuilt with the kinetic energy of the
+      // LES, whose momentum is not touched
+      if (setup::energy_coupling == setup::EnergyCoupling::Off) {
+        continue;
+      }
       amrex::Real kinetic_new = 0.0;
-
       for (int d = 0; d < 3; ++d) {
-        kinetic_old += state_old(iv, comps.mom + d) * state_old(iv, comps.mom + d);
         kinetic_new += state_new(iv, comps.mom + d) * state_new(iv, comps.mom + d);
       }
-      
-      kinetic_old *= 0.5 / state_old(iv, comps.rho);
       kinetic_new *= 0.5 / rho_new;
 
-      const amrex::Real rho_e = (state_old(iv, comps.eden) - kinetic_old) +
-                                (post(iv, NUM_SPECIES) - pre(iv, NUM_SPECIES));
+      amrex::Real rho_e = 0.0;
+      if (setup::energy_coupling == setup::EnergyCoupling::LesPlusSubgrid) {
+        // ( rho E** - k** ) + Delta[rho e]_subgrid
+        rho_e = (state_new(iv, comps.eden) - kinetic_new) + subgrid(iv, 0);
+      } else {
+        // ( rho E^n - k^n ) + Delta[rho e] of the whole CLEM step
+        amrex::Real kinetic_old = 0.0;
+        for (int d = 0; d < 3; ++d) {
+          kinetic_old += state_old(iv, comps.mom + d) * state_old(iv, comps.mom + d);
+        }
+        kinetic_old *= 0.5 / state_old(iv, comps.rho);
+        rho_e = (state_old(iv, comps.eden) - kinetic_old) +
+                (post(iv, NUM_SPECIES) - pre(iv, NUM_SPECIES));
+      }
       state_new(iv, comps.eint) = rho_e;
       state_new(iv, comps.eden) = rho_e + kinetic_new;
     }
@@ -253,6 +267,71 @@ WriteBackCoupling::BackwardCouplingImplementation(ClemContainer& container, cons
 
   amrex::ParallelDescriptor::ReduceRealMax(diag.max_volume_defect);
   amrex::ParallelDescriptor::ReduceRealMax(diag.max_projection);
+  return diag;
+}
+
+AnchorDiagnostics
+AnchorLineEnergy(ClemContainer& container, const int lev, const amrex::MultiFab& les,
+                 const LesComps& comps)
+{
+  BL_PROFILE("clem::AnchorLineEnergy()");
+  auto& pc = container.Particles();
+  if (!container.IsCellMapValid(lev)) {
+    container.RebuildCellMap(lev);
+  }
+  auto eos = pele::physics::PhysicsType::eos();
+
+  AnchorDiagnostics diag;
+  for (ClemParIter pti(pc, lev); pti.isValid(); ++pti) {
+    const int grid_id    = pti.index();
+    const amrex::Box& bx = pti.validbox();
+    const auto& state    = les.const_array(grid_id);
+    auto* particles      = pti.GetArrayOfStructs().data();
+
+    for (amrex::IntVect iv = bx.smallEnd(); iv <= bx.bigEnd(); bx.next(iv)) {
+      const auto& in_cell = container.ParticlesInCell(lev, grid_id, iv);
+
+      amrex::Real mass   = 0.0;
+      amrex::Real mass_e = 0.0;
+      for (const int n : in_cell) {
+        mass += particles[n].rdata(RealData::mass);
+        mass_e += particles[n].rdata(RealData::mass) * particles[n].rdata(RealData::eint);
+      }
+      if (mass <= 0.0) {
+        continue;
+      }
+      const amrex::Real e_les = state(iv, comps.eint) / state(iv, comps.rho);
+      const amrex::Real shift = e_les - mass_e / mass;
+      diag.energy_moved += mass * shift;
+      diag.energy_abs += mass * std::abs(shift);
+      diag.energy_line += mass * e_les;
+      diag.mass += mass;
+
+      for (const int n : in_cell) {
+        auto& p              = particles[n];
+        const amrex::Real* Y = &p.rdata(RealData::Y0);
+        p.rdata(RealData::eint) += shift;
+        TemperatureFromEnergy(p.rdata(RealData::rho), p.rdata(RealData::eint), Y,
+                              p.rdata(RealData::T));
+        eos.RTY2P(p.rdata(RealData::rho), p.rdata(RealData::T), Y, p.rdata(RealData::press));
+      }
+
+      amrex::Real cv     = 0.0;
+      amrex::Real Y_les[NUM_SPECIES];
+      for (int k = 0; k < NUM_SPECIES; ++k) {
+        Y_les[k] = state(iv, comps.spec + k) / state(iv, comps.rho);
+      }
+      eos.RTY2Cv(state(iv, comps.rho), state(iv, comps.temp), Y_les, cv);
+      diag.max_shift = amrex::max<amrex::Real>(diag.max_shift, std::abs(shift) / cv);
+    }
+  }
+  amrex::ParallelDescriptor::ReduceRealMax(diag.max_shift);
+  amrex::Real sums[4] = {diag.energy_moved, diag.energy_abs, diag.energy_line, diag.mass};
+  amrex::ParallelDescriptor::ReduceRealSum(sums, 4);
+  diag.energy_moved = sums[0];
+  diag.energy_abs   = sums[1];
+  diag.energy_line  = sums[2];
+  diag.mass         = sums[3];
   return diag;
 }
 

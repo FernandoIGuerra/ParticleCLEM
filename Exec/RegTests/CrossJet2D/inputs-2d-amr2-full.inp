@@ -1,0 +1,110 @@
+# ============================================================================
+# H2 jet in supersonic crossflow -- Jin et al., Combust. Flame 268 (2024) 113627
+# Case 1 (inflow Mach 1.5), NON-REACTING, 2D version of CrossJet, FULL channel,
+# long run to 1 ms to follow the energy drift between the lines and the LES.
+#
+# Purpose: look at the wake behind the injector at the resolution where the
+# 3D CLEM run fails (finest dx = 0.078 mm), cheaply, and compare pure PeleC
+# with CLEM on the same input.
+#
+#   pure PeleC : mpiexec -n 16 ./PeleC2d.gnu.MPI.ex      inputs-2d-amr2.inp
+#   CLEM       : mpiexec -n 16 ./PeleC2d.gnu.MPI.CLEM.ex inputs-2d-amr2.inp
+#
+# In 2D the round injector becomes a slot of width jet_d across the whole
+# span: the crossflow cannot pass around the jet, so the blockage and the
+# wake are stronger than in 3D. Use it for the mechanism, not for numbers.
+# Same sources as ../CrossJet (prob.H, prob.cpp).
+# ============================================================================
+
+max_step  = 100000000
+stop_time = 1.0e-3           # 1 ms, ~7 flow-through times of 125 mm
+
+# ---------------------------------------------------------------- geometry --
+# CGS. Full combustor (125 x 15 mm), injector at 42 mm.
+geometry.is_periodic = 0 0
+geometry.coord_sys   = 0
+geometry.prob_lo     = 0.0   0.0
+geometry.prob_hi     = 12.5  1.5
+
+amr.n_cell           = 400 48          # dx = 0.3125 mm, as in 3D
+
+# --------------------------------------------------------------------- BCs --
+# xlo : supersonic vitiated-air inflow           (bcnormal)
+# ylo : adiabatic no-slip wall + H2 injector slot (bcnormal)
+# yhi : adiabatic no-slip wall
+# xhi : supersonic outflow (first-order extrapolation)
+pelec.lo_bc = "UserBC"   "UserBC"
+pelec.hi_bc = "FOExtrap" "NoSlipWall"
+
+# ----------------------------------------------------------------- physics --
+pelec.do_hydro     = 1
+pelec.do_mol       = 1        # required by CLEM
+pelec.mol_iorder   = 2
+pelec.diffuse_vel  = 1
+pelec.diffuse_temp = 1
+pelec.diffuse_spec = 1
+pelec.diffuse_enth = 1
+pelec.do_les       = 0
+# The CLEM step sits in PeleC's reaction branch, so do_react = 1 for the CLEM
+# build. ReactorNull integrates nothing, so the pure PeleC build sees no
+# chemistry either and both runs solve the same non-reacting problem.
+pelec.do_react        = 1
+pelec.chem_integrator = "ReactorNull"
+
+# ------------------------------------------------------------- time stepping -
+pelec.cfl         = 0.1
+pelec.init_shrink = 0.1
+pelec.change_max  = 1.05
+pelec.dt_cutoff   = 1.e-14
+
+# ----------------------------------------------------------------- verbosity -
+pelec.v            = 1
+amr.v              = 1
+pelec.sum_interval = 100
+amr.data_log       = datlog
+
+# -------------------------------------------------------------------- AMR ---
+# 2 levels of refinement by 2 -> finest 0.078 mm, as in the failing 3D run.
+amr.max_level       = 2
+amr.ref_ratio       = 2 2
+amr.regrid_int      = 2 2
+amr.blocking_factor = 8
+amr.max_grid_size   = 32
+amr.n_error_buf     = 2 2
+
+tagging.dengrad         = 2.0e-5
+tagging.max_dengrad_lev = 2
+
+tagging.refinement_indicators = injector
+tagging.injector.in_box_lo    = 3.90 -0.01
+tagging.injector.in_box_hi    = 5.20  0.35
+tagging.injector.max_level    = 2
+
+# ------------------------------------------------------------------ output --
+amr.checkpoint_files_output = 0   # the CLEM lines have no restart yet
+
+amr.plot_files_output = 1
+amr.plot_file = plt
+amr.plot_per  = 5.0e-6            # 200 frames of the LES fields
+clem.particle_plot_every = 20     # particles (most of the output) every 0.1 ms
+amr.plot_vars        = density Temp
+amr.derive_plot_vars = x_velocity y_velocity magvel magvort pressure MachNumber
+pelec.plot_massfrac = 1
+pelec.plot_rhoy     = 0
+
+# ------------------------------------------------------- problem parameters --
+prob.p_in   = 1.01325e6      # 1 atm
+prob.T_in   = 1000.0         # K
+prob.u_in   = 9.30e4         # 930 m/s -> M = 1.5
+prob.YO2_in = 0.23
+prob.YN2_in = 0.77
+
+prob.p_jet  = 1.30709e6      # 1.29 atm
+prob.T_jet  = 300.0          # K
+prob.v_jet  = 1.321e5        # 1321 m/s -> M ~ 1.0
+prob.jet_x  = 4.2            # 42 mm from the inlet
+prob.jet_d  = 0.1            # 1 mm slot width
+prob.jet_start = 0.0
+prob.jet_ramp  = 0.0         # impulsive start, as in the failing 3D run
+
+eb2.geom_type = "all_regular"

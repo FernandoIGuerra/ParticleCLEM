@@ -311,7 +311,18 @@ PeleCAmr::writePlotFileDoit(
 #endif
 
 #ifdef PELE_USE_CLEM
-  if (PeleC::ClemPC != nullptr && PeleC::ClemPC->IsDefined() && regular) {
+  // the particles of the lines are most of the output: written with every
+  // clem.particle_plot_every-th plotfile only (1, the default, is every one;
+  // 0 is never)
+  static int particle_plot_every = -1;
+  static int n_plotfiles         = 0;
+  if (particle_plot_every < 0) {
+    particle_plot_every = 1;
+    amrex::ParmParse("clem").query("particle_plot_every", particle_plot_every);
+  }
+  if (
+    PeleC::ClemPC != nullptr && PeleC::ClemPC->IsDefined() && regular &&
+    particle_plot_every > 0 && n_plotfiles++ % particle_plot_every == 0) {
     PeleC::ClemPC->WritePlotFile(pltfile);
     PeleC::ClemPC->WriteLeafPlotFile(pltfile);
   }

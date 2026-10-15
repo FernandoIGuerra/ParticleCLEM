@@ -52,6 +52,7 @@ PeleC::AdvanceClem(amrex::Real /*time*/, const amrex::Real dt, const bool react_
 
   // The temperature of S_new is still that of the predictor
   computeTemp(S_new, 0);
+  ProbeClem("LES after the MOL step");
 
   // The conserved filter of the lines before the CLEM step
   amrex::MultiFab conserved_pre;
@@ -85,10 +86,23 @@ PeleC::AdvanceClem(amrex::Real /*time*/, const amrex::Real dt, const bool react_
 
   // 1. isentropic pressure change: the elements adopt the LES pressure
   coupling.ForwardCoupling(*ClemPC, level, S_new, comps);
+  ProbeClem("after the forward coupling");
 
-  // 2. diffusion, stirring and reaction along the lines of this level
+  // 2. diffusion, stirring and reaction along the lines of this level. The
+  // change of [rho e]_c they make is what the LES energy equation does not
+  // have (setup::energy_coupling = LesPlusSubgrid)
+  amrex::MultiFab subgrid_energy(grids, dmap, 1, 0);
+  amrex::MultiFab conserved_subgrid(grids, dmap, NUM_SPECIES + 1, 0);
+  clem::ConservedSnapshot(*ClemPC, level, conserved_subgrid);
+  amrex::MultiFab::Copy(subgrid_energy, conserved_subgrid, NUM_SPECIES, 0, 1, 0);
+
   const clem::LineDiagnostics diag =
     ClemPC->DiffusionStirringReactor(level, dt, trans_parms.device_parm());
+
+  clem::ConservedSnapshot(*ClemPC, level, conserved_subgrid);
+  amrex::MultiFab::LinComb(subgrid_energy, 1.0, conserved_subgrid, NUM_SPECIES, -1.0,
+                           subgrid_energy, 0, 0, 1, 0);
+  ProbeClem("after the diffusion");
 
   if (verbose != 0) {
     amrex::Print() << "CLEM: level " << level << " lines advanced for dt = " << dt << ": "
@@ -105,6 +119,7 @@ PeleC::AdvanceClem(amrex::Real /*time*/, const amrex::Real dt, const bool react_
   // the LES state with its ghost cells, the source of the inflow
   const clem::SpliceDiagnostics splice_diag = clem::Splice(
     *ClemPC, level, dt, clem_mass_flux, Sborder, comps, parent->levelSteps(level));
+  ProbeClem("after the splice");
 
   if (verbose != 0) {
     amrex::Print() << "CLEM: level " << level << " splice (" << clem::setup::ReindexerType::Name()
@@ -121,6 +136,7 @@ PeleC::AdvanceClem(amrex::Real /*time*/, const amrex::Real dt, const bool react_
   // 4. regridding: every line back to n_lem elements of equal mass
   const clem::setup::RegridderType regridder;
   const clem::RegridDiagnostics regrid_diag = regridder.Regrid(*ClemPC, level);
+  ProbeClem("after the regrid");
 
   if (verbose != 0) {
     amrex::Print() << "CLEM: level " << level << " regrid: " << regrid_diag.n_added
@@ -132,13 +148,59 @@ PeleC::AdvanceClem(amrex::Real /*time*/, const amrex::Real dt, const bool react_
   }
 
   // 5. conserved-delta write-back: the lines return rho Y_k and rho e
+  amrex::MultiFab temp_before;
+  if (verbose != 0 && clem::setup::couple_back) {
+    temp_before.define(grids, dmap, 1, 0);
+    amrex::MultiFab::Copy(temp_before, S_new, UTEMP, 0, 1, 0);
+  }
   if (clem::setup::couple_back) {
-    const clem::CouplingDiagnostics coupling_diag = coupling.BackwardCoupling(*ClemPC, level, S_new, S_old, conserved_pre, comps);
+    const clem::CouplingDiagnostics coupling_diag = coupling.BackwardCoupling(*ClemPC, level, S_new, S_old, conserved_pre, subgrid_energy, comps);
 
     if (verbose != 0) {
       amrex::Print() << "CLEM: level " << level << " write-back: max volume defect "
                      << coupling_diag.max_volume_defect << ", max projection "
                      << coupling_diag.max_projection << std::endl;
     }
+  }
+  computeTemp(S_new, 0);
+
+  // 6. the lines take the energy of their cell
+  if (clem::setup::couple_back && clem::setup::anchor_line_energy) {
+    const clem::AnchorDiagnostics anchor = clem::AnchorLineEnergy(*ClemPC, level, S_new, comps);
+    if (verbose != 0) {
+      amrex::Print() << "CLEM: level " << level << " line energy anchored to the LES, max shift "
+                     << anchor.max_shift << " K, energy moved " << anchor.energy_moved
+                     << " erg (|.| " << anchor.energy_abs << ") of " << anchor.energy_line
+                     << " erg, line mass " << anchor.mass << " g" << std::endl;
+    }
+  }
+  ProbeClem("after the write-back");
+
+  // the lines keep their own energy, so their temperature can drift from the
+  // LES one: the largest gap between the mass-mean T of a line and its cell
+  if (verbose != 0 && clem::setup::couple_back) {
+    // how much the write-back moved the LES temperature, and where
+    amrex::Real kick = 0.0;
+    amrex::IntVect where(0);
+    for (amrex::MFIter mfi(S_new); mfi.isValid(); ++mfi) {
+      const amrex::Box& bx = mfi.validbox();
+      const auto& before   = temp_before.const_array(mfi);
+      const auto& after    = S_new.const_array(mfi, UTEMP);
+      for (amrex::IntVect iv = bx.smallEnd(); iv <= bx.bigEnd(); bx.next(iv)) {
+        const amrex::Real d = std::abs(after(iv) - before(iv));
+        if (!(d <= kick)) {
+          kick  = std::isfinite(d) ? d : 1.0e300;
+          where = iv;
+        }
+      }
+    }
+    amrex::Real kick_all = kick;
+    amrex::ParallelDescriptor::ReduceRealMax(kick_all);
+    if (kick == kick_all && kick > 0.0) {
+      amrex::AllPrint() << "CLEM: level " << level << " write-back moved T_LES by up to " << kick
+                        << " K at " << where << std::endl;
+    }
+    amrex::Print() << "CLEM: level " << level << " line vs LES temperature, max |T_line - T_LES| = "
+                   << clem::LineTemperatureGap(*ClemPC, level, S_new, UTEMP) << " K" << std::endl;
   }
 }

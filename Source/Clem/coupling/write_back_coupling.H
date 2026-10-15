@@ -51,6 +51,7 @@ protected:
                                                      amrex::MultiFab& les_new,
                                                      const amrex::MultiFab& les_old,
                                                      const amrex::MultiFab& conserved_pre,
+                                                     const amrex::MultiFab& subgrid_energy,
                                                      const LesComps& comps) const;
 
 private:

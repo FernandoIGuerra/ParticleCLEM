@@ -146,8 +146,16 @@ ElementFromLes(const amrex::Real mass, const amrex::Array4<const amrex::Real>& s
 
   const amrex::Real rho  = state(iv_les, comps.rho);
   const amrex::Real temp = state(iv_les, comps.temp);
-  AMREX_ALWAYS_ASSERT_WITH_MESSAGE(rho > 0.0 && temp > 0.0,
-                                   "CLEM splice: inflow from a LES ghost cell with no state");
+  if (!(rho > 0.0 && temp > 0.0)) {
+    amrex::Real rho_Y_sum = 0.0;
+    for (int k = 0; k < NUM_SPECIES; ++k) {
+      rho_Y_sum += state(iv_les, comps.spec + k);
+    }
+    amrex::AllPrint() << "CLEM splice: LES ghost cell " << iv_les << " gives " << mass
+                      << " with rho " << rho << ", T " << temp << ", sum rho Y " << rho_Y_sum
+                      << ", rho e " << state(iv_les, comps.eint) << '\n';
+    amrex::Abort("CLEM splice: inflow from a LES ghost cell with no state");
+  }
 
   ParticleType p;
   p.id()  = ParticleType::NextID();
@@ -431,6 +439,37 @@ LineMassDefect(ClemContainer& container, const int lev, const amrex::MultiFab& l
   }
   amrex::ParallelDescriptor::ReduceRealMax(max_defect);
   return max_defect;
+}
+
+amrex::Real
+LineTemperatureGap(ClemContainer& container, const int lev, const amrex::MultiFab& les,
+                   const int temp_comp)
+{
+  auto& pc = container.Particles();
+  if (!container.IsCellMapValid(lev)) {
+    container.RebuildCellMap(lev);
+  }
+
+  amrex::Real max_gap = 0.0;
+  for (ClemParIter pti(pc, lev); pti.isValid(); ++pti) {
+    const amrex::Box& bx  = pti.validbox();
+    const auto* particles = pti.GetArrayOfStructs().data();
+    const auto& state     = les.const_array(pti);
+
+    for (amrex::IntVect iv = bx.smallEnd(); iv <= bx.bigEnd(); bx.next(iv)) {
+      amrex::Real mass   = 0.0;
+      amrex::Real mass_T = 0.0;
+      for (const int n : container.ParticlesInCell(lev, pti.index(), iv)) {
+        mass += particles[n].rdata(RealData::mass);
+        mass_T += particles[n].rdata(RealData::mass) * particles[n].rdata(RealData::T);
+      }
+      if (mass > 0.0) {
+        max_gap = amrex::max<amrex::Real>(max_gap, std::abs(mass_T / mass - state(iv, temp_comp)));
+      }
+    }
+  }
+  amrex::ParallelDescriptor::ReduceRealMax(max_gap);
+  return max_gap;
 }
 
 } // namespace clem

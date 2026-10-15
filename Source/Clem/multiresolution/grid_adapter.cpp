@@ -125,8 +125,18 @@ AdaptToGrids(ClemContainer& container, const int lbase)
       container.RebuildCellMap(lev);
       continue;
     }
-    // refile under the new grids; a line whose cell left the level is dropped
-    const amrex::Long n_before = pc.NumberOfParticlesAtLevel(lev);
+    // refile under the new grids; a line whose cell left the level is dropped.
+    // Its elements are marked invalid first, so that the redistribute removes
+    // them: AMReX aborts on a valid particle outside the grids of its level
+    const amrex::Long n_before   = pc.NumberOfParticlesAtLevel(lev);
+    const amrex::BoxArray& grids = pc.ParticleBoxArray(lev);
+    for (auto& tile : pc.GetParticles(lev)) {
+      for (auto& p : tile.second.GetArrayOfStructs()) {
+        if (p.id() > 0 && !grids.contains(pc.Index(p, lev))) {
+          p.id() = -p.id();
+        }
+      }
+    }
     container.Redistribute(lev);
     diag.n_dropped += n_before - pc.NumberOfParticlesAtLevel(lev);
     container.RebuildCellMap(lev);
