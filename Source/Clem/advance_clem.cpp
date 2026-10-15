@@ -54,7 +54,7 @@ PeleC::AdvanceClem(amrex::Real /*time*/, const amrex::Real dt, const bool react_
   computeTemp(S_new, 0);
 
   // The conserved filter of the lines before the CLEM step
-  amrex::MultiFab conserved_pre;
+  amrex::MultiFab conserved_pre; //U^n
   if (clem::setup::couple_back) {
     conserved_pre.define(grids, dmap, NUM_SPECIES + 1, 0);
     clem::ConservedSnapshot(*ClemPC, level, conserved_pre);
