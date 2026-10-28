@@ -41,4 +41,15 @@ PeleC::InitializeClem()
 
   // the grids the lines are filed under, to tell when an AMR regrid moves them
   ClemPC->RememberGrids();
+
+  // the reactor of the elements: CLEM works only with CVODE
+  AMREX_ALWAYS_ASSERT_WITH_MESSAGE(chem_integrator == "ReactorCvode",
+                                   "CLEM needs pelec.chem_integrator = ReactorCvode");
+  ClemPC->InitializeReactor();
+
+  // its typical values follow PeleC's (use_typ_vals_chem): set now, refreshed
+  // whenever PeleC refreshes its own
+  if (use_typical_vals_chem) {
+    set_typical_values_chem();
+  }
 }

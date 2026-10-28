@@ -1,5 +1,5 @@
 /**
- * react.cpp: the reactor of the LEM lines.
+ * diffusion_reaction_stirring.cpp: the operators along the LEM lines.
  *
  *   ClemContainer::DiffusionStirringReactor  every line of a level advanced
  *                                            by dt
@@ -9,18 +9,21 @@
  * loop of explicit sub-steps that completes the LES dt:
  *
  *   while ( t_line < dt )
- *     dt_sub = min( dt_diffusion, dt - t_line )      [dt_stirring: to come]
- *     diffusion over dt_sub
- *     [stirring, reaction: to come]
+ *     dt_sub = min( dt_diffusion, t_stirring - t_line, dt - t_line )
+ *     DoDiffusion over dt_sub                               (diffusion.cpp)
+ *     DoReaction  over the same dt_sub                       (reaction.cpp)
  *     t_line += dt_sub
+ *     if ( t_line >= t_stirring )  DoStirring                (stirring.cpp)
  *
  * and then written back to its particles. The models are those of setup.H.
+ * Stirring is not implemented yet: t_stirring is never reached.
  */
+#include <limits>
+
+#include <AMReX_MultiFabUtil.H>
 #include <AMReX_ParallelDescriptor.H>
 
-#include "particle_container.H"
-#include "line_scratch.H"
-#include "setup.H"
+#include "line_operators.H"
 
 namespace clem {
 
@@ -44,6 +47,18 @@ ClemContainer::DiffusionStirringReactor(const int lev, const amrex::Real dt,
 
   const setup::DiffusionType diffusion;
 
+  AMREX_ALWAYS_ASSERT_WITH_MESSAGE(!setup::react_lines || HasReactor(),
+                                   "DiffusionStirringReactor: the reactor is not initialized");
+
+  // 1 where the cell is covered by level lev + 1: its line is not reacted
+  // if setup::skip_covered. The finest level covers nothing
+  const bool has_covered = setup::skip_covered && lev < m_pc->finestLevel();
+  amrex::iMultiFab covered;
+  if (has_covered) {
+    covered = amrex::makeFineMask(m_pc->ParticleBoxArray(lev), m_pc->ParticleDistributionMap(lev),
+                                  m_pc->ParticleBoxArray(lev + 1), m_pc->GetParGDB()->refRatio(lev), 0, 1);
+  }
+
   LineDiagnostics diag;
   auto& line = LineScratch::Get();
 
@@ -59,6 +74,7 @@ ClemContainer::DiffusionStirringReactor(const int lev, const amrex::Real dt,
     const int grid_id    = pti.index();
     const amrex::Box& bx = pti.validbox();
     auto* particles      = pti.GetArrayOfStructs().data();
+    const auto mask      = has_covered ? covered.const_array(grid_id) : amrex::Array4<const int>{};
 
     for (amrex::IntVect iv = bx.smallEnd(); iv <= bx.bigEnd(); bx.next(iv)) {
       if (!line.Gather(ParticlesInCell(lev, grid_id, iv), particles)) {
@@ -67,16 +83,24 @@ ClemContainer::DiffusionStirringReactor(const int lev, const amrex::Real dt,
       }
       line.Enthalpy(enthalpy_before, unused);
 
+      const bool react_line = setup::react_lines && !(has_covered && mask(iv) == 1);
+      if (setup::react_lines && !react_line) {
+        ++diag.n_skip_react;
+      }
+
       amrex::Real t_line = 0.0;
       int n_sub          = 0;
       bool capped        = false;
+
+      // time of the next stirring event of the line: none until stirring exists
+      const amrex::Real t_stirring = std::numeric_limits<amrex::Real>::max();
 
       while (dt - t_line > time_tol * dt) {
         diffusion.UpdateProperties(line, trans_parm);
 
         // the sub-step: the smallest of the limits of the operators, and
         // never beyond the end of the LES step
-        amrex::Real dt_sub          = diffusion.StableSubStep(line, area2);
+        amrex::Real dt_sub          = amrex::min(diffusion.StableSubStep(line, area2), t_stirring - t_line);
         const amrex::Real remaining = dt - t_line;
         if (dt_sub >= remaining) {
           dt_sub = remaining;
@@ -86,11 +110,17 @@ ClemContainer::DiffusionStirringReactor(const int lev, const amrex::Real dt,
           capped = true;
         }
 
-        diffusion.ComputeRates(line, area2);
-        diffusion.AdvanceLine(line, dt_sub, diag);
+        DoDiffusion(diffusion, line, dt_sub, area2, diag);
+        if (react_line) {
+          DoReaction(*m_cvode, line, dt_sub, t_line, diag);
+        }
 
         t_line += dt_sub;
         ++n_sub;
+
+        if (t_line >= t_stirring) {
+          DoStirring(line);
+        }
       }
 
       if (capped) {
@@ -112,6 +142,10 @@ ClemContainer::DiffusionStirringReactor(const int lev, const amrex::Real dt,
   amrex::ParallelDescriptor::ReduceLongSum(diag.n_capped);
   amrex::ParallelDescriptor::ReduceLongSum(diag.n_clipped);
   amrex::ParallelDescriptor::ReduceRealMax(diag.max_neg_Y);
+  amrex::ParallelDescriptor::ReduceLongSum(diag.n_reacted);
+  amrex::ParallelDescriptor::ReduceLongSum(diag.n_skip_react);
+  amrex::ParallelDescriptor::ReduceLongSum(diag.rhs_evals);
+  amrex::ParallelDescriptor::ReduceIntMax(diag.max_rhs_evals);
   amrex::ParallelDescriptor::ReduceRealSum(enthalpy_before);
   amrex::ParallelDescriptor::ReduceRealSum(enthalpy_after);
   amrex::ParallelDescriptor::ReduceRealSum(enthalpy_abs);

@@ -10,7 +10,8 @@
  *      the halo of the level above is filled         (multiresolution/)
  *      from the lines of this level at the old time
  *   1. ForwardCoupling: isentropic pressure change   (coupling/)
- *   2. DiffusionStirringReactor                       (reactor/react.cpp)
+ *   2. DiffusionStirringReactor: diffusion, reaction  (reactor/)
+ *      (stirring to come) along the lines
  *   3. Splice: transport of the lines by the LES     (splicing/)
  *      mass flux, in the order of the policy
  *   4. Regrid: n_lem equal-mass elements per line    (regridding/)
@@ -102,7 +103,7 @@ PeleC::AdvanceClem(amrex::Real /*time*/, const amrex::Real dt, const bool react_
   clem::ConservedSnapshot(*ClemPC, level, conserved_subgrid);
   amrex::MultiFab::LinComb(subgrid_energy, 1.0, conserved_subgrid, NUM_SPECIES, -1.0,
                            subgrid_energy, 0, 0, 1, 0);
-  ProbeClem("after the diffusion");
+  ProbeClem("after the line operators");
 
   if (verbose != 0) {
     amrex::Print() << "CLEM: level " << level << " lines advanced for dt = " << dt << ": "
@@ -113,6 +114,15 @@ PeleC::AdvanceClem(amrex::Real /*time*/, const amrex::Real dt, const bool react_
                    << ", skipped " << diag.n_skipped << ", capped " << diag.n_capped
                    << ", clipped " << diag.n_clipped << " (max -Y " << diag.max_neg_Y
                    << "), enthalpy drift " << diag.drift_enthalpy << std::endl;
+    if (clem::setup::react_lines) {
+      amrex::Print() << "CLEM: level " << level << " reaction: " << diag.n_reacted
+                     << " element sub-steps, RHS evaluations mean "
+                     << (diag.n_reacted > 0 ? static_cast<amrex::Real>(diag.rhs_evals) /
+                                                static_cast<amrex::Real>(diag.n_reacted)
+                                            : 0.0)
+                     << " max " << diag.max_rhs_evals << ", covered lines not reacted "
+                     << diag.n_skip_react << std::endl;
+    }
   }
 
   // 3. splicing: the lines follow the mass flux of this step. Sborder holds

@@ -25,6 +25,10 @@
  *
  * DiffusionStirringReactor : the lines of a level advanced over one LES step
  *
+ * InitializeReactor  : the CVODE reactor of the elements, one per rank
+ *
+ * SetReactorTypicalValues : the typical values of the CVODE tolerances
+ *
  * WritePlotFile      : every particle of every level
  *
  * WriteLeafPlotFile  : only the particles of the cells not covered by a finer level
@@ -43,8 +47,13 @@
 #include <AMReX_MultiFab.H>
 
 #include "PelePhysics.H"
+#include "ReactorBase.H"
 
 #include "particle_index.H"
+
+namespace pele::physics::reactions {
+class ReactorCvode;
+}
 
 namespace clem {
 
@@ -66,6 +75,10 @@ struct LineDiagnostics
   // | sum m h after - before | / sum m |h| : at constant pressure the enthalpy
   // of a line, not its internal energy, is what diffusion must conserve
   amrex::Real drift_enthalpy = 0.0;
+  amrex::Long n_reacted      = 0; // elements reacted, summed over the sub-steps
+  amrex::Long n_skip_react   = 0; // lines of covered cells not reacted (setup::skip_covered)
+  amrex::Long rhs_evals      = 0; // CVODE RHS evaluations over all the elements: the cost
+  int max_rhs_evals          = 0; // RHS evaluations of the worst element in one sub-step
 };
 
 using ClemParticleContainer = amrex::AmrParticleContainer<RealData::ncomps, IntData::ncomps, 0, 0>;
@@ -80,6 +93,10 @@ public:
   using CellVectors = std::map<int, amrex::BaseFab<std::vector<int>>>;
 
   ClemContainer() = default;
+  // closes the reactor: must run before amrex::Finalize
+  ~ClemContainer();
+  ClemContainer(ClemContainer const&)            = delete;
+  ClemContainer& operator=(ClemContainer const&) = delete;
 
   // build the storage on the AMR hierarchy of amr
   void Define(amrex::AmrCore* amr);
@@ -145,15 +162,30 @@ public:
   void RememberGrids();
   bool GridsChanged(int lev) const;
 
-  // ---- reactor of the lines (reactor/react.cpp) ------------------------------------
+  // ---- operators along the lines (reactor/diffusion_reaction_stirring.cpp) ---------
 
   // DiffusionStirringReactor: advance every line of level lev by the LES step
   // dt with the operators that act ALONG a line (the models of setup.H), in a
-  // loop of explicit sub-steps sized by their stability limits. Nothing moves
+  // loop of explicit sub-steps sized by their stability limits: diffusion,
+  // then reaction over the same sub-step (stirring to come). Nothing moves
   // between cells. trans_parm are the transport coefficients of PelePhysics.
   // The cell map of lev is rebuilt if stale.
   LineDiagnostics DiffusionStirringReactor(int lev, amrex::Real dt,
                                            const TransParmType* trans_parm);
+
+  // ---- chemistry of the lines (reactor/reaction.cpp) ---------------------------------
+
+  // InitializeReactor: build the reactor of this rank, as PeleC does
+  // (ReactorBase::create, held by pointer), ONCE: init() with
+  // setup::reactor_type, then the CVODE context that every element reuses.
+  // CLEM works only with ReactorCvode
+  void InitializeReactor();
+
+  // SetReactorTypicalValues: the typical values of rho Y_k and T (NUM_SPECIES + 1),
+  // the same that PeleC gives its own reactor, and the CVODE tolerances from them
+  void SetReactorTypicalValues(const std::vector<amrex::Real>& typical_values);
+
+  bool HasReactor() const { return m_cvode != nullptr; }
 
   // ---- plotting (particle_plot.cpp) ----------------------------------------------
 
@@ -184,6 +216,9 @@ private:
   void FlipCoveredParticles();
 
   std::unique_ptr<ClemParticleContainer> m_pc;
+  // the reactor of the elements; m_cvode is the same object, as ReactorCvode
+  std::unique_ptr<pele::physics::reactions::ReactorBase> m_reactor;
+  pele::physics::reactions::ReactorCvode* m_cvode = nullptr;
   // one map per AMR level, keyed by grid index
   amrex::Vector<CellVectors> m_cell_vectors;
   amrex::Vector<int> m_cell_map_valid; // per level; int, since Vector<bool> has no references

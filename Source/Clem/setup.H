@@ -7,6 +7,8 @@
 
 #include <AMReX_REAL.H>
 
+#include "ReactorTypes.H"
+
 #include "mixture_averaged_diffusion.H"
 #include "write_back_coupling.H"
 #include "equal_mass_regridder.H"
@@ -141,11 +143,23 @@ using DiffusionType = typename DiffusionOf<diffusion>::type;
 // stability limit of the scheme
 static constexpr amrex::Real diffusion_cfl = 0.5;
 
-// ---- reactor of the lines (reactor/react.cpp) --------------------------------------
+// ---- operators along the lines (reactor/) ------------------------------------------
 
 // largest number of sub-steps of one line in one LES step; a line that needs
 // more finishes the step above its stability limit, and is reported
 static constexpr int max_substeps = 1000;
+
+// chemistry of the lines (reactor/reaction.cpp): every element is a 0-D
+// reactor integrated by the CVODE of PelePhysics, over each sub-step
+static constexpr bool react_lines = true;
+
+// constant volume: rho and e of the element are held, Y_k and T advance
+static constexpr int reactor_type = pele::physics::reactions::ReactorTypes::e_reactor_type;
+
+/** @brief skip the reaction of the lines of covered cells, to reduce the
+ *  cost: the average down replaces them at the sync. They still diffuse and
+ *  splice */
+static constexpr bool skip_covered = false;
 
 // ---- checks ---------------------------------------------------------------------
 

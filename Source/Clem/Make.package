@@ -53,4 +53,8 @@ CEXE_headers += mixture_averaged_diffusion.H
 CEXE_sources += mixture_averaged_diffusion.cpp
 
 # reactor/
-CEXE_sources += react.cpp
+CEXE_headers += line_operators.H
+CEXE_sources += diffusion_reaction_stirring.cpp
+CEXE_sources += diffusion.cpp
+CEXE_sources += reaction.cpp
+CEXE_sources += stirring.cpp

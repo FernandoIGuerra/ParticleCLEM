@@ -9,6 +9,11 @@ PeleC::set_typical_values_chem()
 {
   if (use_typical_vals_chem_usr) {
     reactor->set_typ_vals_ode(typical_values_chem_usr);
+#ifdef PELE_USE_CLEM
+    if (ClemPC != nullptr && ClemPC->HasReactor()) {
+      ClemPC->SetReactorTypicalValues(typical_values_chem_usr);
+    }
+#endif
   } else {
     const amrex::MultiFab& S_new = get_new_data(State_Type);
     amrex::Real minTemp = S_new.min(UTEMP);
@@ -23,6 +28,12 @@ PeleC::set_typical_values_chem()
     }
     typical_values_chem[NUM_SPECIES] = 0.5 * (minTemp + maxTemp);
     reactor->set_typ_vals_ode(typical_values_chem);
+#ifdef PELE_USE_CLEM
+    // the reactor of the lines takes the same typical values
+    if (ClemPC != nullptr && ClemPC->HasReactor()) {
+      ClemPC->SetReactorTypicalValues(typical_values_chem);
+    }
+#endif
   }
 }
 
