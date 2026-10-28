@@ -1,6 +1,8 @@
 #ifndef LES_H
 #define LES_H
 
+#include <limits>
+
 #include "PeleC.H"
 #include "PeleCUtilities.H"
 #include "Diffusion.H"
@@ -433,7 +435,8 @@ get_wale_sfs_stresses(
   amrex::Real& alpha1,
   amrex::Real& alpha2,
   amrex::Real& alpha,
-  amrex::Real& flux_T)
+  amrex::Real& flux_T,
+  amrex::Real& mut)
 {
   const amrex::IntVect iv{AMREX_D_DECL(i, j, k)};
   const amrex::IntVect ivm(iv - amrex::IntVect::TheDimensionVector(dir));
@@ -491,9 +494,14 @@ get_wale_sfs_stresses(
   amrex::Real DijDij5 = DijDij3 * DijDij * DijDij;
   amrex::Real SijSij5 = SijSij * SijSij * SijSij * SijSij * SijSij;
 
-  const amrex::Real mut =
-    0.5 * (q(iv, QRHO) + q(ivm, QRHO)) * deltabar * deltabar *
-    (std::sqrt(DijDij3) / (std::sqrt(SijSij5) + std::sqrt(std::sqrt(DijDij5))));
+  // A uniform velocity field (rest, the free stream, the centre of a channel)
+  // gives 0/0: the limit of the model there is mut = 0
+  const amrex::Real wale_den =
+    std::sqrt(SijSij5) + std::sqrt(std::sqrt(DijDij5));
+  mut = wale_den > std::numeric_limits<amrex::Real>::min()
+          ? 0.5 * (q(iv, QRHO) + q(ivm, QRHO)) * deltabar * deltabar *
+              std::sqrt(DijDij3) / wale_den
+          : 0.0;
 
   alpha0 = 2.0 * mut * (S[dir][0] - (dir == 0 ? Skk / 3.0 : 0.0));
   alpha1 = 2.0 * mut * (S[dir][1] - (dir == 1 ? Skk / 3.0 : 0.0));
@@ -520,7 +528,8 @@ pc_wale_sfs_term(
   const amrex::Real Cw,
   const amrex::Real CI,
   const amrex::Real PrT,
-  const amrex::Array4<amrex::Real>& flx)
+  const amrex::Array4<amrex::Real>& flx,
+  const amrex::Array4<amrex::Real>& nu_t_face)
 {
 
   const amrex::IntVect iv{AMREX_D_DECL(i, j, k)};
@@ -532,10 +541,16 @@ pc_wale_sfs_term(
     std::pow(dx[0] * dx[1] * dx[2], static_cast<amrex::Real>(1.0 / 3.0));
   const amrex::Real Cw2 = Cw * Cw;
   const amrex::Real third = 1.0 / 3.0;
-  amrex::Real alphaij[AMREX_SPACEDIM] = {0.0}, alpha, flux_T;
+  amrex::Real alphaij[AMREX_SPACEDIM] = {0.0}, alpha, flux_T, mut;
   get_wale_sfs_stresses(
     i, j, k, q, td, dxinv, deltabar, dir, alphaij[0], alphaij[1], alphaij[2],
-    alpha, flux_T);
+    alpha, flux_T, mut);
+
+  // the kinematic turbulent viscosity of the face, nu_T = Cw^2 mut / rho,
+  // when the caller asks for it (the CLEM lines)
+  if (nu_t_face) {
+    nu_t_face(iv) = Cw2 * mut / (0.5 * (q(iv, QRHO) + q(ivm, QRHO)));
+  }
   const amrex::Real sigmadx =
     Cw2 * alphaij[0] - third * CI * alpha * static_cast<amrex::Real>(dir == 0);
   const amrex::Real sigmady =

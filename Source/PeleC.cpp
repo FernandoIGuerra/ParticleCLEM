@@ -17,6 +17,7 @@
 
 #ifdef PELE_USE_CLEM
 #include "particle_container.H"
+#include "setup.H"
 #endif
 
 #ifdef PELE_USE_SOOT
@@ -356,12 +357,35 @@ PeleC::read_params()
                    << std::endl;
   }
 
+#ifdef PELE_USE_CLEM
+  // The LES closure of a CLEM build is the one of clem::setup: it replaces
+  // the LES inputs, whatever the input file says. PeleC has LES in 3D only
+  use_explicit_filter = clem::setup::les_explicit_filter;
+#if AMREX_SPACEDIM == 3
+  do_les    = true;
+  les_model = clem::setup::PeleCLesModel(clem::setup::les_model);
+  Cw        = clem::setup::wale_cw;
+  CI        = clem::setup::les_ci;
+  PrT       = clem::setup::les_prt;
+  amrex::Print() << "CLEM: LES closure from clem::setup (input file ignored): les_model "
+                 << les_model << ", Cw " << Cw << ", CI " << CI << ", PrT " << PrT
+                 << ", explicit filter " << use_explicit_filter << "; lines Sc_T "
+                 << clem::setup::turbulent_schmidt << std::endl;
+#else
+  do_les = false;
+  amrex::Print() << "CLEM: WARNING: no LES in 2D, nu_T = 0: the lines are not stirred"
+                 << std::endl;
+#endif
+#endif
+
   if ((do_les || use_explicit_filter) && (AMREX_SPACEDIM != 3)) {
     amrex::Abort("Using LES/filtering currently requires 3d.");
   }
 
   if (do_les) {
+#ifndef PELE_USE_CLEM
     pp.query("les_model", les_model);
+#endif
     pp.query("les_test_filter_type", les_test_filter_type);
     pp.query("les_test_filter_fgr", les_test_filter_fgr);
   }
@@ -619,17 +643,17 @@ PeleC::buildMetrics()
 #ifdef PELE_USE_CLEM
   for (int dir = 0; dir < AMREX_SPACEDIM; dir++) {
     clem_mass_flux[dir].clear();
-    clem_mass_flux[dir].define(
-      getEdgeBoxArray(dir), dmap, 1, 0, amrex::MFInfo(),
-      amrex::FArrayBoxFactory());
+    clem_mass_flux[dir].define(getEdgeBoxArray(dir), dmap, 1, 0, amrex::MFInfo(),  amrex::FArrayBoxFactory());
     clem_mass_flux[dir].setVal(0.0);
 
     clem_mass_transfer[dir].clear();
-    clem_mass_transfer[dir].define(
-      getEdgeBoxArray(dir), dmap, 1, 0, amrex::MFInfo(),
-      amrex::FArrayBoxFactory());
+    clem_mass_transfer[dir].define(getEdgeBoxArray(dir), dmap, 1, 0, amrex::MFInfo(), amrex::FArrayBoxFactory());
     clem_mass_transfer[dir].setVal(0.0);
   }
+
+  clem_nu_t.clear();
+  clem_nu_t.define(grids, dmap, 1, 0, amrex::MFInfo(), amrex::FArrayBoxFactory());
+  clem_nu_t.setVal(0.0);
 #endif
 
   vfrac.clear();
@@ -1910,6 +1934,18 @@ PeleC::derive(const std::string& name, amrex::Real time, int ngrow)
     return mf;
   }
 
+#ifdef PELE_USE_CLEM
+  if (name == "clem_nu_t") {
+    std::unique_ptr<amrex::MultiFab> mf(
+      new amrex::MultiFab(grids, dmap, 1, ngrow, amrex::MFInfo()));
+    if (ngrow > 0) {
+      mf->setBndry(0);
+    }
+    amrex::MultiFab::Copy(*mf, clem_nu_t, 0, 0, 1, 0);
+    return mf;
+  }
+#endif
+
   // Can't use the AmrLevel derive for state variables with ghost cells:
   // That will fillpatch them individually, but we require the full state
   // for physBCs. Therefore, instead fillpatch the full state and then grab
@@ -1942,6 +1978,10 @@ PeleC::derive(
 {
   if (name == "vfrac") {
     amrex::MultiFab::Copy(mf, vfrac, 0, dcomp, 1, 0);
+#ifdef PELE_USE_CLEM
+  } else if (name == "clem_nu_t") {
+    amrex::MultiFab::Copy(mf, clem_nu_t, 0, dcomp, 1, 0);
+#endif
   } else {
     AmrLevel::derive(name, time, mf, dcomp);
   }
@@ -1994,7 +2034,18 @@ PeleC::init_les()
   amrex::Print() << "WARNING: LES with Fuego assumes Cp is a weak function of T"
                  << std::endl;
 #if NUM_SPECIES > 2
+#ifdef PELE_USE_CLEM
+  // The LES has no subgrid species flux. With CLEM it needs none when the
+  // LES does not transport the species: the lines carry them, and their
+  // subgrid transport is the stirring
+  if (!clem::setup::freeze_les_species) {
+    amrex::Abort(
+      "LES is not supported for multi-component systems: with CLEM it needs "
+      "clem::setup::freeze_les_species");
+  }
+#else
   amrex::Abort("LES is not supported for multi-component systems");
+#endif
 #elif NUM_SPECIES == 2
   amrex::Print() << "WARNING: LES is not supported for multi-component systems"
                  << std::endl;
