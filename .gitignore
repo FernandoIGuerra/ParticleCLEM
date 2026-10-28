@@ -38,3 +38,6 @@ Docs/sphinx/doctrees/
 Docs/sphinx_doc/
 
 __pycache__
+
+# reference papers (copyrighted), kept locally only
+Source/Clem/Theory/*.pdf
