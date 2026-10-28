@@ -361,16 +361,22 @@ PeleC::read_params()
   // The LES closure of a CLEM build is the one of clem::setup: it replaces
   // the LES inputs, whatever the input file says. PeleC has LES in 3D only
   use_explicit_filter = clem::setup::les_explicit_filter;
-#if AMREX_SPACEDIM == 3
-  do_les    = true;
   les_model = clem::setup::PeleCLesModel(clem::setup::les_model);
   Cw        = clem::setup::wale_cw;
   CI        = clem::setup::les_ci;
   PrT       = clem::setup::les_prt;
-  amrex::Print() << "CLEM: LES closure from clem::setup (input file ignored): les_model "
-                 << les_model << ", Cw " << Cw << ", CI " << CI << ", PrT " << PrT
-                 << ", explicit filter " << use_explicit_filter << "; lines Sc_T "
-                 << clem::setup::turbulent_schmidt << std::endl;
+#if AMREX_SPACEDIM == 3
+  do_les = clem::setup::do_les;
+  if (do_les) {
+    amrex::Print() << "CLEM: LES closure from clem::setup (input file ignored): les_model "
+                   << les_model << ", Cw " << Cw << ", CI " << CI << ", PrT " << PrT
+                   << ", explicit filter " << use_explicit_filter << "; lines Sc_T "
+                   << clem::setup::turbulent_schmidt << std::endl;
+  } else {
+    amrex::Print() << "CLEM: WARNING: LES off (clem::setup::do_les), nu_T = 0: the lines "
+                      "are not stirred"
+                   << std::endl;
+  }
 #else
   do_les = false;
   amrex::Print() << "CLEM: WARNING: no LES in 2D, nu_T = 0: the lines are not stirred"

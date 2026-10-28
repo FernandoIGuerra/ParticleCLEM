@@ -155,6 +155,9 @@ static constexpr int max_substeps = 1000;
 // runs without it, nu_T = 0 and the lines are not stirred
 //   Wale: wall-adapting local eddy viscosity (Nicoud & Ducros 1999),
 //         mu_T = rho (Cw Delta)^2 OP_WALE, Delta = (dx dy dz)^(1/3)
+// the LES closure on or off; off, nu_T = 0 and the lines are not stirred
+static constexpr bool do_les = true;
+
 enum class LesModel { Wale };
 
 static constexpr LesModel les_model = LesModel::Wale;
