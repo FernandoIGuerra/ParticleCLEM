@@ -436,7 +436,8 @@ get_wale_sfs_stresses(
   amrex::Real& alpha2,
   amrex::Real& alpha,
   amrex::Real& flux_T,
-  amrex::Real& mut)
+  amrex::Real& mut,
+  amrex::Real& strain2)
 {
   const amrex::IntVect iv{AMREX_D_DECL(i, j, k)};
   const amrex::IntVect ivm(iv - amrex::IntVect::TheDimensionVector(dir));
@@ -471,16 +472,19 @@ get_wale_sfs_stresses(
 
   amrex::Real g2kk = g2[0][0] + g2[1][1] + g2[2][2];
 
-  amrex::Real S[3][3] = {{0.0}};
-  amrex::Real Sijmag = 0.0;
-  amrex::Real SijSij = 0.0;
-  amrex::Real D[3][3] = {{0.0}};
-  amrex::Real DijDij = 0.0;
+  amrex::Real S[3][3]     = {{0.0}};
+  amrex::Real Sijmag      = 0.0;
+  amrex::Real SijSij      = 0.0;
+  amrex::Real D[3][3]     = {{0.0}};
+  amrex::Real DijDij      = 0.0;
+
   for (int m = 0; m < 3; m++) {
     for (int n = 0; n < 3; n++) {
-      S[m][n] = 0.5 * (g[m][n] + g[n][m]);
-      SijSij += S[m][n] * S[m][n];
-      D[m][n] = 0.5 * (g2[m][n] + g2[n][m]);
+
+      S[m][n]   = 0.5 * (g[m][n] + g[n][m]);
+      SijSij    += S[m][n] * S[m][n];
+      D[m][n]   = 0.5 * (g2[m][n] + g2[n][m]);
+      
       if (m == n) {
         D[m][n] = D[m][n] - g2kk / 3.0;
       }
@@ -496,12 +500,8 @@ get_wale_sfs_stresses(
 
   // A uniform velocity field (rest, the free stream, the centre of a channel)
   // gives 0/0: the limit of the model there is mut = 0
-  const amrex::Real wale_den =
-    std::sqrt(SijSij5) + std::sqrt(std::sqrt(DijDij5));
-  mut = wale_den > std::numeric_limits<amrex::Real>::min()
-          ? 0.5 * (q(iv, QRHO) + q(ivm, QRHO)) * deltabar * deltabar *
-              std::sqrt(DijDij3) / wale_den
-          : 0.0;
+  const amrex::Real wale_den = std::sqrt(SijSij5) + std::sqrt(std::sqrt(DijDij5));
+  mut = wale_den > std::numeric_limits<amrex::Real>::min() ? 0.5 * (q(iv, QRHO) + q(ivm, QRHO)) * deltabar * deltabar * std::sqrt(DijDij3) / wale_den : 0.0;
 
   alpha0 = 2.0 * mut * (S[dir][0] - (dir == 0 ? Skk / 3.0 : 0.0));
   alpha1 = 2.0 * mut * (S[dir][1] - (dir == 1 ? Skk / 3.0 : 0.0));
@@ -511,6 +511,10 @@ get_wale_sfs_stresses(
 
   const amrex::Real dTdx = dxinv * (q(iv, QTEMP) - q(ivm, QTEMP));
   flux_T = mut * dTdx;
+
+  // 2 S^d_ij S^d_ij of the traceless strain rate, S^d = S - (S_kk / 3) I:
+  // nu_T 2 S^d_ij S^d_ij is then the production of subgrid kinetic energy
+  strain2 = 2.0 * (SijSij - Skk * Skk / 3.0);
 }
 
 AMREX_GPU_DEVICE
@@ -529,34 +533,35 @@ pc_wale_sfs_term(
   const amrex::Real CI,
   const amrex::Real PrT,
   const amrex::Array4<amrex::Real>& flx,
-  const amrex::Array4<amrex::Real>& nu_t_face)
+  const amrex::Array4<amrex::Real>& nu_t_face,
+  const amrex::Array4<amrex::Real>& eps_face)
 {
 
   const amrex::IntVect iv{AMREX_D_DECL(i, j, k)};
   const amrex::IntVect ivm(iv - amrex::IntVect::TheDimensionVector(dir));
 
   // SFS stress
-  const amrex::Real dxinv = 1.0 / dx[dir];
-  const amrex::Real deltabar =
-    std::pow(dx[0] * dx[1] * dx[2], static_cast<amrex::Real>(1.0 / 3.0));
-  const amrex::Real Cw2 = Cw * Cw;
-  const amrex::Real third = 1.0 / 3.0;
-  amrex::Real alphaij[AMREX_SPACEDIM] = {0.0}, alpha, flux_T, mut;
-  get_wale_sfs_stresses(
-    i, j, k, q, td, dxinv, deltabar, dir, alphaij[0], alphaij[1], alphaij[2],
-    alpha, flux_T, mut);
+  const amrex::Real dxinv       = 1.0 / dx[dir];
+  const amrex::Real deltabar    = std::pow(dx[0] * dx[1] * dx[2], static_cast<amrex::Real>(1.0 / 3.0));
+  const amrex::Real Cw2         = Cw * Cw;
+  const amrex::Real third       = 1.0 / 3.0;
+
+  amrex::Real alphaij[AMREX_SPACEDIM] = {0.0}, alpha, flux_T, mut, strain2;
+  get_wale_sfs_stresses(i, j, k, q, td, dxinv, deltabar, dir, alphaij[0], alphaij[1], alphaij[2],alpha, flux_T, mut, strain2);
 
   // the kinematic turbulent viscosity of the face, nu_T = Cw^2 mut / rho,
   // when the caller asks for it (the CLEM lines)
   if (nu_t_face) {
     nu_t_face(iv) = Cw2 * mut / (0.5 * (q(iv, QRHO) + q(ivm, QRHO)));
   }
-  const amrex::Real sigmadx =
-    Cw2 * alphaij[0] - third * CI * alpha * static_cast<amrex::Real>(dir == 0);
-  const amrex::Real sigmady =
-    Cw2 * alphaij[1] - third * CI * alpha * static_cast<amrex::Real>(dir == 1);
-  const amrex::Real sigmadz =
-    Cw2 * alphaij[2] - third * CI * alpha * static_cast<amrex::Real>(dir == 2);
+  // and the subgrid dissipation of the face, in equilibrium with the
+  // production: eps = nu_T 2 S^d_ij S^d_ij (the Kolmogorov scale of the lines)
+  if (eps_face) {
+    eps_face(iv) = Cw2 * mut / (0.5 * (q(iv, QRHO) + q(ivm, QRHO))) * strain2;
+  }
+  const amrex::Real sigmadx = Cw2 * alphaij[0] - third * CI * alpha * static_cast<amrex::Real>(dir == 0);
+  const amrex::Real sigmady = Cw2 * alphaij[1] - third * CI * alpha * static_cast<amrex::Real>(dir == 1);
+  const amrex::Real sigmadz = Cw2 * alphaij[2] - third * CI * alpha * static_cast<amrex::Real>(dir == 2);
   flx(iv, UMX) = -sigmadx;
   flx(iv, UMY) = -sigmady;
   flx(iv, UMZ) = -sigmadz;

@@ -662,6 +662,16 @@ PeleC::variableSetUp()
   // (PeleC::clem_nu_t), copied by PeleC::derive
   derive_lst.add("clem_nu_t", amrex::IndexType::TheCellType(), 1, pc_dernull,amrex::DeriveRec::TheSameBox);
   derive_lst.addComponent("clem_nu_t", desc_lst, State_Type, Density, 1);
+  // its subgrid dissipation and the Kolmogorov scale from it
+  derive_lst.add("clem_eps", amrex::IndexType::TheCellType(), 1, pc_dernull, amrex::DeriveRec::TheSameBox);
+  derive_lst.addComponent("clem_eps", desc_lst, State_Type, Density, 1);
+  derive_lst.add("clem_eta", amrex::IndexType::TheCellType(), 1, pc_dernull, amrex::DeriveRec::TheSameBox);
+  derive_lst.addComponent("clem_eta", desc_lst, State_Type, Density, 1);
+  // and the stirring of the lines: event rate per unit length, time between events
+  derive_lst.add("clem_lambda", amrex::IndexType::TheCellType(), 1, pc_dernull, amrex::DeriveRec::TheSameBox);
+  derive_lst.addComponent("clem_lambda", desc_lst, State_Type, Density, 1);
+  derive_lst.add("clem_dt_stir", amrex::IndexType::TheCellType(), 1, pc_dernull, amrex::DeriveRec::TheSameBox);
+  derive_lst.addComponent("clem_dt_stir", desc_lst, State_Type, Density, 1);
 #endif
 
   // MMS derives

@@ -76,6 +76,12 @@ struct LineScratch
   amrex::Vector<amrex::Real> dY_dt;
   amrex::Vector<amrex::Real> dT_dt;
 
+  // the triplet map of a stirring event: the source of every place of the
+  // segment, and the copy of the segment it is permuted through
+  amrex::Vector<int> stir_source;
+  amrex::Vector<int> stir_int;
+  amrex::Vector<amrex::Real> stir_real;
+
   // make room for a line of n elements; after the first line this is only
   // the two assignments
   void Resize(const int n)
@@ -99,6 +105,8 @@ struct LineScratch
     flux_heat.resize(n);
     flux_interspecies.resize(n);
     dT_dt.resize(n);
+    stir_source.resize(n);
+    stir_int.resize(n);
 
     Y.resize(n_spec);
     X.resize(n_spec);
@@ -106,6 +114,7 @@ struct LineScratch
     rho_d.resize(n_spec);
     flux_species.resize(n_spec);
     dY_dt.resize(n_spec);
+    stir_real.resize(n_spec);
   }
 
   // copy the elements `in_cell` (indices into `particles`) into the
@@ -143,13 +152,15 @@ struct LineScratch
     return true;
   }
 
-  // write (rho, vol, T, eint, Y) back. The mass and the pressure of an
-  // element are not changed by the line operators; its density is, so its
-  // volume follows as mass / rho
+  // write (rho, vol, T, eint, Y) back, and lem_index = the place of the
+  // element on the line, which stirring may have changed. The mass and the
+  // pressure of an element are not changed by the line operators; its
+  // density is, so its volume follows as mass / rho
   void Scatter(ParticleType* particles) const
   {
     for (int l = 0; l < n_elem; ++l) {
       auto& p                = particles[particle_index[l]];
+      p.idata(IntData::lem_index) = l;
       p.rdata(RealData::rho)  = rho[l];
       p.rdata(RealData::vol)  = mass[l] / rho[l];
       p.rdata(RealData::T)    = T[l];

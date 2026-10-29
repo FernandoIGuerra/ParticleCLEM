@@ -149,7 +149,6 @@ static constexpr amrex::Real diffusion_cfl = 0.5;
 // more finishes the step above its stability limit, and is reported
 static constexpr int max_substeps = 1000;
 
-<<<<<<< HEAD
 // chemistry of the lines (reactor/reaction.cpp): every element is a 0-D
 // reactor integrated by the CVODE of PelePhysics, over each sub-step
 static constexpr bool react_lines = true;
@@ -200,7 +199,15 @@ static constexpr bool les_explicit_filter = false;
 // stirring reproduces is D_T = nu_T / Sc_T, with nu_T = mu_T / rho of the
 // LES closure (PeleC::clem_nu_t)
 static constexpr amrex::Real turbulent_schmidt = 1.0;
->>>>>>> clem/stirring
+
+// stirring of the lines: triplet maps at the rate that reproduces the D_T of
+// the LES closure (stirring/, reactor/stirring.cpp)
+static constexpr bool stir_lines = true;
+
+// the fewest elements a triplet map acts on (a map of 3 is the identity):
+// eddies smaller than this many elements of a line, l < 6 Delta_x / n_lem,
+// are left out of the inertial range of the stirring (stirring/eddy_sampling.H)
+static constexpr int stirring_min_elements = 6;
 
 // ---- checks ---------------------------------------------------------------------
 

@@ -254,6 +254,15 @@ public:
   // MOL stages, each the mean of the face values of the subgrid model
   // (PeleC::getWALELESTerm). Zero without LES (2D)
   amrex::MultiFab clem_nu_t;
+  // the subgrid dissipation of the LES closure over the step,
+  // eps = nu_T 2 S^d S^d (getWALELESTerm), and the Kolmogorov scale of the
+  // cell from it, eta = (nu^3 / eps)^(1/4) (AdvanceClem)
+  amrex::MultiFab clem_eps;
+  amrex::MultiFab clem_eta;
+  // the stirring of the lines of the cell: the event rate per unit length
+  // Lambda and the mean time between the events of the line (AdvanceClem)
+  amrex::MultiFab clem_lambda;
+  amrex::MultiFab clem_dt_stir;
 
   // The halo lines of this level (level > 0): the copy of the coarse lines
   // around its grids, filled by the step of the level below (halo_manager.H)

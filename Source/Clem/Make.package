@@ -58,3 +58,10 @@ CEXE_sources += diffusion_reaction_stirring.cpp
 CEXE_sources += diffusion.cpp
 CEXE_sources += reaction.cpp
 CEXE_sources += stirring.cpp
+
+# stirring/
+CEXE_headers += kolmogorov_scale.H
+CEXE_sources += kolmogorov_scale.cpp
+CEXE_headers += stirring_rate.H
+CEXE_headers += eddy_sampling.H
+CEXE_sources += stirring_rate.cpp

@@ -1,0 +1,1 @@
+pelec.diffuse_spec = 0   # command-line override of ../inputs, run with the pelec executable

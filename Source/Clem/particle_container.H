@@ -79,6 +79,9 @@ struct LineDiagnostics
   amrex::Long n_skip_react   = 0; // lines of covered cells not reacted (setup::skip_covered)
   amrex::Long rhs_evals      = 0; // CVODE RHS evaluations over all the elements: the cost
   int max_rhs_evals          = 0; // RHS evaluations of the worst element in one sub-step
+  amrex::Long stir_events    = 0; // triplet maps applied, over all the lines
+  int max_stir_events        = 0; // triplet maps of the most stirred line
+  amrex::Long n_stirred      = 0; // lines stirred at least once
 };
 
 using ClemParticleContainer = amrex::AmrParticleContainer<RealData::ncomps, IntData::ncomps, 0, 0>;
@@ -168,10 +171,14 @@ public:
   // dt with the operators that act ALONG a line (the models of setup.H), in a
   // loop of explicit sub-steps sized by their stability limits: diffusion,
   // then reaction over the same sub-step (stirring to come). Nothing moves
-  // between cells. trans_parm are the transport coefficients of PelePhysics.
-  // The cell map of lev is rebuilt if stale.
+  // between cells. trans_parm are the transport coefficients of PelePhysics;
+  // eta and dt_stir, the Kolmogorov scale and the mean time between the
+  // stirring events of the line of every cell (stirring/), on the grids of
+  // lev. The cell map of lev is rebuilt if stale.
   LineDiagnostics DiffusionStirringReactor(int lev, amrex::Real dt,
-                                           const TransParmType* trans_parm);
+                                           const TransParmType* trans_parm,
+                                           const amrex::MultiFab& eta,
+                                           const amrex::MultiFab& dt_stir);
 
   // ---- chemistry of the lines (reactor/reaction.cpp) ---------------------------------
 

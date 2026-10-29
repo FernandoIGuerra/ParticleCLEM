@@ -30,6 +30,8 @@
 #include "PeleC.H"
 #include "IndexDefines.H"
 
+#include "kolmogorov_scale.H"
+#include "stirring_rate.H"
 #include "particle_container.H"
 #include "setup.H"
 #include "splicer.H"
@@ -62,6 +64,31 @@ PeleC::AdvanceClem(amrex::Real /*time*/, const amrex::Real dt, const bool react_
     amrex::Print() << "CLEM: level " << level << " nu_T of the LES closure: max "
                    << clem_nu_t.max(0) << ", mean " << clem_nu_t.sum(0) / n_cells
                    << ", min " << clem_nu_t.min(0) << std::endl;
+  }
+
+  // The Kolmogorov scale of the cells, eta = (nu^3 / eps)^(1/4), from the
+  // subgrid dissipation of the same closure (clem_eps) and the molecular
+  // viscosity of S_new: the smallest eddy of the stirring
+  const clem::KolmogorovDiagnostics kolmogorov =
+    clem::KolmogorovScale(S_new, clem_eps, clem_eta, comps, geom.CellSize(0), trans_parms.device_parm());
+  if (verbose != 0) {
+    amrex::Print() << "CLEM: level " << level << " Kolmogorov scale: " << kolmogorov.n_turbulent
+                   << " cells with eps > 0, eta min " << kolmogorov.eta_min << " max "
+                   << kolmogorov.eta_max << ", Delta / eta max " << kolmogorov.delta_over_eta_max
+                   << std::endl;
+  }
+
+  // The stirring of the lines: the event rate per unit length that gives the
+  // D_T = nu_T / Sc_T of the closure, and the mean time between the events of
+  // each line, dt_stir = 1 / (Lambda L)
+  const clem::StirringDiagnostics stirring =
+    clem::StirringRate(clem_nu_t, clem_eta, clem_lambda, clem_dt_stir, geom, dt);
+  if (verbose != 0) {
+    amrex::Print() << "CLEM: level " << level << " stirring: " << stirring.n_stirred
+                   << " cells stirred (" << stirring.n_truncated
+                   << " with eta below the line resolution), Lambda max " << stirring.lambda_max
+                   << ", dt_stir min " << stirring.dt_stir_min << ", events per line in this step max "
+                   << stirring.events_max << std::endl;
   }
 
   // The conserved filter of the lines before the CLEM step
@@ -107,7 +134,7 @@ PeleC::AdvanceClem(amrex::Real /*time*/, const amrex::Real dt, const bool react_
   amrex::MultiFab::Copy(subgrid_energy, conserved_subgrid, NUM_SPECIES, 0, 1, 0);
 
   const clem::LineDiagnostics diag =
-    ClemPC->DiffusionStirringReactor(level, dt, trans_parms.device_parm());
+    ClemPC->DiffusionStirringReactor(level, dt, trans_parms.device_parm(), clem_eta, clem_dt_stir);
 
   clem::ConservedSnapshot(*ClemPC, level, conserved_subgrid);
   amrex::MultiFab::LinComb(subgrid_energy, 1.0, conserved_subgrid, NUM_SPECIES, -1.0,
@@ -131,6 +158,11 @@ PeleC::AdvanceClem(amrex::Real /*time*/, const amrex::Real dt, const bool react_
                                             : 0.0)
                      << " max " << diag.max_rhs_evals << ", covered lines not reacted "
                      << diag.n_skip_react << std::endl;
+    }
+    if (clem::setup::stir_lines) {
+      amrex::Print() << "CLEM: level " << level << " stirring: " << diag.stir_events
+                     << " triplet maps on " << diag.n_stirred << " lines, max " << diag.max_stir_events
+                     << " on one line" << std::endl;
     }
   }
 

@@ -1,0 +1,42 @@
+# zeroD: uniform, periodic, at rest -> every cell is a constant-volume reactor
+stop_time = 4.0e-4
+max_step  = 100000
+geometry.is_periodic = 1 1 1
+geometry.coord_sys   = 0
+geometry.prob_lo     = 0.0 0.0 0.0
+geometry.prob_hi     = 1.0 1.0 1.0
+amr.n_cell           = 4 4 4
+pelec.lo_bc = "Interior" "Interior" "Interior"
+pelec.hi_bc = "Interior" "Interior" "Interior"
+
+# same physics in both runs: MOL, one iteration, CVODE
+pelec.do_hydro = 1
+pelec.do_mol   = 1
+pelec.mol_iters = 1
+pelec.do_react = 1
+pelec.chem_integrator = "ReactorCvode"
+cvode.solve_type = denseAJ_direct
+pelec.diffuse_temp = 0
+pelec.diffuse_enth = 0
+pelec.diffuse_spec = 0
+pelec.diffuse_vel  = 0
+pelec.fixed_dt = 1.0e-6
+
+pelec.sum_interval  = 1
+pelec.track_extrema = 1
+pelec.extrema_spec_name = ALL
+pelec.v = 1
+amr.v   = 0
+
+amr.max_level       = 0
+amr.blocking_factor = 2
+amr.max_grid_size   = 2
+amr.checkpoint_files_output = 0
+amr.plot_files_output = 0
+
+prob.p_init    = 1013250.0
+prob.Y_init_H2 = 0.06
+prob.Y_init_O2 = 0.5
+prob.Y_init_N2 = 0.44
+prob.T_init    = 1000.0
+amrex.signal_handling = 0

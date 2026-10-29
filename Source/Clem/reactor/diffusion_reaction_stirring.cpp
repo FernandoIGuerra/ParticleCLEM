@@ -4,32 +4,67 @@
  *   ClemContainer::DiffusionStirringReactor  every line of a level advanced
  *                                            by dt
  *
- * The three operators that act ALONG a line are advanced together. Each line
- * is gathered into the workspace of the rank (LineScratch) and advanced by a
- * loop of explicit sub-steps that completes the LES dt:
+ * The three operators that act ALONG a line are advanced together (the
+ * sub-cycle of Maxwell). Each line is gathered into the workspace of the rank
+ * (LineScratch) and advanced by a loop of explicit sub-steps that completes
+ * the LES dt:
  *
+ *   t_stirring = next event                                  (exponential draw)
  *   while ( t_line < dt )
  *     dt_sub = min( dt_diffusion, t_stirring - t_line, dt - t_line )
  *     DoDiffusion over dt_sub                               (diffusion.cpp)
  *     DoReaction  over the same dt_sub                       (reaction.cpp)
  *     t_line += dt_sub
- *     if ( t_line >= t_stirring )  DoStirring                (stirring.cpp)
+ *     if ( the sub-step reached t_stirring )
+ *       draw the eddy: size l from f(l), its elements, its first element
+ *       DoStirring                                           (stirring.cpp)
+ *       t_stirring = next event
  *
  * and then written back to its particles. The models are those of setup.H.
- * Stirring is not implemented yet: t_stirring is never reached.
+ *
+ * The stirring events of a line are a Poisson process of mean spacing
+ * dt_stir = 1 / (Lambda L) (stirring/stirring_rate.H): the time to the next
+ * event is drawn as -dt_stir ln(1 - u), u uniform on [0, 1). Being memoryless
+ * it starts afresh every LES step, so nothing is stored on the line, and a
+ * line with dt_stir > dt still stirs, in a fraction dt / dt_stir of the steps
+ * on average. A cell with no inertial range (dt_stir = the largest Real)
+ * never stirs. The stirred order reaches the next sub-step (UpdateProperties
+ * reads the permuted line) and the particles (Scatter writes lem_index).
  */
+#include <cmath>
 #include <limits>
 
 #include <AMReX_MultiFabUtil.H>
 #include <AMReX_ParallelDescriptor.H>
+#include <AMReX_Random.H>
 
+#include "eddy_sampling.H"
 #include "line_operators.H"
 
 namespace clem {
 
+namespace {
+
+constexpr amrex::Real never = std::numeric_limits<amrex::Real>::max();
+
+// the time of the next stirring event of a line after t, for a mean spacing
+// dt_stir: exponential, -dt_stir ln(1 - u)
+amrex::Real
+NextStirringTime(const amrex::Real t, const amrex::Real dt_stir)
+{
+  if (!setup::stir_lines || dt_stir >= never) {
+    return never;
+  }
+  return t - dt_stir * std::log(1.0 - amrex::Random());
+}
+
+} // namespace
+
 LineDiagnostics
 ClemContainer::DiffusionStirringReactor(const int lev, const amrex::Real dt,
-                                        const TransParmType* trans_parm)
+                                        const TransParmType* trans_parm,
+                                        const amrex::MultiFab& eta,
+                                        const amrex::MultiFab& dt_stir)
 {
   BL_PROFILE("clem::ClemContainer::DiffusionStirringReactor()");
   AMREX_ALWAYS_ASSERT(m_pc != nullptr);
@@ -46,6 +81,9 @@ ClemContainer::DiffusionStirringReactor(const int lev, const amrex::Real dt,
   const amrex::Real area2    = area * area;
 
   const setup::DiffusionType diffusion;
+
+  // the eddy sizes of the lines of this level (stirring/eddy_sampling.H)
+  const EddyRange range = LevelEddyRange(m_pc->Geom(lev));
 
   AMREX_ALWAYS_ASSERT_WITH_MESSAGE(!setup::react_lines || HasReactor(),
                                    "DiffusionStirringReactor: the reactor is not initialized");
@@ -75,6 +113,8 @@ ClemContainer::DiffusionStirringReactor(const int lev, const amrex::Real dt,
     const amrex::Box& bx = pti.validbox();
     auto* particles      = pti.GetArrayOfStructs().data();
     const auto mask      = has_covered ? covered.const_array(grid_id) : amrex::Array4<const int>{};
+    const auto eta_arr     = eta.const_array(grid_id);
+    const auto dt_stir_arr = dt_stir.const_array(grid_id);
 
     for (amrex::IntVect iv = bx.smallEnd(); iv <= bx.bigEnd(); bx.next(iv)) {
       if (!line.Gather(ParticlesInCell(lev, grid_id, iv), particles)) {
@@ -92,14 +132,18 @@ ClemContainer::DiffusionStirringReactor(const int lev, const amrex::Real dt,
       int n_sub          = 0;
       bool capped        = false;
 
-      // time of the next stirring event of the line: none until stirring exists
-      const amrex::Real t_stirring = std::numeric_limits<amrex::Real>::max();
+      // the stirring of the line: the mean time between its events, the
+      // smallest eddy it draws, and the time of its first event
+      const amrex::Real dt_stir_cell = dt_stir_arr(iv);
+      const amrex::Real l_min        = range.Smallest(eta_arr(iv));
+      amrex::Real t_stirring         = NextStirringTime(t_line, dt_stir_cell);
+      int n_events                   = 0;
 
       while (dt - t_line > time_tol * dt) {
         diffusion.UpdateProperties(line, trans_parm);
 
-        // the sub-step: the smallest of the limits of the operators, and
-        // never beyond the end of the LES step
+        // the sub-step: the smallest of the diffusion limit and the time to
+        // the next stirring event, and never beyond the end of the LES step
         amrex::Real dt_sub          = amrex::min(diffusion.StableSubStep(line, area2), t_stirring - t_line);
         const amrex::Real remaining = dt - t_line;
         if (dt_sub >= remaining) {
@@ -110,6 +154,10 @@ ClemContainer::DiffusionStirringReactor(const int lev, const amrex::Real dt,
           capped = true;
         }
 
+        // the event falls within this sub-step (at its end, unless the step
+        // was capped or cut at the end of the LES step)
+        const bool stir_now = t_stirring - t_line <= dt_sub;
+
         DoDiffusion(diffusion, line, dt_sub, area2, diag);
         if (react_line) {
           DoReaction(*m_cvode, line, dt_sub, t_line, diag);
@@ -118,9 +166,23 @@ ClemContainer::DiffusionStirringReactor(const int lev, const amrex::Real dt,
         t_line += dt_sub;
         ++n_sub;
 
-        if (t_line >= t_stirring) {
-          DoStirring(line);
+        // the stirring event: the eddy drawn from f(l) on [l_min, Delta],
+        // its elements, its place on the line, then the triplet map
+        if (stir_now) {
+          const amrex::Real l = SampleEddySize(l_min, range.delta, amrex::Random());
+          const int n_eddy    = EddyElements(l, range.l_particle, line.n_elem);
+          if (n_eddy > 0) {
+            DoStirring(line, SampleEddyStart(line.n_elem, amrex::Random()), n_eddy);
+            ++n_events;
+          }
+          t_stirring = NextStirringTime(t_line, dt_stir_cell);
         }
+      }
+
+      diag.stir_events += n_events;
+      diag.max_stir_events = amrex::max<int>(diag.max_stir_events, n_events);
+      if (n_events > 0) {
+        ++diag.n_stirred;
       }
 
       if (capped) {
@@ -146,6 +208,9 @@ ClemContainer::DiffusionStirringReactor(const int lev, const amrex::Real dt,
   amrex::ParallelDescriptor::ReduceLongSum(diag.n_skip_react);
   amrex::ParallelDescriptor::ReduceLongSum(diag.rhs_evals);
   amrex::ParallelDescriptor::ReduceIntMax(diag.max_rhs_evals);
+  amrex::ParallelDescriptor::ReduceLongSum(diag.stir_events);
+  amrex::ParallelDescriptor::ReduceIntMax(diag.max_stir_events);
+  amrex::ParallelDescriptor::ReduceLongSum(diag.n_stirred);
   amrex::ParallelDescriptor::ReduceRealSum(enthalpy_before);
   amrex::ParallelDescriptor::ReduceRealSum(enthalpy_after);
   amrex::ParallelDescriptor::ReduceRealSum(enthalpy_abs);

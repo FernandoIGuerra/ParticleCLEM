@@ -660,6 +660,18 @@ PeleC::buildMetrics()
   clem_nu_t.clear();
   clem_nu_t.define(grids, dmap, 1, 0, amrex::MFInfo(), amrex::FArrayBoxFactory());
   clem_nu_t.setVal(0.0);
+  clem_eps.clear();
+  clem_eps.define(grids, dmap, 1, 0, amrex::MFInfo(), amrex::FArrayBoxFactory());
+  clem_eps.setVal(0.0);
+  clem_eta.clear();
+  clem_eta.define(grids, dmap, 1, 0, amrex::MFInfo(), amrex::FArrayBoxFactory());
+  clem_eta.setVal(0.0);
+  clem_lambda.clear();
+  clem_lambda.define(grids, dmap, 1, 0, amrex::MFInfo(), amrex::FArrayBoxFactory());
+  clem_lambda.setVal(0.0);
+  clem_dt_stir.clear();
+  clem_dt_stir.define(grids, dmap, 1, 0, amrex::MFInfo(), amrex::FArrayBoxFactory());
+  clem_dt_stir.setVal(0.0);
 #endif
 
   vfrac.clear();
@@ -1941,13 +1953,19 @@ PeleC::derive(const std::string& name, amrex::Real time, int ngrow)
   }
 
 #ifdef PELE_USE_CLEM
-  if (name == "clem_nu_t") {
+  if (name == "clem_nu_t" || name == "clem_eps" || name == "clem_eta" ||
+      name == "clem_lambda" || name == "clem_dt_stir") {
     std::unique_ptr<amrex::MultiFab> mf(
       new amrex::MultiFab(grids, dmap, 1, ngrow, amrex::MFInfo()));
     if (ngrow > 0) {
       mf->setBndry(0);
     }
-    amrex::MultiFab::Copy(*mf, clem_nu_t, 0, 0, 1, 0);
+    const amrex::MultiFab& src = name == "clem_nu_t"     ? clem_nu_t
+                                 : name == "clem_eps"    ? clem_eps
+                                 : name == "clem_eta"    ? clem_eta
+                                 : name == "clem_lambda" ? clem_lambda
+                                                         : clem_dt_stir;
+    amrex::MultiFab::Copy(*mf, src, 0, 0, 1, 0);
     return mf;
   }
 #endif
@@ -1987,6 +2005,14 @@ PeleC::derive(
 #ifdef PELE_USE_CLEM
   } else if (name == "clem_nu_t") {
     amrex::MultiFab::Copy(mf, clem_nu_t, 0, dcomp, 1, 0);
+  } else if (name == "clem_eps") {
+    amrex::MultiFab::Copy(mf, clem_eps, 0, dcomp, 1, 0);
+  } else if (name == "clem_eta") {
+    amrex::MultiFab::Copy(mf, clem_eta, 0, dcomp, 1, 0);
+  } else if (name == "clem_lambda") {
+    amrex::MultiFab::Copy(mf, clem_lambda, 0, dcomp, 1, 0);
+  } else if (name == "clem_dt_stir") {
+    amrex::MultiFab::Copy(mf, clem_dt_stir, 0, dcomp, 1, 0);
 #endif
   } else {
     AmrLevel::derive(name, time, mf, dcomp);

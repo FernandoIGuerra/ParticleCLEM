@@ -698,14 +698,19 @@ PeleC::getWALELESTerm(
       amrex::GpuArray<amrex::Array4<amrex::Real>, AMREX_SPACEDIM> flx;
       resizeAndSetFlux(eboxes, flx, flux_ec);
 
-      // The face values of nu_T = mu_T / rho, for the CLEM lines; without
-      // CLEM the kernel gets null arrays and does not write them
+      // The face values of nu_T = mu_T / rho and of the subgrid dissipation
+      // eps, for the CLEM lines; without CLEM the kernel gets null arrays and
+      // does not write them
       amrex::GpuArray<amrex::Array4<amrex::Real>, AMREX_SPACEDIM> nu_t_face{};
+      amrex::GpuArray<amrex::Array4<amrex::Real>, AMREX_SPACEDIM> eps_face{};
 #ifdef PELE_USE_CLEM
       amrex::Array<amrex::FArrayBox, AMREX_SPACEDIM> nu_t_ec;
+      amrex::Array<amrex::FArrayBox, AMREX_SPACEDIM> eps_ec;
       for (int dir = 0; dir < AMREX_SPACEDIM; dir++) {
         nu_t_ec[dir].resize(eboxes[dir], 1, amrex::The_Async_Arena());
         nu_t_face[dir] = nu_t_ec[dir].array();
+        eps_ec[dir].resize(eboxes[dir], 1, amrex::The_Async_Arena());
+        eps_face[dir] = eps_ec[dir].array();
       }
 #endif
 
@@ -719,30 +724,36 @@ PeleC::getWALELESTerm(
             eboxes[dir], [=] AMREX_GPU_DEVICE(int i, int j, int k) noexcept {
               pc_wale_sfs_term(
                 i, j, k, q_ar, tanders[dir], a[dir], dx, dir, Cw_local,
-                CI_local, PrT_local, flx[dir], nu_t_face[dir]);
+                CI_local, PrT_local, flx[dir], nu_t_face[dir], eps_face[dir]);
             });
         }
       }
 
 #ifdef PELE_USE_CLEM
-      // nu_T of the cell: the mean of its 2 * AMREX_SPACEDIM face values.
+      // nu_T and eps of the cell: the mean of their 2 * AMREX_SPACEDIM face
+      // values (eps as the product nu_T 2 S^d S^d of each face).
       // Each of the two MOL stages (U^n, then U^{n+1,*}) weighs 1/2, as in
       // the RK2 update and in clem_mass_flux; the weight is not
       // reflux_factor, which is 0 for the second stage of the MOL path.
-      // clem_nu_t is zeroed at the start of the step (do_mol_advance)
+      // clem_nu_t and clem_eps are zeroed at the start of the step
+      // (do_mol_advance)
       {
         constexpr amrex::Real stage_weight = 0.5;
         constexpr amrex::Real face_weight = 1.0 / (2.0 * AMREX_SPACEDIM);
         auto const& nu_t = clem_nu_t.array(mfi);
+        auto const& eps = clem_eps.array(mfi);
         amrex::ParallelFor(
           vbox, [=] AMREX_GPU_DEVICE(int i, int j, int k) noexcept {
             const amrex::IntVect iv{AMREX_D_DECL(i, j, k)};
-            amrex::Real sum = 0.0;
+            amrex::Real sum_nu_t = 0.0;
+            amrex::Real sum_eps = 0.0;
             for (int dir = 0; dir < AMREX_SPACEDIM; dir++) {
-              sum += nu_t_face[dir](iv) +
-                     nu_t_face[dir](iv + amrex::IntVect::TheDimensionVector(dir));
+              const amrex::IntVect ivp = iv + amrex::IntVect::TheDimensionVector(dir);
+              sum_nu_t += nu_t_face[dir](iv) + nu_t_face[dir](ivp);
+              sum_eps += eps_face[dir](iv) + eps_face[dir](ivp);
             }
-            nu_t(iv) += stage_weight * face_weight * sum;
+            nu_t(iv) += stage_weight * face_weight * sum_nu_t;
+            eps(iv) += stage_weight * face_weight * sum_eps;
           });
       }
 #endif
