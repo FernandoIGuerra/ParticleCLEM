@@ -657,6 +657,13 @@ PeleC::variableSetUp()
     derive_lst.addComponent("Pr_T", desc_lst, State_Type, Density, 1);
   }
 
+#ifdef PELE_USE_CLEM
+  // the turbulent viscosity of the LES closure seen by the CLEM lines
+  // (PeleC::clem_nu_t), copied by PeleC::derive
+  derive_lst.add("clem_nu_t", amrex::IndexType::TheCellType(), 1, pc_dernull,amrex::DeriveRec::TheSameBox);
+  derive_lst.addComponent("clem_nu_t", desc_lst, State_Type, Density, 1);
+#endif
+
   // MMS derives
 #ifdef PELE_USE_MASA
   if (do_mms) {

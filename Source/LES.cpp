@@ -697,6 +697,18 @@ PeleC::getWALELESTerm(
           area[0].array(mfi), area[1].array(mfi), area[2].array(mfi))}};
       amrex::GpuArray<amrex::Array4<amrex::Real>, AMREX_SPACEDIM> flx;
       resizeAndSetFlux(eboxes, flx, flux_ec);
+
+      // The face values of nu_T = mu_T / rho, for the CLEM lines; without
+      // CLEM the kernel gets null arrays and does not write them
+      amrex::GpuArray<amrex::Array4<amrex::Real>, AMREX_SPACEDIM> nu_t_face{};
+#ifdef PELE_USE_CLEM
+      amrex::Array<amrex::FArrayBox, AMREX_SPACEDIM> nu_t_ec;
+      for (int dir = 0; dir < AMREX_SPACEDIM; dir++) {
+        nu_t_ec[dir].resize(eboxes[dir], 1, amrex::The_Async_Arena());
+        nu_t_face[dir] = nu_t_ec[dir].array();
+      }
+#endif
+
       {
         BL_PROFILE("PeleC::pc_wale_sfs_term()");
         for (int dir = 0; dir < AMREX_SPACEDIM; dir++) {
@@ -707,10 +719,33 @@ PeleC::getWALELESTerm(
             eboxes[dir], [=] AMREX_GPU_DEVICE(int i, int j, int k) noexcept {
               pc_wale_sfs_term(
                 i, j, k, q_ar, tanders[dir], a[dir], dx, dir, Cw_local,
-                CI_local, PrT_local, flx[dir]);
+                CI_local, PrT_local, flx[dir], nu_t_face[dir]);
             });
         }
       }
+
+#ifdef PELE_USE_CLEM
+      // nu_T of the cell: the mean of its 2 * AMREX_SPACEDIM face values.
+      // Each of the two MOL stages (U^n, then U^{n+1,*}) weighs 1/2, as in
+      // the RK2 update and in clem_mass_flux; the weight is not
+      // reflux_factor, which is 0 for the second stage of the MOL path.
+      // clem_nu_t is zeroed at the start of the step (do_mol_advance)
+      {
+        constexpr amrex::Real stage_weight = 0.5;
+        constexpr amrex::Real face_weight = 1.0 / (2.0 * AMREX_SPACEDIM);
+        auto const& nu_t = clem_nu_t.array(mfi);
+        amrex::ParallelFor(
+          vbox, [=] AMREX_GPU_DEVICE(int i, int j, int k) noexcept {
+            const amrex::IntVect iv{AMREX_D_DECL(i, j, k)};
+            amrex::Real sum = 0.0;
+            for (int dir = 0; dir < AMREX_SPACEDIM; dir++) {
+              sum += nu_t_face[dir](iv) +
+                     nu_t_face[dir](iv + amrex::IntVect::TheDimensionVector(dir));
+            }
+            nu_t(iv) += stage_weight * face_weight * sum;
+          });
+      }
+#endif
 
       // Compute flux divergence (1/Vol).Div(F.A)
       computeFluxDiv(LESTerm, mfi, vbox, flx, volume);

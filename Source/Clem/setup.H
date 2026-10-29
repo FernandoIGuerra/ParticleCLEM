@@ -149,6 +149,7 @@ static constexpr amrex::Real diffusion_cfl = 0.5;
 // more finishes the step above its stability limit, and is reported
 static constexpr int max_substeps = 1000;
 
+<<<<<<< HEAD
 // chemistry of the lines (reactor/reaction.cpp): every element is a 0-D
 // reactor integrated by the CVODE of PelePhysics, over each sub-step
 static constexpr bool react_lines = true;
@@ -160,6 +161,46 @@ static constexpr int reactor_type = pele::physics::reactions::ReactorTypes::e_re
  *  cost: the average down replaces them at the sync. They still diffuse and
  *  splice */
 static constexpr bool skip_covered = false;
+
+// ---- LES closure (PeleC::read_params) -------------------------------------------
+
+// The subgrid closure of the LES. In a CLEM build these choices REPLACE the LES
+// inputs of the input file (pelec.do_les, les_model, Cw, CI, PrT,
+// use_explicit_filter), whatever it says. PeleC has LES in 3D only: a 2D build
+// runs without it, nu_T = 0 and the lines are not stirred
+//   Wale: wall-adapting local eddy viscosity (Nicoud & Ducros 1999),
+//         mu_T = rho (Cw Delta)^2 OP_WALE, Delta = (dx dy dz)^(1/3)
+// the LES closure on or off; off, nu_T = 0 and the lines are not stirred
+static constexpr bool do_les = true;
+
+enum class LesModel { Wale };
+
+static constexpr LesModel les_model = LesModel::Wale;
+
+// the number of each model in PeleC (PeleC::getLESTerm)
+constexpr int
+PeleCLesModel(const LesModel model)
+{
+  return model == LesModel::Wale ? 2 : -1;
+}
+
+// WALE constant Cw
+static constexpr amrex::Real wale_cw = 0.5;
+
+// coefficient of the isotropic part of the subgrid stress, C_I; 0 leaves it out
+static constexpr amrex::Real les_ci = 0.0;
+
+// turbulent Prandtl number of the subgrid heat flux of the LES
+static constexpr amrex::Real les_prt = 1.0;
+
+// the LES is filtered implicitly, by its grid
+static constexpr bool les_explicit_filter = false;
+
+// turbulent Schmidt number of the lines: the turbulent diffusivity the
+// stirring reproduces is D_T = nu_T / Sc_T, with nu_T = mu_T / rho of the
+// LES closure (PeleC::clem_nu_t)
+static constexpr amrex::Real turbulent_schmidt = 1.0;
+>>>>>>> clem/stirring
 
 // ---- checks ---------------------------------------------------------------------
 

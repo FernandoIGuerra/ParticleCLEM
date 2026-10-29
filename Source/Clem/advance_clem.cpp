@@ -55,6 +55,15 @@ PeleC::AdvanceClem(amrex::Real /*time*/, const amrex::Real dt, const bool react_
   computeTemp(S_new, 0);
   ProbeClem("LES after the MOL step");
 
+  // The turbulent viscosity of the LES closure over this step, left by the
+  // MOL stages in clem_nu_t (PeleC::getWALELESTerm)
+  if (verbose != 0) {
+    const auto n_cells = static_cast<amrex::Real>(clem_nu_t.boxArray().numPts());
+    amrex::Print() << "CLEM: level " << level << " nu_T of the LES closure: max "
+                   << clem_nu_t.max(0) << ", mean " << clem_nu_t.sum(0) / n_cells
+                   << ", min " << clem_nu_t.min(0) << std::endl;
+  }
+
   // The conserved filter of the lines before the CLEM step
   amrex::MultiFab conserved_pre;
   if (clem::setup::couple_back) {

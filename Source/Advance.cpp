@@ -74,6 +74,8 @@ PeleC::do_mol_advance(
   for (int dir = 0; dir < AMREX_SPACEDIM; dir++) {
     clem_mass_flux[dir].setVal(0.0);
   }
+  // and the turbulent viscosity of their LES closure
+  clem_nu_t.setVal(0.0);
 #endif
 
   amrex::MultiFab molSrc(grids, dmap, NVAR, 0, amrex::MFInfo(), Factory());

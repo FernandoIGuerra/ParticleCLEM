@@ -249,6 +249,12 @@ public:
   // of the lines of the level below (multiresolution/refluxer.H)
   amrex::Array<amrex::MultiFab, AMREX_SPACEDIM> clem_mass_transfer;
 
+  // The turbulent (kinematic) viscosity nu_T = mu_T / rho of the LES closure
+  // over the step of this level, at the cell centres: the RK2 average of the
+  // MOL stages, each the mean of the face values of the subgrid model
+  // (PeleC::getWALELESTerm). Zero without LES (2D)
+  amrex::MultiFab clem_nu_t;
+
   // The halo lines of this level (level > 0): the copy of the coarse lines
   // around its grids, filled by the step of the level below (halo_manager.H)
   clem::HaloManager clem_halo;
