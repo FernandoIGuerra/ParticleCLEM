@@ -41,3 +41,10 @@ __pycache__
 
 # reference papers (copyrighted), kept locally only
 Source/Clem/Theory/*.pdf
+
+# slides and validation runs, kept locally only
+Presentation/
+Validation/
+
+# Windows metadata of files copied into WSL
+*:Zone.Identifier
