@@ -1,0 +1,81 @@
+# ------------------  CLEM: 1D detonation in 2H2 + O2 + 7Ar  ------------------
+# A closed-end tube of 2H2-O2-7Ar at 6.67 kPa, 298 K, quasi-1D along x, in 3D
+# with the CLEM lines, two AMR levels on the front and the WALE closure
+# (forced by clem::setup). A hot, high-pressure driver at the closed end
+# ignites the mixture and launches an overdriven detonation that relaxes to
+# Chapman-Jouguet. Metric: the speed of the front against D_CJ (about
+# 1.62 km/s for this mixture), the von Neumann spike and the reaction zone.
+# Reaction happens on the lines only (the LES species are frozen).
+max_step  = 1000000
+stop_time = 6.0e-5            # the front crosses ~10 cm at D_CJ
+
+# PROBLEM SIZE & GEOMETRY: quasi-1D along x, periodic cross-section
+geometry.is_periodic = 0 1 1
+geometry.coord_sys   = 0
+geometry.prob_lo     = 0.0   0.0    0.0
+geometry.prob_hi     = 12.0  0.375  0.375
+amr.n_cell           = 256   8      8          # dx = 0.47 mm
+
+pelec.lo_bc = "SlipWall" "Interior" "Interior"   # the closed end
+pelec.hi_bc = "FOExtrap" "Interior" "Interior"
+
+# WHICH PHYSICS
+pelec.do_hydro     = 1
+pelec.do_mol       = 1        # CLEM: MOL with one iteration
+pelec.mol_iters    = 1
+pelec.diffuse_vel  = 1
+pelec.diffuse_temp = 1
+pelec.diffuse_spec = 1
+pelec.diffuse_enth = 1
+pelec.do_react     = 1        # required: the CLEM step sits in the reaction branch
+pelec.chem_integrator = "ReactorCvode"
+cvode.solve_type      = denseAJ_direct
+
+# TIME STEP CONTROL
+pelec.cfl         = 0.3
+pelec.init_shrink = 0.1
+pelec.change_max  = 1.05
+pelec.dt_cutoff   = 5.e-20
+
+# DIAGNOSTICS & VERBOSITY
+pelec.sum_interval = 10
+pelec.v            = 1
+amr.v              = 1
+amr.data_log       = datlog
+
+# REFINEMENT: the shock and the reaction zone behind it
+amr.max_level       = 1
+amr.ref_ratio       = 2 2 2 2
+amr.regrid_int      = 2 2 2 2
+amr.blocking_factor = 8
+amr.max_grid_size   = 32
+amr.n_error_buf     = 4 4 4 4
+tagging.pressgrad         = 2.0e4
+tagging.max_pressgrad_lev = 1
+tagging.tempgrad          = 100.0
+tagging.max_tempgrad_lev  = 1
+
+# CHECKPOINT FILES: the lines have no restart yet
+amr.checkpoint_files_output = 0
+
+# PLOTFILES
+amr.plot_files_output = 1
+amr.plot_file         = plt
+amr.plot_per          = 5.0e-6
+amr.plot_vars         = density Temp
+amr.derive_plot_vars  = x_velocity pressure MachNumber clem_nu_t clem_eps clem_eta clem_lambda clem_dt_stir
+pelec.plot_massfrac   = 1
+pelec.plot_rhoy       = 0
+
+# PROBLEM PARAMETERS
+prob.X_H2 = 2.0
+prob.X_O2 = 1.0
+prob.X_AR = 7.0
+prob.p0   = 6.67e4            # 6.67 kPa
+prob.T0   = 298.0
+prob.p_driver = 1.0e6         # 15 p0
+prob.T_driver = 2500.0
+prob.x_driver = 0.5
+
+eb2.geom_type = "all_regular"
+amrex.signal_handling = 0

@@ -1,0 +1,79 @@
+# ------------------  CLEM: multispecies shock tube (N2 | He)  ------------------
+# The MultiSpecSod case (the EB-C8 shock tube, not rotated, no EB) in 3D with
+# the CLEM lines, two AMR levels and the WALE closure (forced by clem::setup).
+# Reference: Lv & Ihme, JCP 270 (2014) 105-137, Lv_Ihme_JCP_2014/.
+# Non-reacting: the species are carried by the lines alone (splicing), across
+# the moving shock, contact and rarefaction and the coarse-fine interfaces.
+max_step  = 100000
+stop_time = 1.959e-6          # 0.2 L sqrt(rho_L / p_L)
+
+# PROBLEM SIZE & GEOMETRY: quasi-1D along x, periodic cross-section
+geometry.is_periodic = 0 1 1
+geometry.coord_sys   = 0
+geometry.prob_lo     = 0.0  0.0     0.0
+geometry.prob_hi     = 1.0  0.0625  0.0625
+amr.n_cell           = 128  8       8
+
+pelec.lo_bc = "SlipWall" "Interior" "Interior"
+pelec.hi_bc = "SlipWall" "Interior" "Interior"
+
+# WHICH PHYSICS (the reference is inviscid)
+pelec.do_hydro     = 1
+pelec.do_mol       = 1        # CLEM: MOL with one iteration
+pelec.mol_iters    = 1
+pelec.diffuse_vel  = 0
+pelec.diffuse_temp = 0
+pelec.diffuse_spec = 0
+pelec.diffuse_enth = 0
+pelec.do_react     = 1        # required: the CLEM step sits in the reaction branch
+pelec.chem_integrator = "ReactorCvode"
+cvode.solve_type      = denseAJ_direct
+
+# TIME STEP CONTROL
+pelec.cfl         = 0.3
+pelec.init_shrink = 0.1
+pelec.change_max  = 1.05
+pelec.dt_cutoff   = 5.e-20
+
+# DIAGNOSTICS & VERBOSITY
+pelec.sum_interval = 1
+pelec.v            = 1
+amr.v              = 1
+amr.data_log       = datlog
+
+# REFINEMENT: the shock, the contact and the rarefaction
+amr.max_level       = 1
+amr.ref_ratio       = 2 2 2 2
+amr.regrid_int      = 2 2 2 2
+amr.blocking_factor = 8
+amr.max_grid_size   = 32
+amr.n_error_buf     = 2 2 2 2
+tagging.dengrad         = 1.0e-5
+tagging.max_dengrad_lev = 1
+
+# CHECKPOINT FILES: the lines have no restart yet
+amr.checkpoint_files_output = 0
+
+# PLOTFILES
+amr.plot_files_output = 1
+amr.plot_file         = plt
+amr.plot_int          = 20
+amr.plot_vars         = density Temp
+amr.derive_plot_vars  = x_velocity pressure clem_nu_t clem_eps clem_eta clem_lambda clem_dt_stir
+pelec.plot_massfrac   = 1
+pelec.plot_rhoy       = 0
+
+# PROBLEM PARAMETERS
+prob.p_l   = 1e7
+prob.u_l   = 0.0
+prob.rho_l = 9.6e-4
+prob.p_r   = 1e6
+prob.u_r   = 0.0
+prob.rho_r = 1.2e-4
+prob.idir  = 1
+prob.frac  = 0.5
+prob.left_gas  = N2
+prob.right_gas = HE
+
+eb2.geom_type = "all_regular"
+amrex.signal_handling = 0

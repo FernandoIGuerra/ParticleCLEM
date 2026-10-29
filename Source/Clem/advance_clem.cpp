@@ -160,9 +160,24 @@ PeleC::AdvanceClem(amrex::Real /*time*/, const amrex::Real dt, const bool react_
                      << diag.n_skip_react << std::endl;
     }
     if (clem::setup::stir_lines) {
+      // the triplet maps of this level since the start of the run (every
+      // rank keeps the same, already reduced, sums)
+      static amrex::Vector<amrex::Long> total_events;
+      static amrex::Vector<amrex::Long> total_line_steps;
+      if (static_cast<int>(total_events.size()) <= level) {
+        total_events.resize(level + 1, 0);
+        total_line_steps.resize(level + 1, 0);
+      }
+      total_events[level] += diag.stir_events;
+      total_line_steps[level] += diag.n_lines;
       amrex::Print() << "CLEM: level " << level << " stirring: " << diag.stir_events
-                     << " triplet maps on " << diag.n_stirred << " lines, max " << diag.max_stir_events
-                     << " on one line" << std::endl;
+                     << " triplet maps on " << diag.n_stirred << " of " << diag.n_lines
+                     << " lines, max " << diag.max_stir_events << " on one line; run total "
+                     << total_events[level] << " ("
+                     << (total_line_steps[level] > 0 ? static_cast<amrex::Real>(total_events[level]) /
+                                                         static_cast<amrex::Real>(total_line_steps[level])
+                                                     : 0.0)
+                     << " per line per step)" << std::endl;
     }
   }
 

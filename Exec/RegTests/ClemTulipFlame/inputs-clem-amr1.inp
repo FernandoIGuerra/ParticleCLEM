@@ -1,0 +1,77 @@
+# ------------------  CLEM: tulip flame in a small closed channel  ------------------
+# Stoichiometric H2/air at rest in a closed channel with no-slip walls,
+# ignited by a hot kernel at the middle of one closed end. The flame grows as
+# a finger, touches the side walls, and its front inverts into a tulip
+# (flame - wall - pressure-wave interaction). 3D, thin and periodic in z, with
+# the CLEM lines, two AMR levels on the flame and the WALE closure (forced by
+# clem::setup). Reaction and species diffusion happen on the lines only (the
+# LES species are frozen): the flame speed needs the inter-cell species
+# diffusion that the lines do not have yet.
+max_step  = 10000000
+stop_time = 1.0e-3
+
+# PROBLEM SIZE & GEOMETRY: 12 x 3 mm channel, thin in z; cubic cells
+geometry.is_periodic = 0 0 1
+geometry.coord_sys   = 0
+geometry.prob_lo     = 0.0   0.0   0.0
+geometry.prob_hi     = 1.2   0.3   0.075
+amr.n_cell           = 128   32    8          # dx = 94 um, 47 um on level 1
+
+pelec.lo_bc = "NoSlipWall" "NoSlipWall" "Interior"
+pelec.hi_bc = "NoSlipWall" "NoSlipWall" "Interior"
+
+# WHICH PHYSICS
+pelec.do_hydro     = 1
+pelec.do_mol       = 1        # CLEM: MOL with one iteration
+pelec.mol_iters    = 1
+pelec.diffuse_vel  = 1
+pelec.diffuse_temp = 1
+pelec.diffuse_spec = 1
+pelec.diffuse_enth = 1
+pelec.do_react     = 1        # required: the CLEM step sits in the reaction branch
+pelec.chem_integrator = "ReactorCvode"
+cvode.solve_type      = denseAJ_direct
+
+# TIME STEP CONTROL
+pelec.cfl         = 0.3
+pelec.init_shrink = 0.1
+pelec.change_max  = 1.05
+pelec.dt_cutoff   = 5.e-20
+
+# DIAGNOSTICS & VERBOSITY
+pelec.sum_interval = 10
+pelec.v            = 1
+amr.v              = 1
+amr.data_log       = datlog
+
+# REFINEMENT: the flame
+amr.max_level       = 1
+amr.ref_ratio       = 2 2 2 2
+amr.regrid_int      = 2 2 2 2
+amr.blocking_factor = 8
+amr.max_grid_size   = 32
+amr.n_error_buf     = 2 2 2 2
+tagging.tempgrad         = 50.0
+tagging.max_tempgrad_lev = 1
+
+# CHECKPOINT FILES: the lines have no restart yet
+amr.checkpoint_files_output = 0
+
+# PLOTFILES
+amr.plot_files_output = 1
+amr.plot_file         = plt
+amr.plot_per          = 5.0e-5
+amr.plot_vars         = density Temp
+amr.derive_plot_vars  = x_velocity y_velocity pressure magvort clem_nu_t clem_eps clem_eta clem_lambda clem_dt_stir
+pelec.plot_massfrac   = 1
+pelec.plot_rhoy       = 0
+
+# PROBLEM PARAMETERS
+prob.phi   = 1.0
+prob.p0    = 1.01325e6        # 1 atm
+prob.T0    = 300.0
+prob.T_ign = 1800.0
+prob.r_ign = 0.05             # 0.5 mm kernel
+
+eb2.geom_type = "all_regular"
+amrex.signal_handling = 0
