@@ -24,6 +24,9 @@
 #ifdef PELE_USE_SPRAY
 #include "SprayParticles.H"
 #endif
+#ifdef PELE_USE_CLEM
+#include "particle_container.H"
+#endif
 
 #ifdef PELE_USE_CMAKE
 #include "PeleGitHashes.H"
@@ -250,6 +253,13 @@ PeleC::checkPoint(
 #ifdef PELE_USE_SPRAY
   if (SprayPC != nullptr) {
     SprayPC->SprayParticleIO(level, true, dir);
+  }
+#endif
+
+#ifdef PELE_USE_CLEM
+  // the lines of every level, once, with level 0
+  if (level == 0 && ClemPC != nullptr) {
+    ClemPC->Checkpoint(dir);
   }
 #endif
 

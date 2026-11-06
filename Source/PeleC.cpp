@@ -1217,6 +1217,14 @@ PeleC::post_restart()
     }
   }
 
+#ifdef PELE_USE_CLEM
+  // every level is restored before any post_restart: level 0 brings back the
+  // lines of all of them (after init_reactor, as in post_init)
+  if (level == 0) {
+    InitializeClem(parent->theRestartFile());
+  }
+#endif
+
   // initialize LES variables
   if (do_les) {
     init_les();

@@ -216,6 +216,25 @@ public:
   // shown once, at its finest resolution.
   void WriteLeafPlotFile(const std::string& grid_plotfile);
 
+  // ---- checkpoint and restart (restart_clem.cpp) ----------------------------------
+
+  // Checkpoint: every element of every level into the checkpoint directory
+  // chk_dir, one single-level particle set per level
+  // (chk_dir/clem_particles_level_<lev>), with CLEMHeader (n_lem, species,
+  // finest level). Called at the end of a coarse step, after every sync.
+  void Checkpoint(const std::string& chk_dir) const;
+
+  // Restart: the elements back from chk_dir, each level on its restored grids,
+  // whatever the rank count. Lines saved with another n_lem are remapped to
+  // setup::n_lem. False if chk_dir holds no CLEM lines (CLEMHeader missing):
+  // the caller seeds them from the LES state. The cell maps are rebuilt.
+  bool Restart(const std::string& chk_dir);
+
+  // PadLines: add massless copies of the tail element to every line of level
+  // lev, from n_old to setup::n_lem elements, so that the regridder can
+  // spread the line over the new count
+  void PadLines(int lev, int n_old);
+
 private:
   // flip the sign of the id of every particle living in a covered cell: a
   // negative id hides the particle from the AMReX writers. Two calls restore
@@ -233,6 +252,11 @@ private:
   amrex::Vector<amrex::BoxArray> m_grids;
   amrex::Vector<amrex::DistributionMapping> m_dmaps;
 };
+
+// the names of the particle components, in the order of RealData / IntData,
+// species as Y(name): those of the plotfiles and of the checkpoints
+void ParticleComponentNames(amrex::Vector<std::string>& real_names,
+                            amrex::Vector<std::string>& int_names);
 
 // slot k of the n of the line of cell iv: at fraction (k + 1) / (n + 1) of the
 // cell along x, at its centre in the other directions; strictly interior, so

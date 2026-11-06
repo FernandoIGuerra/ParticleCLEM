@@ -207,8 +207,9 @@ public:
 
 #ifdef PELE_USE_CLEM
   // Build the CLEM particle container and seed the lines of every level
-  // from the LES state (initialize_clem.cpp)
-  void InitializeClem();
+  // from the LES state, or, with restart_dir, read them back from that
+  // checkpoint (initialize_clem.cpp)
+  void InitializeClem(const std::string& restart_dir = "");
 
   // The step of the CLEM model: it replaces react_state in the MOL advance
   // (advance_clem.cpp)

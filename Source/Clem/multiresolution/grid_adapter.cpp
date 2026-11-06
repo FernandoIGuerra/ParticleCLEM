@@ -101,7 +101,9 @@ AdaptToGrids(ClemContainer& container, const int lbase)
   // most regrids leave the grids as they were: nothing to do then
   bool changed = static_cast<int>(pc.GetParticles().size()) > finest + 1 &&
                  pc.NumberOfParticlesAtLevel(finest + 1) > 0;
-  for (int lev = lbase + 1; lev <= finest; ++lev) {
+  // lbase too: Amr may hand it a new distribution map (after a restart on
+  // another number of ranks, the first regrid rebalances level 0)
+  for (int lev = lbase; lev <= finest; ++lev) {
     changed = changed || container.GridsChanged(lev);
   }
   if (!changed) {
@@ -117,8 +119,13 @@ AdaptToGrids(ClemContainer& container, const int lbase)
     pc.RemoveParticlesAtLevel(lev);
   }
 
-  // from the coarsest changed level up, so that a parent exists before its children
+  // the base level keeps its cells; only their ranks may have moved
+  if (container.GridsChanged(lbase)) {
+    container.Redistribute(lbase);
+  }
   container.RebuildCellMap(lbase);
+
+  // from the coarsest changed level up, so that a parent exists before its children
   for (int lev = lbase + 1; lev <= finest; ++lev) {
     // a level on unchanged grids, under unchanged parents, is as it was
     if (!container.GridsChanged(lev) && diag.n_refined == 0 && diag.n_dropped == 0) {

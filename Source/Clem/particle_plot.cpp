@@ -16,10 +16,8 @@
 
 namespace clem {
 
-namespace {
-// the names of the particle components, in the order of RealData / IntData
 void
-ComponentNames(amrex::Vector<std::string>& real_names, amrex::Vector<std::string>& int_names)
+ParticleComponentNames(amrex::Vector<std::string>& real_names, amrex::Vector<std::string>& int_names)
 {
   real_names.resize(RealData::ncomps);
   real_names[RealData::rho]   = "rho";
@@ -42,6 +40,7 @@ ComponentNames(amrex::Vector<std::string>& real_names, amrex::Vector<std::string
   int_names[IntData::entry_side]      = "entry_side";
 }
 
+namespace {
 // the particle directory of a LES plotfile: next to it, the tag between the
 // root (amr.plot_file) and the step, plt00048 -> plt<tag>00048
 std::string
@@ -67,7 +66,7 @@ WriteParticles(const ClemParticleContainer& pc, const std::string& grid_plotfile
   amrex::Vector<std::string> real_names;
   amrex::Vector<std::string> int_names;
 
-  ComponentNames(real_names, int_names);
+  ParticleComponentNames(real_names, int_names);
   pc.WritePlotFile(particle_dir, "particles", real_names, int_names);
 
   if (amrex::ParallelDescriptor::IOProcessor()) {

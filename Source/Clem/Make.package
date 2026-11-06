@@ -12,6 +12,7 @@ CEXE_sources += initialize_clem.cpp
 CEXE_sources += mass_flux.cpp
 CEXE_sources += advance_clem.cpp
 CEXE_sources += probe.cpp
+CEXE_sources += restart_clem.cpp
 
 # coupling/
 CEXE_headers += coupling.H

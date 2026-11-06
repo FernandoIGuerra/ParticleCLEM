@@ -43,7 +43,8 @@ struct AdaptDiagnostics
   amrex::Long n_refined = 0; // new fine cells that got the clone of their parent
 };
 
-// the lines of the levels lbase + 1 .. finest onto their new grids. Nothing
+// the lines of the levels lbase + 1 .. finest onto their new grids, and those
+// of lbase onto its new ranks if its distribution map changed. Nothing
 // is done if the grids are those the lines are already filed under. On
 // return every cell of every level holds n_lem elements (checked)
 AdaptDiagnostics AdaptToGrids(ClemContainer& container, int lbase);
