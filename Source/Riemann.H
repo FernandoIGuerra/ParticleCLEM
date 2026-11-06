@@ -181,8 +181,15 @@ riemann(
   qint_gdgame = qint_gdpres / regd + 1.0;
   qint_iu = bc_test_val * qint_iu;
   uflx_rho = rgd * qint_iu;
+  // the species ride on the mass flux with the composition of the side it
+  // comes from, upwind of the face velocity: rspgd carries the side chosen by
+  // the sign of ustar, which at a transonic rarefaction (qint_iu and ustar of
+  // opposite signs) would take from a cell species it does not hold, and drive
+  // Y_k out of [0, 1] (RiemannSpeciesFix.md). Elsewhere this is the same flux
   for (int n = 0; n < NUM_SPECIES; n++) {
-    uflx_rhoY[n] = rspgd[n] * qint_iu;
+    const amrex::Real Y_up =
+      (qint_iu > 0.0) ? spl[n] : ((qint_iu < 0.0) ? spr[n] : rspgd[n] / rgd);
+    uflx_rhoY[n] = uflx_rho * Y_up;
   }
   uflx_u = uflx_rho * qint_iu + qint_gdpres;
   uflx_v = uflx_rho * qint_iv1;
