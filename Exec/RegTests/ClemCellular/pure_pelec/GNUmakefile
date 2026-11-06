@@ -13,6 +13,8 @@ USE_GPROF = FALSE
 
 # CLEM particle model (Source/Clem)
 CLEM_MODEL = FALSE
+# its own build directory and executable name: Blocs holds the CLEM build of ..
+USERSuffix = .PURE
 
 # Performance
 USE_MPI = TRUE

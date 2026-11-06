@@ -66,19 +66,26 @@ amrex_probinit(
     pp.query("D_window", parm.D_window);
     pp.query("x_shock", parm.x_shock);
     pp.query("alpha", parm.alpha);
+    pp.query("hs_p", parm.hs_p);
+    pp.query("hs_x", parm.hs_x);
+    pp.query("hs_y", parm.hs_y);
+    pp.query("hs_r", parm.hs_r);
     pp.query("profile", PeleC::prob_parm_host->profile);
   }
   ReadProfile(PeleC::prob_parm_host->profile);
 
   // the fresh mixture: mole fractions -> mass fractions, (p, T) -> (rho, e)
   amrex::Real molefrac[NUM_SPECIES] = {0.0};
-  const amrex::Real sum = parm.X_H2 + parm.X_O2 + parm.X_AR;
+  const amrex::Real sum             = parm.X_H2 + parm.X_O2 + parm.X_AR;
+
   molefrac[H2_ID] = parm.X_H2 / sum;
   molefrac[O2_ID] = parm.X_O2 / sum;
   molefrac[AR_ID] = parm.X_AR / sum;
+
   amrex::Real massfrac[NUM_SPECIES] = {0.0};
   auto eos = pele::physics::PhysicsType::eos();
   eos.X2Y(molefrac, massfrac);
+  
   for (int n = 0; n < NUM_SPECIES; n++) {
     parm.massfrac0[n] = massfrac[n];
   }

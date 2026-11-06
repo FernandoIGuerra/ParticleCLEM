@@ -28,9 +28,16 @@ struct ProbParmDevice
   amrex::Real D_window = 1.61602e5; // D_CJ
   // the shock at the start
   amrex::Real x_shock = 4.5;
-  // the random disturbance of the energy behind the shock at the start,
+  // the random disturbance of the energy of the whole field at the start,
   // e* = e (1 + alpha f), f uniform on [-1, 1]
   amrex::Real alpha = 0.1;
+  // an optional hot spot behind the shock at the start: a disc of radius
+  // hs_r, its centre hs_x behind the shock and at height hs_y, raised to the
+  // pressure hs_p at the density of the ZND state (hs_p <= 0: none)
+  amrex::Real hs_p = 0.0;
+  amrex::Real hs_x = 0.1;
+  amrex::Real hs_y = 0.3;
+  amrex::Real hs_r = 0.1;
   // filled in amrex_probinit
   amrex::GpuArray<amrex::Real, NUM_SPECIES> massfrac0 = {0.0};
   amrex::Real rho0 = 0.0;

@@ -24,8 +24,8 @@ geometry.prob_lo     = 0.0  0.0
 geometry.prob_hi     = 6.0  0.9
 amr.n_cell           = 160  24            # dx = dy = 0.375 mm
 
-pelec.lo_bc = "FOExtrap" "SlipWall"       # burnt gas leaves; channel wall
-pelec.hi_bc = "UserBC"   "SlipWall"       # fresh mixture enters; channel wall
+pelec.lo_bc = "FOExtrap" "NoSlipWall"       # burnt gas leaves; channel wall
+pelec.hi_bc = "UserBC"   "NoSlipWall"       # fresh mixture enters; channel wall
 
 # WHICH PHYSICS: Euler
 pelec.do_hydro     = 1
@@ -51,13 +51,31 @@ pelec.v            = 1
 amr.v              = 1
 amr.data_log       = datlog
 
-# NO REFINEMENT for this first try
-amr.max_level       = 0
+# REFINEMENT: only around the detonation front. The window moves with the
+# wave, so the leading shock stays near x_shock = 4.5 cm; the band from 1.5 cm
+# behind it (the induction zone, ~1.8 mm, the triple points and the transverse
+# waves over about one cell length, ~1.5 cm) to 0.3 cm ahead of it is refined
+# where the pressure or the temperature jumps between neighbouring cells. The
+# burnt gas further behind stays on the base grid. Widen the band if the front
+# drifts out of it (watch x of the shock in the plotfiles).
+amr.max_level       = 2
 amr.ref_ratio       = 2 2 2 2
 amr.regrid_int      = 2 2 2 2
 amr.blocking_factor = 8
 amr.max_grid_size   = 40
 amr.n_error_buf     = 4 4 4 4
+
+tagging.refinement_indicators = front_p front_T
+tagging.front_p.in_box_lo                   = 3.0 0.0
+tagging.front_p.in_box_hi                   = 4.8 0.9
+tagging.front_p.field_name                  = pressure
+tagging.front_p.adjacent_difference_greater = 5.0e4    # dyn/cm2 (5 kPa ~ 0.75 p0): shock, Mach stem, transverse waves
+tagging.front_p.max_level                   = 2
+tagging.front_T.in_box_lo                   = 3.0 0.0
+tagging.front_T.in_box_hi                   = 4.8 0.9
+tagging.front_T.field_name                  = Temp
+tagging.front_T.adjacent_difference_greater = 100.0    # K: the reaction front and the ignition behind the transverse waves
+tagging.front_T.max_level                   = 2
 
 # CHECKPOINT FILES: the lines have no restart yet
 amr.checkpoint_files_output = 0
@@ -65,7 +83,7 @@ amr.checkpoint_files_output = 0
 # PLOTFILES
 amr.plot_files_output = 1
 amr.plot_file         = plt
-amr.plot_per          = 2.0e-6
+amr.plot_per          = 10.0e-6
 amr.plot_vars         = density Temp
 amr.derive_plot_vars  = x_velocity y_velocity pressure MachNumber magvort eint_e
 pelec.plot_massfrac   = 1

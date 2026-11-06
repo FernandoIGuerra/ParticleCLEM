@@ -54,8 +54,8 @@ CellNoise(const int i, const int j)
 }
 
 // the 1-D ZND detonation in the frame of the window, the shock at x_shock and
-// the fresh mixture ahead, with random disturbances of the energy behind the
-// shock, which the transverse waves grow from
+// the fresh mixture ahead, with random disturbances of the energy on both sides
+// of the shock, which the transverse waves grow from. The inflow stays clean.
 AMREX_GPU_DEVICE
 AMREX_FORCE_INLINE
 void
@@ -78,6 +78,19 @@ pc_initdata(
     for (int n = 0; n < NVAR; n++) {
       state(i, j, k, n) = s[n];
     }
+    const amrex::Real rho0 = prob_parm.rho0;
+    const amrex::Real u0 = -prob_parm.D_window;
+    const amrex::Real e0 = prob_parm.e0 * (1.0 + prob_parm.alpha * CellNoise(i, j));
+    amrex::Real T0 = prob_parm.T0;
+    auto eos0 = pele::physics::PhysicsType::eos();
+    amrex::Real massfrac0[NUM_SPECIES];
+    for (int n = 0; n < NUM_SPECIES; n++) {
+      massfrac0[n] = prob_parm.massfrac0[n];
+    }
+    eos0.REY2T(rho0, e0, massfrac0, T0);
+    state(i, j, k, UEINT) = rho0 * e0;
+    state(i, j, k, UEDEN) = rho0 * (e0 + 0.5 * u0 * u0);
+    state(i, j, k, UTEMP) = T0;
     return;
   }
 
@@ -118,6 +131,15 @@ pc_initdata(
   amrex::Real e = 0.0;
   eos.TY2E(T, massfrac, e);
   e *= 1.0 + prob_parm.alpha * CellNoise(i, j);
+  if (prob_parm.hs_p > 0.0) {
+    const amrex::Real y = prob_lo[1] + (j + 0.5) * dx[1];
+    const amrex::Real dxs = behind - prob_parm.hs_x;
+    const amrex::Real dys = y - prob_parm.hs_y;
+    if (dxs * dxs + dys * dys <= prob_parm.hs_r * prob_parm.hs_r) {
+      amrex::Real p_hs = prob_parm.hs_p;
+      eos.RYP2E(rho, massfrac, p_hs, e);
+    }
+  }
   eos.REY2T(rho, e, massfrac, T);
 
   state(i, j, k, URHO) = rho;
